@@ -1,10 +1,9 @@
 var express = require('express');
-var path = require('path');
 var router = express.Router();
 
-/* GET home page. */
+/* GET users listing. */
 router.get('/', function(req, res, next) {
-	res.sendFile(path.dirname(__dirname)+'/public/html/index.html');
+  res.send('feature respond with a resource');
 });
 
 module.exports = router;
