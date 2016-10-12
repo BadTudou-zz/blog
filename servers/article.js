@@ -44,5 +44,57 @@ var del = function del(article, callback)
 	});
 };
 
+var edit = function edit(article, callback) {
+	database.connection((err, connection)=> {
+		if(err) {
+			callback(err, null);
+			return false;
+		}
+		var values = connection.escape(utility.objectValues(article));
+
+		connection.query(`UPDATE tb_article SET ? WHERE id = ${article.id} ;`, article, function(err, result) {
+			callback(err || !result.affectedRows, result);
+		 	return (err || result.affectedRows);
+		});
+	});
+
+};
+
+var list = function list(range, callback) {
+	database.connection((err, connection)=> {
+		if(err) {
+			callback(err, null);
+			return false;
+		}
+		var sql;
+		if(!range)
+			sql = `SELECT * FROM tb_article`;
+		else
+			sql = `SELECT * FROM tb_article LIMIT ${range.from},${range.to};`
+		connection.query(sql, function(err, result) {
+			callback(err, result);
+		 	return (err);
+		});
+	});
+};
+
+var search = function search(condition, callback) {
+	database.connection((err, connection)=> {
+		if(err) {
+			callback(err, null);
+			return false;
+		}
+
+		connection.query(`SELECT * FROM tb_article WHERE ? ;`, condition, function(err, result) {
+			callback(err, result);
+		 	return (err);
+		});
+	});
+};
+
+
 exports.add = add;
 exports.del = del;
+exports.edit = edit;
+exports.list = list;
+exports.search = search;

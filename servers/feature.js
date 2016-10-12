@@ -7,8 +7,7 @@ var add = function add(feature, callback)
 {
 	database.connection((err, connection)=>
 	{
-		if(err)
-		{
+		if(err) {
 			callback(err);
 			return false;
 		}
@@ -16,31 +15,77 @@ var add = function add(feature, callback)
 		var values = connection.escape(utility.objectValues(feature));
 
 		connection.query(`INSERT INTO tb_feature (title, author, introduction)
-			VALUES('${feature.title}', '${feature.author}', '${feature.introduction}')`, function(err, result)
-			{
+			VALUES('${feature.title}', '${feature.author}', '${feature.introduction}')`, function(err, result) {
 				callback(err || !result.affectedRows, result);
 				return  (err || result.affectedRows);
 			});
 	});
 };
 
-var del = function del(feature, callback)
-{
-	database.connection((err, connection)=>
-	{
-		if(err)
-		{
+var del = function del(feature, callback) {
+	database.connection((err, connection)=> {
+		if(err) {
 			callback(err);
 			return false;
 		}
 
-		connection.query('DELETE FROM tb_feature WHERE ? ;', feature, function(err, result)
-		 	{
+		connection.query(`DELETE FROM tb_feature WHERE ? ;`, feature, function(err, result) {
 		 		callback(err || !result.affectedRows, result);
 		 		return (err || result.affectedRows);
 		 	});
 	});
 };
 
+var edit = function edit(feature, callback) {
+	database.connection((err, connection)=> {
+		if(err) {
+			callback(err, null);
+			return false;
+		}
+		var values = connection.escape(utility.objectValues(feature));
+
+		connection.query(`UPDATE tb_feature SET ? WHERE id = ${feature.id} ;`, feature, function(err, result) {
+			callback(err || !result.affectedRows, result);
+		 	return (err || result.affectedRows);
+		});
+	});
+
+};
+
+var list = function list(range, callback) {
+	database.connection((err, connection)=> {
+		if(err) {
+			callback(err, null);
+			return false;
+		}
+		var sql;
+		if(!range)
+			sql = `SELECT * FROM tb_feature`;
+		else
+			sql = `SELECT * FROM tb_feature LIMIT ${range.from},${range.to};`
+		connection.query(sql, function(err, result) {
+			callback(err, result);
+		 	return (err);
+		});
+	});
+};
+
+var search = function search(condition, callback) {
+	database.connection((err, connection)=> {
+		if(err) {
+			callback(err, null);
+			return false;
+		}
+
+		connection.query(`SELECT * FROM tb_feature WHERE ? ;`, condition, function(err, result) {
+			callback(err, result);
+		 	return (err);
+		});
+	});
+};
+
 exports.add = add;
 exports.del = del;
+exports.edit = edit;
+exports.list = list;
+exports.search = search;

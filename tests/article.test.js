@@ -45,6 +45,31 @@ describe('test article', function() {
 		});
 	});
 
+	describe('#edit', function()
+	{
+		it('should return true when edit article is ok', function(done){
+			var articleEdit = {id:insertId, title:'新文章名'};	// 此处要更新内容的ID是#add 添加的记录，手动指定请启用下面的语句
+			//var featureDel = {id:60, title:'新文章名'};	// 手动指定要更新的ID
+			article.edit(articleEdit, (err, result)=> {
+					if (!err)
+						done();
+					else
+						done(err);
+				});
+		});
+
+		it('should return true when edit article is error', function(done){
+			var articleEdit = {id:insertId+1, title:'新文章名'};	// 此处要更新内容的ID是#add 添加的记录+1，手动指定请启用下面的语句
+			//var featureDel = {id:-1234567, title:'新文章名'};	// 手动指定要更新的ID
+			article.edit(articleEdit, (err, result)=> {
+					if (!err)
+						done(err);
+					else
+						done();
+				});
+		});
+	});
+
 	describe('#del', function()
 	{
 		it('should return true when del article is ok', function(done){
@@ -69,6 +94,81 @@ describe('test article', function() {
 					else
 						done();
 				});
+		});
+	});
+
+	describe('#search', function() {
+		it('should return true when add article is ok', function(done) {
+			var condition = {author:'作者'};
+			article.search(condition, (err, result)=> {
+				if (!err)
+				{
+					done();
+				}
+				else
+				{
+					done(err);
+				}
+			});
+		});
+
+		it('should return true when add article is error', function(done) {
+			var condition = {};
+			article.search(condition, (err, result)=> {
+				if (!err)
+				{
+					done(err);
+				}
+				else
+				{
+					done();
+				}
+			});
+		});
+	});
+
+	describe('#list', function() {
+		it('should return true when list range is ok', function(done) {
+			var range = {from:0, to:1};
+			article.list(range, (err, result)=> {
+				if (!err)
+				{
+					done();
+					console.log(JSON.stringify(result));
+				}
+				else
+				{
+					done(err);
+				}
+			});
+		});
+
+		it('should return true when list feature is error', function(done) {
+			var range = {from:0, to:-1};
+			article.list(range, (err, result)=> {
+				if (!err)
+				{
+					done(err);
+				}
+				else
+				{
+					done();
+				}
+			});
+		});
+
+		it('should return true when list range is null', function(done) {
+			article.list(null, (err, result)=> {
+				if (!err)
+				{
+					done();
+					console.log(JSON.stringify(result));
+				}
+				else
+				{
+					done(err);
+				}
+			});
 		});
 	});
 });
