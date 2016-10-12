@@ -1,35 +1,48 @@
 var conf = require('../conf/conf.js');
-var mysql = require('mysql');
-//featureID, title, subtitle, link, license, timeCreated, timeRelease, timeModify, author, introduction, coverLink, content, countRead, countShare, countDiscuss, labels
+var utility = require('../utility/utility.js');
+var database = require('../servers/database.js');
 var add = function add(article, callback)
 {
-	var pool  = mysql.createPool(conf.mysql);		
-	pool.getConnection(function(err, connection)
+	database.connection((err, connection)=>
 	{
 		if(err)
 		{
 			callback(err);
 			return false;
 		}
-		/*
-		console.log(`INSERT INTO tb_article (featureID, title, subtitle, author, link, license, 
+		//文章字段：id, featureID, title, subtitle, link, license, timeCreated, 
+		//		timeRelease, timeModify, author, introduction, coverLink, 
+		//		content, countRead, countShare, countDiscuss, labels
+		
+		var values = connection.escape(utility.objectValues(article));
+		
+		connection.query(`INSERT INTO tb_article (featureID, title, subtitle, author, link, license, 
 			timeRelease, introduction, coverLink, content, labels)
-			VALUES(${article.featureID}, '${article.title}', '${article.subtitle}', '${article.author}',
-			'${article.link}', '${article.license}', '${article.timeRelease}', '${article.introduction}',
-			'${article.coverLink}', '${article.content}', '${article.labels}');`);
-		*/
-	
-			connection.query(`INSERT INTO tb_article (featureID, title, subtitle, author, link, license, 
-			timeRelease, introduction, coverLink, content, labels) 
-			VALUES(${article.featureID}, '${article.title}', '${article.subtitle}', '${article.author}',
-			'${article.link}', '${article.license}', '${article.timeRelease}', '${article.introduction}',
-			'${article.coverLink}', '${article.content}', '${article.labels}');`, function(err, result)
+			VALUES(${values});`, function(err, result)
 		 	{
-		 		callback(err);
-		 		return !err;
+		 		callback(err || !result.affectedRows, result);
+		 		return  (err || result.affectedRows);
 		 	});
+	});
+};
 
+var del = function del(article, callback)
+{
+	database.connection((err, connection)=>
+	{
+		if(err)
+		{
+			callback(err);
+			return false;
+		}
+
+		connection.query('DELETE FROM tb_article WHERE ? ;', article, function(err, result)
+		 	{
+		 		callback(err || !result.affectedRows, result);
+		 		return (err || result.affectedRows);
+		 	});
 	});
 };
 
 exports.add = add;
+exports.del = del;

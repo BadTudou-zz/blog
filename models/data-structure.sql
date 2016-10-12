@@ -59,7 +59,7 @@ CREATE TABLE tb_discuss
 	type  'disc':评论, 'disc_res':回复评论, 'message':留言, 'message_res':回复留言
  */
 
-//管理员:截止 2016/10/11 暂未创建
+//
 CREATE TABLE tb_admin
 (
 	name VARCHAR(128) NOT NULL PRIMARY KEY,
