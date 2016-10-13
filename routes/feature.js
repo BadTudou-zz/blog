@@ -43,7 +43,6 @@ router.get('/', function(req, res) {
 		case 'feature-search':
 			var conditionArray = params.condition.split(',');
 			var fields = params.fields;
-			console.log(conditionArray);
 			var condition = {};
 			for(var item in conditionArray) {
 				var ele = conditionArray[item];

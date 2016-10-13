@@ -27,6 +27,21 @@ CREATE TABLE tb_article
 	FOREIGN KEY (featureID) REFERENCES tb_feature(id)
 	ON UPDATE CASCADE ON DELETE CASCADE
 
+	CREATE TRIGGER tb_article_insert
+	AFTER INSERT ON tb_article 
+	FOR EACH ROW 
+	UPDATE tb_feature SET countArticle = countArticle+1 WHERE id = NEW.featureID;
+
+
+	CREATE TRIGGER tb_article_delete
+	AFTER DELETE ON tb_article 
+	FOR EACH ROW 
+	UPDATE tb_feature SET countArticle = countArticle-1 WHERE id = OLD.featureID;
+
+	/*
+	DROP TRIGGER tb_article_delete;
+	*/
+
 //专题 （专题ID，标题，创建日期，作者，简介）
 CREATE TABLE tb_feature
 (
@@ -34,7 +49,8 @@ CREATE TABLE tb_feature
 	title VARCHAR(20) NOT NULL,
 	timeCreate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	author VARCHAR(256) NOT NULL,
-	introduction VARCHAR(256)
+	introduction VARCHAR(256),
+	countArticle INTEGER UNSIGNED DEFAULT NOT NULL 0
 )
 	ALTER TABLE tb_feature ADD CONSTRAINT fk_author 
 	FOREIGN KEY author REFERENCES tb_admin(name)

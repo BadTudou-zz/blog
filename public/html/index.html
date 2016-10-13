@@ -4,8 +4,8 @@
 	<title>杜小豆的编程小道</title>
 	<meta charset="utf-8">
   <base href="http://localhost:3000" target="_blank">
-	<link rel="bookmark"  type="image/x-icon"  href="favicon.ico"/>
-  <link rel="shortcut icon" href="favicon.ico">
+	<link rel="bookmark"  type="image/x-icon"  href="images/favicon.ico"/>
+  <link rel="shortcut icon" href="images/favicon.ico">
 	<!-- bootstrap css -->
 	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
 
@@ -154,7 +154,7 @@
       			</span>
   				  <a href="#" class="list-group-item" v-for="featureItem in featureList">
   					 {{featureItem.title}}
-  					 <span class="label label-pill label-info pull-right">1</span>
+  					 <span class="label label-pill label-info pull-right">{{featureItem.countArticle}}</span>
   				  </a>
 			   </div>
     </div>
@@ -264,7 +264,7 @@
           getFeatureList: function(from, to)
           {
             var _this = this;
-            var fields = 'id, title';
+            var fields = 'id, title, countArticle';
             this.$http.get((`/feature?action=list-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
             {
               console.log(response.body);

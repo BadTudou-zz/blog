@@ -4,8 +4,8 @@
 	<title>杜小豆的编程小道</title>
 	<meta charset="utf-8">
   <base href="http://localhost:3000" target="_blank">
-	<link rel="bookmark"  type="image/x-icon"  href="http://localhost:3000/images/favicon.ico"/>
-  <link rel="shortcut icon" href="http://localhost:3000/images/favicon.ico">
+	<link rel="bookmark"  type="image/x-icon"  href="images/favicon.ico"/>
+  <link rel="shortcut icon" href="images/favicon.ico">
 	<!-- bootstrap css -->
 	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
 
@@ -133,13 +133,13 @@
       	<iframe id="iframe-article" src="{{'http://localhost:3000/'+currentArticle.link}}" class="col-lg-12" style="border:none; height: 700px"></iframe>
 		</div>
 
-    <div id="div-featureArticles" class="col-lg-3">
+    <div id="div-featureArticleList" class="col-lg-3">
       		<div class="list-group ">
       			<span class="list-group-item" style="background-color:#006DE0; color:#fff;">
       				专题文章
       			</span>
-  				  <a href="#" class="list-group-item" v-for="featureItem in featureList">
-  					 {{featureItem.title}}
+  				  <a href="article?action=article-show&id={{featureArticleItem.id}}"}}" class="list-group-item" v-for="featureArticleItem in featureArticleList">
+  					 {{featureArticleItem.title}}
   					 <span class="label label-pill label-info pull-right">1</span>
   				  </a>
 			   </div>
@@ -230,19 +230,20 @@
         el: 'body',
         data: {
           featureCurrent:null,
-          featureList:null,
+          featureArticleList:null,
           articleCurrent:null,
           articleCountOfPerPage:6
         },
         methods: {
-          getFeatureList: function(from, to)
+          getFeature: function(id)
           {
             var _this = this;
             var fields = 'id, title';
-            this.$http.get((`/feature?action=list-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
+            this.$http.get((`/feature?action=feature-search&fields=${fields}&condition=id:${id}`)).then((response) => 
             {
-              console.log(response.body);
-              _this.featureList = JSON.parse(response.body);
+              console.log('专题信息'+response.body);
+              _this.featureCurrent = JSON.parse(response.body)[0];
+              _this.getFeatureArticle(_this.featureCurrent.id);
             });
           },
           getQueryString: function(name) {
@@ -262,27 +263,22 @@
               document.title = _this.articleCurrent.title+_this.articleCurrent.subtitle + '-' + document.title;
               $('#iframe-article').attr("src", _this.articleCurrent.link);
               console.log(_this.articleCurrent.link);
-              _this.featureCurrent = _this.getFeatureInfo(_this.articleCurrent.featureID);
+              _this.featureCurrent = _this.getFeature(_this.articleCurrent.featureID);
             });
           },
-          getFeatureInfo: function(id)
-          {
-            console.log('获取专题信息'+id);
-            for (var index in this.featureList)
+          getFeatureArticle: function(id){
+            var _this = this;
+            var fields = 'id, featureID, title, subtitle, link';
+            this.$http.get((`/article?action=article-search&fields=${fields}&condition=featureID:${id}`)).then((response) => 
             {
-              console.log(this.featureList[index].id);
-              if (this.featureList[index].id == id)
-              {
-                console.log('找到');
-                return this.featureList[index];
-              }
-            }
-          }
+              console.log('获取专题文章信息'+response.body);
+               _this.featureArticleList = JSON.parse(response.body);
+            });
+          }     
         }
        });
 
        //vue.getArtileListOfPage(1);
-       vue.getFeatureList(0, 10);
        console.log('当前文章ID'+vue.getQueryString('id'));
        vue.getArticle(vue.getQueryString('id'));
      </script>
