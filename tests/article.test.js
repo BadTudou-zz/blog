@@ -99,11 +99,13 @@ describe('test article', function() {
 
 	describe('#search', function() {
 		it('should return true when add article is ok', function(done) {
+			var fields = 'id, title';
 			var condition = {author:'作者'};
-			article.search(condition, (err, result)=> {
+			article.search(fields, condition, (err, result)=> {
 				if (!err)
 				{
 					done();
+					console.log(JSON.stringify(result));
 				}
 				else
 				{
@@ -113,8 +115,9 @@ describe('test article', function() {
 		});
 
 		it('should return true when add article is error', function(done) {
+			var fields = 'id, title';
 			var condition = {};
-			article.search(condition, (err, result)=> {
+			article.search(fields, condition, (err, result)=> {
 				if (!err)
 				{
 					done(err);
@@ -129,8 +132,9 @@ describe('test article', function() {
 
 	describe('#list', function() {
 		it('should return true when list range is ok', function(done) {
+			var fields = 'id, title';
 			var range = {from:0, to:1};
-			article.list(range, (err, result)=> {
+			article.list(fields, range, (err, result)=> {
 				if (!err)
 				{
 					done();
@@ -144,8 +148,9 @@ describe('test article', function() {
 		});
 
 		it('should return true when list feature is error', function(done) {
+			var fields = 'id, title';
 			var range = {from:0, to:-1};
-			article.list(range, (err, result)=> {
+			article.list(fields, range, (err, result)=> {
 				if (!err)
 				{
 					done(err);
@@ -158,11 +163,13 @@ describe('test article', function() {
 		});
 
 		it('should return true when list range is null', function(done) {
-			article.list(null, (err, result)=> {
+			var fields = 'id, title';
+			article.list(fields, null, (err, result)=> {
 				if (!err)
 				{
 					done();
 					console.log(JSON.stringify(result));
+
 				}
 				else
 				{

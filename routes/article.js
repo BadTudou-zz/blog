@@ -3,6 +3,7 @@
 var express = require('express');
 var router = express.Router();
 var article = require('../servers/article.js');
+var path = require('path');
 
 router.get('/', function(req, res, next) {
 	var params = req.query;
@@ -21,8 +22,9 @@ router.get('/', function(req, res) {
 	}
 	switch(params.action) {
 		case 'list-range':
+			var fields = params.fields;
 			var range = {from: Number(params.from), to: Number(params.to)};
-			article.list(range, (err, result)=> {
+			article.list(fields, range, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify(result));
 				else
@@ -31,7 +33,8 @@ router.get('/', function(req, res) {
 			break;
 
 		case 'list-all':
-			article.list(null, (err, result)=> {
+			var fields = params.fields;
+			article.list(fields, null, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify(result));
 				else
@@ -39,9 +42,9 @@ router.get('/', function(req, res) {
 			});
 			break;
 
-		case 'list-search':
+		case 'article-search':
 			var conditionArray = params.condition.split(',');
-			console.log(conditionArray);
+			var fields = params.fields;
 			var condition = {};
 			for(var item in conditionArray) {
 				var ele = conditionArray[item];
@@ -50,12 +53,17 @@ router.get('/', function(req, res) {
 				var value = ele.substr(index+1);
 				condition[proto] = value;
 			}
-			article.search(condition, (err, result)=> {
+			article.search(fields, condition, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify(result));
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
 			});
+			break;
+
+		case 'article-show':
+			var id = params.id;
+			res.sendFile(path.dirname(__dirname)+'/public/html/article.html');
 			break;
 
 		default:

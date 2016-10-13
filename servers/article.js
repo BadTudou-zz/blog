@@ -60,7 +60,7 @@ var edit = function edit(article, callback) {
 
 };
 
-var list = function list(range, callback) {
+var list = function list(fields, range, callback) {
 	database.connection((err, connection)=> {
 		if(err) {
 			callback(err, null);
@@ -68,9 +68,9 @@ var list = function list(range, callback) {
 		}
 		var sql;
 		if(!range)
-			sql = `SELECT * FROM tb_article`;
+			sql = `SELECT ${fields} FROM tb_article`;
 		else
-			sql = `SELECT * FROM tb_article LIMIT ${range.from},${range.to};`
+			sql = `SELECT ${fields} FROM tb_article LIMIT ${range.from},${range.to};`
 		connection.query(sql, function(err, result) {
 			callback(err, result);
 		 	return (err);
@@ -78,14 +78,15 @@ var list = function list(range, callback) {
 	});
 };
 
-var search = function search(condition, callback) {
+var search = function search(fields, condition, callback) {
 	database.connection((err, connection)=> {
 		if(err) {
 			callback(err, null);
 			return false;
 		}
-
-		connection.query(`SELECT * FROM tb_article WHERE ? ;`, condition, function(err, result) {
+		//var fields = connection.escape(fields);
+		console.log(`SELECT `+fields +` FROM tb_article WHERE ? ;`);
+		connection.query(`SELECT ${fields} FROM tb_article WHERE ? ;`, condition, function(err, result) {
 			callback(err, result);
 		 	return (err);
 		});

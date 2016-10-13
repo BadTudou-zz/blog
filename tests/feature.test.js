@@ -76,7 +76,8 @@ describe('test feature', function() {
 	describe('#search', function() {
 		it('should return true when add feature is ok', function(done) {
 			var condition = {author:'作者'};
-			feature.search(condition, (err, result)=> {
+			var fields = 'id, title';
+			feature.search(fields, condition, (err, result)=> {
 				if (!err)
 				{
 					done();
@@ -90,7 +91,8 @@ describe('test feature', function() {
 
 		it('should return true when add feature is error', function(done) {
 			var condition = {};
-			feature.search(condition, (err, result)=> {
+			var fields = 'id, title';
+			feature.search(fields, condition, (err, result)=> {
 				if (!err)
 				{
 					done(err);
@@ -105,8 +107,9 @@ describe('test feature', function() {
 
 	describe('#list', function() {
 		it('should return true when list range is ok', function(done) {
+			var fields = 'id, title';
 			var range = {from:0, to:5};
-			feature.list(range, (err, result)=> {
+			feature.list(fields, range, (err, result)=> {
 				if (!err)
 				{
 					done();
@@ -119,8 +122,9 @@ describe('test feature', function() {
 		});
 
 		it('should return true when list feature is error', function(done) {
+			var fields = 'id, title';
 			var range = {from:0, to:-1};
-			feature.list(range, (err, result)=> {
+			feature.list(fields ,range, (err, result)=> {
 				if (!err)
 				{
 					done(err);
@@ -133,7 +137,8 @@ describe('test feature', function() {
 		});
 
 		it('should return true when list range is null', function(done) {
-			feature.list(null, (err, result)=> {
+			var fields = 'id, title';
+			feature.list(fields, null, (err, result)=> {
 				if (!err)
 				{
 					done();
