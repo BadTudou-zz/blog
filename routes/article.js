@@ -14,6 +14,10 @@ router.get('/', function(req, res, next) {
 		next();
 });
 
+router.put('/', function(req, res) {
+
+});
+
 router.get('/', function(req, res) {
 	var params = req.query;
 	if(typeof(params.action) === 'undefined')
@@ -64,6 +68,11 @@ router.get('/', function(req, res) {
 		case 'article-show':
 			var id = params.id;
 			res.sendFile(path.dirname(__dirname)+'/public/html/article.html');
+			break;
+
+		case 'article-new':
+			//var id = params.id;
+			res.sendFile(path.dirname(__dirname)+'/public/html/article-new.html');
 			break;
 
 		default:

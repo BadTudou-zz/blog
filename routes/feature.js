@@ -32,7 +32,8 @@ router.get('/', function(req, res) {
 			break;
 
 		case 'list-all':
-			feature.list(null, (err, result)=> {
+			var fields = params.fields;
+			feature.list(fields, null, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify(result));
 				else

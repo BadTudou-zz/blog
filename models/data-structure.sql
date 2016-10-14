@@ -20,7 +20,12 @@ CREATE TABLE tb_article
 	countRead INTEGER UNSIGNED NOT NULL DEFAULT 0,
 	countShare INTEGER UNSIGNED NOT NULL DEFAULT 0,
 	countDiscuss INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	labels VARCHAR(256)
+	labels VARCHAR(256),
+	state VARCHAR(16) NOT NULL DEFAULT  'pass'
+	/*
+		state 'verify':审核, 'pass':通过, 'unpass':未通过, 'draft':草稿
+	*/
+
 )
 
 	ALTER TABLE tb_article ADD CONSTRAINT fk_article_featuresID 
