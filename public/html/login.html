@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>杜小豆的编程小道</title>
+	<meta charset="utf-8">
+  <base href="http://localhost:3000" target="_blank">
+	<link rel="bookmark"  type="image/x-icon"  href="images/favicon.ico"/>
+  <link rel="shortcut icon" href="images/favicon.ico">
+	<!-- bootstrap css -->
+	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
+
+	<style type="text/css">
+	p
+	{
+		text-indent:2em;
+	}
+	div#div-logo
+	{
+		height: 140px; width: 140px; margin-top: 10px; margin-bottom: 10px; background: #FFF; border-color: #0099F0;
+		border-width: 2px;
+	}
+	div#div-logo>a>img
+	{
+		height: 60%; width: 70%; margin: 15%;
+	}
+	div#div-searchbox
+	{
+		width: 50%;	margin: auto;
+	}
+	div#div-nav
+	{
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	div#div-location>ol
+	{
+		background-color: #FFF; border:solid 1px; border-color: #DDD;
+	}
+	div#div-features
+	{
+		margin-top: 0px;
+	}
+	div#div-article,div#div-features
+	{
+		margin-bottom: 10px;
+	}
+	div#div-footer
+	{
+		width: 100%; height: 160px; padding-top: 10px; border-color: #0099F0;
+	}
+	div#div-footer--curtain
+	{
+		height: 50%; background-color: #0099F0;
+	}
+	div#div-footer--curtain--copyright
+	{
+		color: #FFF; font-size: 150%; font-weight: bold; text-align: center;
+	}
+	div#div-footer--contact>ol
+	{
+		height: 50%; margin-bottom: 36px;
+	}
+	div#div-footer--contact>ol>li
+	{
+		display: inline;
+	}
+	div#div-footer--contact>ol>li>a>img
+	{
+		width: 72px; height: 72px;
+	}
+	img#img-headProtrait
+	{
+		height: 100px; width: 100px;
+	}
+		
+	</style>
+
+	<!-- jquery js -->
+	<script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+	<!-- bootstrap js -->
+	<script src="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+  <!-- vue js -->
+  <script src="http://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
+  <!-- vue-resource js -->
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.0.1/vue-resource.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div id="div-logo" class="img-circle img-thumbnail img-responsive center-block">
+			<a href="http://119.29.96.174/blog"><img src ="images/logo/logo.png" title="杜小豆的编程小道"></a>
+		</div>
+
+		<div id="div-searchbox" class="input-group">
+      		<input type="text" class="form-control" placeholder="搜索文章...">
+      		<span class="input-group-btn">
+        		<button class="btn btn-secondary" type="button">搜索!</button>
+      		</span>
+    </div>
+
+		<div id="div-nav" class="navbar navbar-static-top navbar-dark bg-inverse" style="background-color: #0099F0">
+			<a class="navbar-brand" href="#">杜小豆的编程小道</a>
+			<ul class="nav navbar-nav">
+        		<li class="nav-item active">
+        		  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        		</li>
+        		<li class="nav-item">
+        		  <a class="nav-link" href="#">专题</a>
+        		</li>
+        		<li class="nav-item">
+        		  <a class="nav-link" href="#">关于</a>
+        		</li>
+        		<li class="nav-item">
+        		  <a class="nav-link" href="#">联系</a>
+        		</li>
+      </ul>
+    </div>
+
+    <div id="div-location" class="col-lg-9">
+      	<ol class="breadcrumb">
+  				<li><a href="#">Home</a></li>
+  				<li><a href="#">管理</a></li>
+  				<li class="active">登陆</li>
+			  </ol>
+    </div>
+
+    <div class="col-lg-3 text-center">
+      	生命，宇宙，以及一切的答案。
+      	<br><strong>让我们的思想自由恋爱吧！</strong>
+    </div>
+      	
+    <div id="div-login"  class="col-lg-9" >
+      <div class="col-lg-offset-2 col-lg-8">
+        <form>
+          <fieldset class="form-group">
+            <label for="input-name">用户名</label>
+            <input type="text" class="form-control" id="input-name" placeholder="用户名" v-model="user.name">
+          </fieldset>
+      
+          <fieldset class="form-group">
+            <label for="input-password">密码</label>
+            <input type="password" class="form-control" id="input-password" placeholder="密码" v-model="user.password">
+          </fieldset>
+
+          <fieldset class="form-group">
+            <div class="col-lg-offset-6 col-lg-6">
+              <button type="button" class="btn btn-primary" @click="login()">登陆</button>
+              <button type="button" class="btn btn-link text-center">忘记密码?</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="col-lg-offset-1 col-lg-10 text-center">
+		<div id="div-tips"  class="alert" role="alert" hidden>
+		</div>
+	</div>
+	</div>
+  
+    <div id="div-intro" class="col-lg-3">
+      <div class="card">
+          <div class="card-header text-left" style="margin-bottom: 10px; background-color: #006DE0; color:#fff;">
+            关于我
+          </div>
+          <img id="img-headProtrait" src="images/system/head-protrait.jpg" alt="Card image"  class="img-circle img-thumbnail img-responsive center-block" >
+          <div class="card-block" style="padding: 5px">
+            <h4 class="card-title text-center" style="padding: 0px">杜小豆</h4>
+            <h6 class="card-subtitle text-muted text-center">IT男,程序猿,技术型工作者.</h6>
+          </div>
+          
+          <div class="card-block" style="padding: 5px; font-size: 80%;">
+            <p class="card-text">
+              一个农民的后代,不了解乡土,也不懂得城市.
+            </p>
+          </div>
+
+          <div class="card-block" style="padding: 0px; font-size: 80%;">
+            <p class="card-text">
+              我有一个脑袋,装载思想、未来与梦想.
+            </p>
+          </div>
+      </div>  
+    </div>
+
+    <!-- 页脚 -->
+		<div id='div-footer' class="col-lg-12">
+			<!-- 页脚-联系方式 -->
+			<div id='div-footer--contact'>
+				<ol>
+					<li class="col-lg-2"><a href="#"><img src="images/logo/twitter-logo.png"></a></li>
+					<li class="col-lg-2"><a href="#"><img src="images/logo/facebook-logo.png"></a></li>
+					<li class="col-lg-2"><a href="#"><img src="images/logo/wechat-logo.png"></a></li>
+					<li class="col-lg-2"><a href="#"><img src="images/logo/weibo-logo.png"></a></li>
+					<li class="col-lg-2"><a href="#"><img src="images/logo/qq-logo.png"></a></li>
+					<li class="col-lg-2"><a href="#"><img src="images/logo/email-logo.png"></a></li>
+				</ol>
+			</div>
+			<!-- 页脚-版权 -->
+			<div id='div-footer--curtain'>
+				<div id='div-footer--curtain--copyright'>
+					Copyright © 2016 BadTudou. All rights reserved.				
+		    </div>
+	   </div>
+
+     <script>
+        var vue = new Vue({
+          el: 'body',
+          data:{
+            user:{
+              name:'',
+              password:''
+            }
+          },
+          methods:{
+            login: function(){
+            	var _this = this;
+              this.$http.put('user', {action:'user-login', user:this.user}).then((response)=>{
+                var data = JSON.parse(response.body);
+                console.log(response);
+                console.log(data);
+                if(!data.err){
+                	_this.showTip('alert alert-success', '正确：登陆成功', 3000);
+                }
+                else{
+                  _this.showTip('alert alert-danger', '错误：用户名或密码错误', 3000);
+                }
+              })
+             },
+             showTip: function(classText, text, time){
+            	$('#div-tips').attr('hidden',false).attr('class', classText).html(text);
+            	setTimeout(function()
+            	{
+             		$('#div-tips').attr('hidden', true);
+            	},time);
+            }
+          }
+        });
+     </script>
+</body>
+</html>
