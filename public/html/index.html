@@ -253,8 +253,7 @@
             var fields = 'id, title, subtitle, link, introduction, coverLink';
             var from = (page-1)*this.articleCountOfPerPage;
             var to = page * this.articleCountOfPerPage;
-            console.log('请求的链接'+`/article?action=list-range&fields=${fields}&from=${from}&to=${to}`);
-            this.$http.get((`/article?action=list-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
+            this.$http.get((`/article?action=article-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
             {
               console.log(response.body);
               _this.articleList = JSON.parse(response.body);
@@ -265,7 +264,7 @@
           {
             var _this = this;
             var fields = 'id, title, countArticle';
-            this.$http.get((`/feature?action=list-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
+            this.$http.get((`/feature?action=feature-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
             {
               console.log(response.body);
               _this.featureList = JSON.parse(response.body);

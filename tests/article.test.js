@@ -98,9 +98,9 @@ describe('test article', function() {
 	});
 
 	describe('#search', function() {
-		it('should return true when add article is ok', function(done) {
+		it('should return true when search article is ok', function(done) {
 			var fields = 'id, title';
-			var condition = {author:'作者'};
+			var condition = {author:'作者', id:124};
 			article.search(fields, condition, (err, result)=> {
 				if (!err)
 				{

@@ -77,7 +77,8 @@ var search = function search(fields, condition, callback) {
 			return false;
 		}
 
-		connection.query(`SELECT ${fields} FROM tb_feature WHERE ? ;`, condition, function(err, result) {
+		var conditionString = (utility.obj2array(condition)).join(' AND ');
+		connection.query(`SELECT ${fields} FROM tb_feature WHERE ${conditionString} ;`, function(err, result) {
 			callback(err, result);
 		 	return (err);
 		});

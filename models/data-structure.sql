@@ -81,7 +81,7 @@ CREATE TABLE tb_discuss
  */
 
 //
-CREATE TABLE tb_admin
+CREATE TABLE tb_user
 (
 	name VARCHAR(128) NOT NULL PRIMARY KEY,
 	nickname VARCHAR(128) NOT NULL,

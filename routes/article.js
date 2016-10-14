@@ -15,6 +15,17 @@ router.get('/', function(req, res, next) {
 });
 
 router.put('/', function(req, res) {
+	var params = req.query;
+	if(typeof(params.action) === 'undefined')
+	{
+		return res.end(JSON.stringify({err:true, result:'illegal request action'}));
+	}
+	switch(params.action) {
+		case 'article-add':
+			var newArticle = req.body.newArticle;
+			console.log(newArticle);
+			res.end('end article-add');
+	}
 
 });
 
@@ -25,7 +36,7 @@ router.get('/', function(req, res) {
 		return res.end(JSON.stringify({err:true, result:'illegal request action'}));
 	}
 	switch(params.action) {
-		case 'list-range':
+		case 'article-range':
 			var fields = params.fields;
 			var range = {from: Number(params.from), to: Number(params.to)};
 			article.list(fields, range, (err, result)=> {
@@ -36,7 +47,7 @@ router.get('/', function(req, res) {
 			});
 			break;
 
-		case 'list-all':
+		case 'article-all':
 			var fields = params.fields;
 			article.list(fields, null, (err, result)=> {
 				if(!err)

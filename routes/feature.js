@@ -20,7 +20,7 @@ router.get('/', function(req, res) {
 		return res.end(JSON.stringify({err:true, result:'illegal request action'}));
 	}
 	switch(params.action) {
-		case 'list-range':
+		case 'feature-range':
 			var range = {from: Number(params.from), to: Number(params.to)};
 			var fields = params.fields;
 			feature.list(fields, range, (err, result)=> {
@@ -31,7 +31,7 @@ router.get('/', function(req, res) {
 			});
 			break;
 
-		case 'list-all':
+		case 'feature-all':
 			var fields = params.fields;
 			feature.list(fields, null, (err, result)=> {
 				if(!err)

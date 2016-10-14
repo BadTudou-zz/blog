@@ -50,7 +50,7 @@ var edit = function edit(article, callback) {
 			callback(err, null);
 			return false;
 		}
-		var values = connection.escape(utility.objectValues(article));
+		//var values = connection.escape(utility.objectValues(article));
 
 		connection.query(`UPDATE tb_article SET ? WHERE id = ${article.id} ;`, article, function(err, result) {
 			callback(err || !result.affectedRows, result);
@@ -84,9 +84,8 @@ var search = function search(fields, condition, callback) {
 			callback(err, null);
 			return false;
 		}
-		//var fields = connection.escape(fields);
-		console.log(`SELECT `+fields +` FROM tb_article WHERE ? ;`);
-		connection.query(`SELECT ${fields} FROM tb_article WHERE ? ;`, condition, function(err, result) {
+		var conditionString = (utility.obj2array(condition)).join(' AND ');
+		connection.query(`SELECT ${fields} FROM tb_article WHERE ${conditionString} ;`, condition, function(err, result) {
 			callback(err, result);
 		 	return (err);
 		});

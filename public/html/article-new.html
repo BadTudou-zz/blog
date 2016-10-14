@@ -260,7 +260,7 @@
           {
             var _this = this;
             var fields = 'id, title, countArticle';
-            this.$http.get((`/feature?action=list-all&fields=${fields}`)).then((response) => 
+            this.$http.get((`/feature?action=feature-all&fields=${fields}`)).then((response) => 
             {
               console.log(response.body);
               _this.featureList = JSON.parse(response.body);
@@ -273,8 +273,10 @@
             {
               console.log(proto+this.newArticle[proto]);
             }
-
-            return false;
+            this.$http.put('/article?action=article-add',{newArticle:this.newArticle}).then((response)=>
+            {
+              console.log(response.body);
+            });
           }
         }
        });
