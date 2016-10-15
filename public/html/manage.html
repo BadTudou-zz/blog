@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>杜小豆的编程小道</title>
+	<meta charset="utf-8">
+  <base target="_blank">
+	<link rel="bookmark"  type="image/x-icon"  href="images/favicon.ico"/>
+  <link rel="shortcut icon" href="images/favicon.ico">
+	<!-- bootstrap css -->
+	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
+
+	<style type="text/css">
+	p
+	{
+		text-indent:2em;
+	}
+	div#div-logo
+	{
+		height: 140px; width: 140px; margin-top: 10px; margin-bottom: 10px; background: #FFF; border-color: #0099F0;
+		border-width: 2px;
+	}
+	div#div-logo>a>img
+	{
+		height: 60%; width: 70%; margin: 15%;
+	}
+	
+	div#div-nav
+	{
+		margin-top: 10px;
+		margin-bottom: 10px;
+    background-color: #0099F0;
+	}
+	
+	div#div-footer
+	{
+		width: 100%; height: 80px;  border-color: #0099F0;
+	}
+	div#div-footer--curtain
+	{
+		height: 50%; background-color: #0099F0;
+	}
+	div#div-footer--curtain--copyright
+	{
+		color: #FFF; font-size: 150%; font-weight: bold; text-align: center;
+	}
+	
+	img#img-headProtrait
+	{
+		height: 100px; width: 100px;
+	}
+		
+	</style>
+
+	<!-- jquery js -->
+	<script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+	<!-- bootstrap js -->
+	<script src="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+  <!-- vue js -->
+  <script src="http://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
+  <!-- vue-resource js -->
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.0.1/vue-resource.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div id="div-logo" class="img-circle img-thumbnail img-responsive center-block">
+			<a href="http://119.29.96.174/blog"><img src ="images/logo/logo.png" title="杜小豆的编程小道"></a>
+		</div>
+
+		<div id="div-nav" class="navbar navbar-static-top navbar-dark bg-inverse">
+			<a class="navbar-brand" href="#">杜小豆的编程小道-管理中心</a>
+    </div>
+
+    <div id="div-manage"  class="col-lg-11" >
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" href="#tabcontent-user" role="tab" data-toggle="tab">用户</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#tabcontent-content" role="tab" data-toggle="tab">内容</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#tabcontent-system" role="tab" data-toggle="tab">系统</a>
+        </li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        
+        <div role="tabpanel" class="tab-pane active" id="tabcontent-user">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" href="#home" role="tab" data-toggle="tab">全部</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#home" role="tab" data-toggle="tab">待审核</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#home" role="tab" data-toggle="tab">添加</a>
+            </li>
+          </ul>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="tabcontent-content">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" href="#home" role="tab" data-toggle="tab">专题</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#home" role="tab" data-toggle="tab">文章</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#home" role="tab" data-toggle="tab">评论</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#home" role="tab" data-toggle="tab">留言</a>
+            </li>
+          </ul>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="tabcontent-system">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" href="#home" role="tab" data-toggle="tab">状态</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#home" role="tab" data-toggle="tab">日志</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#home" role="tab" data-toggle="tab">数据库</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#home" role="tab" data-toggle="tab">设置</a>
+            </li>
+          </ul>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="settings">...</div>
+      </div>
+      <div class="col-lg-offset-1 col-lg-10 text-center">
+		    <div id="div-tips"  class="alert" role="alert" hidden>
+		    </div>
+	    </div>
+	   </div>
+  
+    <!-- 页脚 -->
+		<div id='div-footer' class="col-lg-12">
+			<!-- 页脚-版权 -->
+			<div id='div-footer--curtain'>
+				<div id='div-footer--curtain--copyright'>
+					Copyright © 2016 BadTudou. All rights reserved.				
+		    </div>
+	   </div>
+
+     <script>
+     </script>
+</body>
+</html>
