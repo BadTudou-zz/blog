@@ -157,11 +157,10 @@
   					 <span class="label label-pill label-info pull-right">{{featureItem.countArticle}}</span>
   				  </a>
 			   </div>
-    </div>
-      
-    <div id="div-intro" class="col-lg-3">
-      <div class="card">
-          <div class="card-header text-left" style="margin-bottom: 10px; background-color: #006DE0; color:#fff;">
+
+         <div id="div-intro" style="margin-top: 10px; float: bottom">
+          <div class="card">
+          <div class="card-header text-left" style="margin-bottom: 10px;  background-color: #006DE0; color:#fff;">
             关于我
           </div>
           <img id="img-headProtrait" src="images/system/head-protrait.jpg" alt="Card image"  class="img-circle img-thumbnail img-responsive center-block" >
@@ -183,25 +182,23 @@
           </div>
       </div>  
     </div>
-
+    </div>
+      
+    
     <div id="div-paging" class="col-lg-7 col-lg-offset-4">
     	<nav>
   		  <ul class="pagination">
-    		  <li class="disabled">
-    		  		<a href="#" aria-label="Previous">
+    		  <li class="{{page.current==1?'disabled':''}}">
+    		  		<a href="#" aria-label="Previous" @click="getArtileListOfPage(page.current-1)">
     		  			<span aria-hidden="true">&laquo;</span>
     		  			<span class="sr-only">Previous</span>
     		  		</a>
     		  </li>
-    		  <li class="active">
-    		  		<a href="#">1 <span class="sr-only">(current)</span></a>
+    		  <li v-bind:class="n == page.current?'active':''" v-for="n in generatePage()">
+    		  		<a href="#" >{{n}}</a>
     		  </li>
-    		  <li><a href="#">2</a></li>
-    		  <li><a href="#">3</a></li>
-    		  <li><a href="#">4</a></li>
-    		  <li><a href="#">5</a></li>
     		  <li>
-    		  	<a href="#" aria-label="Next">
+    		  	<a href="#" aria-label="Next" @click="getArtileListOfPage(page.current+1)>
     		  			<span aria-hidden="true">&raquo;</span>
     		  			<span class="sr-only">Next</span>
     		  		</a>
@@ -245,18 +242,30 @@
         data: {
           articleList:null,
           featureList:null,
-          articleCountOfPerPage:6
+          page:{
+            articleCountOfPerPage: 6,
+            current:1,
+            bottom:1,
+            top:5
+          }
         },
         methods: {
           getArtileListOfPage: function(page){
             var _this = this;
             var fields = 'id, title, subtitle, link, introduction, coverLink';
-            var from = (page-1)*this.articleCountOfPerPage;
-            var to = page * this.articleCountOfPerPage;
+            var from = (page-1)*this.page.articleCountOfPerPage;
+            var to = page * this.page.articleCountOfPerPage;
             this.$http.get((`/article?action=article-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
             {
+              var data = JSON.parse(response.body);
               console.log(response.body);
-              _this.articleList = JSON.parse(response.body);
+              if(!data.err){
+                _this.page.current = page;
+                _this.articleList = data.result;;
+              }else{
+                console.log('获取数据失败');
+              }
+              return false;
             });
           },
 
@@ -266,15 +275,32 @@
             var fields = 'id, title, countArticle';
             this.$http.get((`/feature?action=feature-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
             {
+              var data = JSON.parse(response.body);
               console.log(response.body);
-              _this.featureList = JSON.parse(response.body);
+              if(!data.err){
+                _this.featureList = data.result;
+              }else{
+                console.log('获取专题列表失败');
+              }
             });
+          },
+          generatePage: function(){
+            var pages = [];
+            for(var i = 0;i < this.page.top-this.page.bottom+1; i++){
+              pages.push(Number(this.page.current)+i);
+            }
+            console.log(pages);
+            return pages;
           }
         }
        });
 
        vue.getArtileListOfPage(1);
        vue.getFeatureList(0, 10);
+       $('#div-paging').on('click', 'a', function(event){
+          vue.getArtileListOfPage($(this ).text());
+          return false;
+       });
      </script>
 </body>
 </html>

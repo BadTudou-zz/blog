@@ -25,7 +25,7 @@ router.get('/', function(req, res) {
 			var fields = params.fields;
 			feature.list(fields, range, (err, result)=> {
 				if(!err)
-					res.end(JSON.stringify(result));
+					res.end(JSON.stringify({err:false, result:result}));
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
 			});
@@ -35,7 +35,7 @@ router.get('/', function(req, res) {
 			var fields = params.fields;
 			feature.list(fields, null, (err, result)=> {
 				if(!err)
-					res.end(JSON.stringify(result));
+					res.end(JSON.stringify({err:false, result:result}));
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
 			});
@@ -54,7 +54,7 @@ router.get('/', function(req, res) {
 			}
 			feature.search(fields, condition, (err, result)=> {
 				if(!err)
-					res.end(JSON.stringify(result));
+					res.end(JSON.stringify({err:false, result:result}));
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
 			});

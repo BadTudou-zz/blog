@@ -58,7 +58,7 @@ describe('test user', function() {
 				});
 		});
 
-		it('should return true when del article is error', function(done){
+		it('should return true when del user is error', function(done){
 			var userDel = {name:'test9'};	// 手动指定要更新的用户名
 			user.del(userDel,(err, result)=>
 				{
@@ -87,7 +87,7 @@ describe('test user', function() {
 			});
 		});
 
-		it('should return true when add article is error', function(done) {
+		it('should return true when search user is error', function(done) {
 			var fields = 'name, nickname';
 			var condition = {};
 			user.search(fields, condition, (err, result)=> {

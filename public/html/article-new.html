@@ -184,7 +184,11 @@
         </div>
       </fieldset>
 
-      <div class="col-lg-3 col-lg-offset-9">
+      <div class="col-lg-offset-1 col-lg-5 text-center">
+        <div id="div-tips"  class="alert" role="alert" hidden>
+        </div>
+      </div>
+      <div class="col-lg-3 col-lg-offset-3">
         <button type="button" id="btn_add" class="btn btn-primary" @click="add()">立即发布</button>
         </div>
     </form>
@@ -262,22 +266,34 @@
             var fields = 'id, title, countArticle';
             this.$http.get((`/feature?action=feature-all&fields=${fields}`)).then((response) => 
             {
-              console.log(response.body);
-              _this.featureList = JSON.parse(response.body);
+              var data = JSON.parse(response.body);
+              if(!data.err){
+                _this.featureList = data.result;
+              }else{
+                _this.showTip('alert alert-danger', '错误：获取专题列表失败', 3000);
+              }
             });
           },
           add: function()
           {
-            console.log('添加新文章的数据');
-            for(var proto in this.newArticle)
-            {
-              console.log(proto+this.newArticle[proto]);
-            }
+            var _this = this;
             this.$http.put('/article?action=article-add',{newArticle:this.newArticle}).then((response)=>
             {
-              console.log(response.body);
+              var data = JSON.parse(response.body);
+              if(!data.err){
+                _this.showTip('alert alert-success', '添加新文章成功,<a href="article?action=article-show&id='+JSON.stringify(data.result)+'">立即预览</a>', 3000);
+              }else{
+                _this.showTip('alert alert-danger', '错误：添加新文章失败', 3000);
+              }
             });
-          }
+          },
+          showTip: function(classText, text, time){
+              $('#div-tips').attr('hidden',false).attr('class', classText).html(text);
+              setTimeout(function()
+              {
+                $('#div-tips').attr('hidden', true);
+              },time);
+            }
         }
        });
 

@@ -33,7 +33,7 @@ describe('test article', function() {
 				});
 		});
 
-		it('should return true when add article propery is error', function(done){
+		it('should return true when add article  is error', function(done){
 			newArticle.featureID = -1234;
 			article.add(newArticle,(err)=>
 				{
@@ -114,7 +114,7 @@ describe('test article', function() {
 			});
 		});
 
-		it('should return true when add article is error', function(done) {
+		it('should return true when search article is error', function(done) {
 			var fields = 'id, title';
 			var condition = {};
 			article.search(fields, condition, (err, result)=> {
@@ -131,7 +131,7 @@ describe('test article', function() {
 	});
 
 	describe('#list', function() {
-		it('should return true when list range is ok', function(done) {
+		it('should return true when list article range is ok', function(done) {
 			var fields = 'id, title';
 			var range = {from:0, to:1};
 			article.list(fields, range, (err, result)=> {
@@ -147,7 +147,7 @@ describe('test article', function() {
 			});
 		});
 
-		it('should return true when list feature is error', function(done) {
+		it('should return true when list article range is error', function(done) {
 			var fields = 'id, title';
 			var range = {from:0, to:-1};
 			article.list(fields, range, (err, result)=> {
@@ -162,7 +162,7 @@ describe('test article', function() {
 			});
 		});
 
-		it('should return true when list range is null', function(done) {
+		it('should return true when list article range is null', function(done) {
 			var fields = 'id, title';
 			article.list(fields, null, (err, result)=> {
 				if (!err)

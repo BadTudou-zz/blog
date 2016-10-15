@@ -50,7 +50,7 @@ describe('test feature', function() {
 	});
 
 	describe('#del', function() {
-		it('should return true when add feature is ok', function(done) {
+		it('should return true when del feature is ok', function(done) {
 			var featureDel = {id:insertId};	// 此处要删除的ID是#add 添加的记录，手动指定请启用下面的语句
 			//var featureDel = {id:60};	// 手动指定要删除的ID
 			feature.del(featureDel,(err, result)=> {
@@ -61,7 +61,7 @@ describe('test feature', function() {
 				});
 		});
 
-		it('should return true when add feature is error', function(done) {
+		it('should return true when del feature is error', function(done) {
 			var featureDel = {id:insertId+1};// 此处要删除的ID是#add 添加的记录+1，手动指定请启用下面的语句
 			//var featureDel = {id:-1234567};	// 手动指定要删除的ID
 			feature.del(featureDel,(err, result)=> {
@@ -74,7 +74,7 @@ describe('test feature', function() {
 	});
 
 	describe('#search', function() {
-		it('should return true when add feature is ok', function(done) {
+		it('should return true when search feature is ok', function(done) {
 			var condition = {author:'作者'};
 			var fields = 'id, title';
 			feature.search(fields, condition, (err, result)=> {
@@ -89,7 +89,7 @@ describe('test feature', function() {
 			});
 		});
 
-		it('should return true when add feature is error', function(done) {
+		it('should return true when search feature is error', function(done) {
 			var condition = {};
 			var fields = 'id, title';
 			feature.search(fields, condition, (err, result)=> {
@@ -106,7 +106,7 @@ describe('test feature', function() {
 	});
 
 	describe('#list', function() {
-		it('should return true when list range is ok', function(done) {
+		it('should return true when list feature range is ok', function(done) {
 			var fields = 'id, title';
 			var range = {from:0, to:5};
 			feature.list(fields, range, (err, result)=> {
@@ -121,7 +121,7 @@ describe('test feature', function() {
 			});
 		});
 
-		it('should return true when list feature is error', function(done) {
+		it('should return true when list feature range is error', function(done) {
 			var fields = 'id, title';
 			var range = {from:0, to:-1};
 			feature.list(fields ,range, (err, result)=> {
@@ -136,7 +136,7 @@ describe('test feature', function() {
 			});
 		});
 
-		it('should return true when list range is null', function(done) {
+		it('should return true when list feature range is null', function(done) {
 			var fields = 'id, title';
 			feature.list(fields, null, (err, result)=> {
 				if (!err)

@@ -3,92 +3,64 @@ var utility = require('../utility/utility.js');
 var database = require('../servers/database.js');
 var add = function add(article, callback)
 {
-	database.connection((err, connection)=>
-	{
-		if(err)
-		{
-			callback(err);
-			return false;
-		}
-		//文章字段：id, featureID, title, subtitle, link, license, timeCreated, 
-		//		timeRelease, timeModify, author, introduction, coverLink, 
-		//		content, countRead, countShare, countDiscuss, labels
-		
-		var values = connection.escape(utility.objectValues(article));
-		
-		connection.query(`INSERT INTO tb_article (featureID, title, subtitle, author, link, license, 
-			timeRelease, introduction, coverLink, content, labels)
-			VALUES(${values});`, function(err, result)
-		 	{
-		 		callback(err || !result.affectedRows, result);
-		 		return  (err || result.affectedRows);
-		 	});
-	});
+
+	//文章字段：id, featureID, title, subtitle, link, license, timeCreated, 
+	//		timeRelease, timeModify, author, introduction, coverLink, 
+	//		content, countRead, countShare, countDiscuss, labels
+	
+	var values = database.escape(utility.objectValues(article));
+	var sql = `INSERT INTO tb_article (featureID, title, subtitle, author, link, license, 
+		timeRelease, introduction, coverLink, content, labels)
+		VALUES(${values});`;
+	
+	database.query(sql, function(err, result)
+	 	{
+	 		callback(err || !result.affectedRows, result);
+	 		return  (err || result.affectedRows);
+	 	});
 };
 
-var del = function del(article, callback)
+var del = function del(condition, callback)
 {
-	database.connection((err, connection)=>
-	{
-		if(err)
-		{
-			callback(err);
-			return false;
-		}
-
-		connection.query('DELETE FROM tb_article WHERE ? ;', article, function(err, result)
-		 	{
-		 		callback(err || !result.affectedRows, result);
-		 		return (err || result.affectedRows);
-		 	});
-	});
+	var conditionString = (utility.obj2array(condition)).join(' AND ');
+	var sqlString = `DELETE FROM tb_article WHERE ${conditionString} ;`;
+	database.query(sqlString, function(err, result)
+	 	{
+	 		callback(err || !result.affectedRows, result);
+	 		return (err || result.affectedRows);
+	 	});
 };
 
 var edit = function edit(article, callback) {
-	database.connection((err, connection)=> {
-		if(err) {
-			callback(err, null);
-			return false;
-		}
-		//var values = connection.escape(utility.objectValues(article));
-
-		connection.query(`UPDATE tb_article SET ? WHERE id = ${article.id} ;`, article, function(err, result) {
-			callback(err || !result.affectedRows, result);
-		 	return (err || result.affectedRows);
-		});
+	
+	var values = (utility.obj2array(article)).join(' , ');
+	var sqlString = `UPDATE tb_article SET ${values} WHERE id = ${article.id} ;`;
+	database.query(sqlString, function(err, result) {
+		callback(err || !result.affectedRows, result);
+	 	return (err || result.affectedRows);
 	});
-
 };
 
 var list = function list(fields, range, callback) {
-	database.connection((err, connection)=> {
-		if(err) {
-			callback(err, null);
-			return false;
-		}
-		var sql;
-		if(!range)
-			sql = `SELECT ${fields} FROM tb_article`;
-		else
-			sql = `SELECT ${fields} FROM tb_article LIMIT ${range.from},${range.to};`
-		connection.query(sql, function(err, result) {
-			callback(err, result);
-		 	return (err);
-		});
+	var sql;
+	if(!range)
+		sql = `SELECT ${fields} FROM tb_article`;
+	else
+		sql = `SELECT ${fields} FROM tb_article LIMIT ${range.from},${range.to};`
+	
+	database.query(sql, function(err, result) {
+		callback(err, result);
+	 	return (err);
 	});
+
 };
 
 var search = function search(fields, condition, callback) {
-	database.connection((err, connection)=> {
-		if(err) {
-			callback(err, null);
-			return false;
-		}
-		var conditionString = (utility.obj2array(condition)).join(' AND ');
-		connection.query(`SELECT ${fields} FROM tb_article WHERE ${conditionString} ;`, condition, function(err, result) {
-			callback(err, result);
-		 	return (err);
-		});
+	var conditionString = (utility.obj2array(condition)).join(' AND ');
+	var sql = `SELECT ${fields} FROM tb_article WHERE ${conditionString} ;`;
+	database.query(sql, function(err, result) {
+		callback(err, result);
+	 	return (err);
 	});
 };
 

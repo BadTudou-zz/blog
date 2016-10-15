@@ -14,6 +14,15 @@ router.get('/', function(req, res, next) {
 		next();
 });
 
+router.put('/', function(req, res, next) {
+	if(req.session.loginstate == 'true'){
+		next();
+	}
+	else{
+		res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+	}
+});
+
 router.put('/', function(req, res) {
 	var params = req.query;
 	if(typeof(params.action) === 'undefined')
@@ -23,8 +32,13 @@ router.put('/', function(req, res) {
 	switch(params.action) {
 		case 'article-add':
 			var newArticle = req.body.newArticle;
-			console.log(newArticle);
-			res.end('end article-add');
+			article.add(newArticle, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result.insertId}));
+				else
+					res.end(JSON.stringify({err:true, result:'error'}));
+			});
+			break;
 	}
 
 });
@@ -41,7 +55,7 @@ router.get('/', function(req, res) {
 			var range = {from: Number(params.from), to: Number(params.to)};
 			article.list(fields, range, (err, result)=> {
 				if(!err)
-					res.end(JSON.stringify(result));
+					res.end(JSON.stringify({err:false, result:result}));
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
 			});
@@ -51,7 +65,7 @@ router.get('/', function(req, res) {
 			var fields = params.fields;
 			article.list(fields, null, (err, result)=> {
 				if(!err)
-					res.end(JSON.stringify(result));
+					res.end(JSON.stringify({err:false, result:result}));
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
 			});
@@ -70,7 +84,7 @@ router.get('/', function(req, res) {
 			}
 			article.search(fields, condition, (err, result)=> {
 				if(!err)
-					res.end(JSON.stringify(result));
+					res.end(JSON.stringify({err:false, result:result}));
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
 			});
@@ -83,7 +97,12 @@ router.get('/', function(req, res) {
 
 		case 'article-new':
 			//var id = params.id;
-			res.sendFile(path.dirname(__dirname)+'/public/html/article-new.html');
+			if(req.session.loginstate == 'true'){
+				res.sendFile(path.dirname(__dirname)+'/public/html/article-new.html');
+			}
+			else{
+				res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+			}
 			break;
 
 		default:

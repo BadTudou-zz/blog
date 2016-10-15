@@ -1,23 +1,26 @@
 var conf = require('../conf/conf.js');
 var mysql = require('mysql');
-var pool;
+var pool  = mysql.createPool(conf.mysql);
 
-var create = function create(callback)
-{
-	pool  = mysql.createPool(conf.mysql);
-	callback(pool);
-};
-
-var  connection = function connection(callback)
-{
-	create((pool)=>
+var query = function query(sql, callback){
+	pool.getConnection(function(err, connection)
 	{
-		pool.getConnection(function(err, connection)
-		{
-			callback(err, connection);
-			return !err;
-		});
+		if(!err){
+			connection.query(sql,function(err,result){  
+                connection.release();  
+                callback(err, result);
+            });
+		}
+		else{
+			callback(err, null);
+		}
+		return !err;
 	});
 };
 
-exports.connection = connection;
+var escape = function(query){
+	return mysql.escape(query);
+};
+
+exports.query = query;
+exports.escape = escape;

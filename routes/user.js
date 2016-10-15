@@ -1,6 +1,7 @@
 'use static';
 
 var express = require('express');
+var session = require('express-session');
 var router = express.Router();
 var user = require('../servers/user');
 var path = require('path');
@@ -35,10 +36,13 @@ router.put('/', function(req, res) {
 			console.log(JSON.stringify(condition));
 			user.search(fields, condition, (err, result)=> {
 
-				if(!err && result.length)
+				if(!err && result.length){
+					req.session.loginstate = 'true';
 					res.end(JSON.stringify({err:false, result:result}));
-				else
+				}
+				else{
 					res.end(JSON.stringify({err:true, result:'user not exists or password war wrong'}));
+				}
 
 			});
 			break;

@@ -134,42 +134,42 @@
 		</div>
 
     <div id="div-featureArticleList" class="col-lg-3">
-      		<div class="list-group ">
-      			<span class="list-group-item" style="background-color:#006DE0; color:#fff;">
-      				专题文章
-      			</span>
-  				  <a href="article?action=article-show&id={{featureArticleItem.id}}"}}" class="list-group-item" v-for="featureArticleItem in featureArticleList">
-  					 {{featureArticleItem.title}}
-  					 <span class="label label-pill label-info pull-right">1</span>
-  				  </a>
-			   </div>
+      <div class="list-group ">
+      	<span class="list-group-item" style="background-color:#006DE0color:#fff;">
+      		专题文章
+      	</span>
+  		  <a href="article?action=article-show&id={{featureArticleItem.id}}}" class="list-group-item" v-for="featureArticleItem in featureArticleList">
+  			 {{featureArticleItem.title}}
+  			 <span class="label label-pill label-info pull-right">1</span>
+  		  </a>
+			  </div>
+
+      <div id="div-intro" style="padding-top: 10px;">
+        <div class="card">
+            <div class="card-header text-left" style="margin-bottom: 10px;  background-color: #006DE0; color:#fff;">
+              关于我
+            </div>
+            <img id="img-headProtrait" src="images/system/head-protrait.jpg" alt= "Card image"  class="img-circle img-thumbnail img-responsive   center-block" >
+            <div class="card-block" style="padding: 5px">
+              <h4 class="card-title text-center" style="padding: 0px">杜小豆</h4>
+              <h6 class="card-subtitle text-muted text-center"> IT男,程序猿,技术型工作者.</h6>
+            </div>
+            
+            <div class="card-block" style="padding: 5px; font-size: 80%;">
+              <p class="card-text">
+                一个农民的后代,不了解乡土,也不懂得城市.
+              </p>
+            </div>
+  
+            <div class="card-block" style="padding: 0px; font-size: 80%;">
+              <p class="card-text">
+                我有一个脑袋,装载思想、未来与梦想.
+              </p>
+            </div>
+        </div>  
+      </div>
     </div>
       
-    <div id="div-intro" class="col-lg-3">
-      <div class="card">
-          <div class="card-header text-left" style="margin-bottom: 10px; background-color: #006DE0; color:#fff;">
-            关于我
-          </div>
-          <img id="img-headProtrait" src="images/system/head-protrait.jpg" alt="Card image"  class="img-circle img-thumbnail img-responsive center-block" >
-          <div class="card-block" style="padding: 5px">
-            <h4 class="card-title text-center" style="padding: 0px">杜小豆</h4>
-            <h6 class="card-subtitle text-muted text-center">IT男,程序猿,技术型工作者.</h6>
-          </div>
-          
-          <div class="card-block" style="padding: 5px; font-size: 80%;">
-            <p class="card-text">
-              一个农民的后代,不了解乡土,也不懂得城市.
-            </p>
-          </div>
-
-          <div class="card-block" style="padding: 0px; font-size: 80%;">
-            <p class="card-text">
-              我有一个脑袋,装载思想、未来与梦想.
-            </p>
-          </div>
-      </div>  
-    </div>
-
     <div id="div-paging" class="col-lg-7 col-lg-offset-4">
     	<nav>
   		  <ul class="pagination">
@@ -241,9 +241,15 @@
             var fields = 'id, title';
             this.$http.get((`/feature?action=feature-search&fields=${fields}&condition=id:${id}`)).then((response) => 
             {
-              console.log('专题信息'+response.body);
-              _this.featureCurrent = JSON.parse(response.body)[0];
-              _this.getFeatureArticle(_this.featureCurrent.id);
+              var data = JSON.parse(response.body);
+              console.log(response.body);
+              if(!data.err){
+                _this.featureCurrent = data.result[0];
+                _this.getFeatureArticle(_this.featureCurrent.id);
+              }else{
+                console.log('获取专题列表失败');
+              }
+              
             });
           },
           getQueryString: function(name) {
@@ -258,12 +264,13 @@
             var fields = 'id, featureID, title, subtitle, link';
             this.$http.get((`/article?action=article-search&fields=${fields}&condition=id:${id}`)).then((response) => 
             {
-              console.log('获取文章信息'+response.body);
-              _this.articleCurrent = JSON.parse(response.body)[0];
+              var data = JSON.parse(response.body);
+              if(!data.err){
+                _this.articleCurrent = data.result[0];
               document.title = _this.articleCurrent.title+_this.articleCurrent.subtitle + '-' + document.title;
               $('#iframe-article').attr("src", _this.articleCurrent.link);
-              console.log(_this.articleCurrent.link);
               _this.featureCurrent = _this.getFeature(_this.articleCurrent.featureID);
+             }
             });
           },
           getFeatureArticle: function(id){
@@ -271,8 +278,11 @@
             var fields = 'id, featureID, title, subtitle, link';
             this.$http.get((`/article?action=article-search&fields=${fields}&condition=featureID:${id}`)).then((response) => 
             {
-              console.log('获取专题文章信息'+response.body);
-               _this.featureArticleList = JSON.parse(response.body);
+              console.log(response.body);
+              var data = JSON.parse(response.body);
+              if(!data.err){
+               _this.featureArticleList = data.result;
+             }
             });
           }     
         }

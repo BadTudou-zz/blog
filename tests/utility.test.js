@@ -19,6 +19,11 @@ describe('test utility', function() {
 			var obj = {id:1, name:'test'};
 			assert.ok(utility.obj2array(obj) == ['id = 1', 'name = "test"'].toString());
 		});
+
+		it('should return true when the obj2array is error', function() {
+			var obj = {id:1, name:'test'};
+			assert.ok(utility.obj2array(obj) != ['id = 1', 'name= "test"'].toString());
+		});
 	});
 	
 });
