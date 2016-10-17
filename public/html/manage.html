@@ -74,83 +74,181 @@
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" href="#tabcontent-user" role="tab" data-toggle="tab">用户</a>
+          <a class="nav-link active" href="#tabcontent-user" role="tab" data-toggle="tab" @click="activeItem='tabcontent-user', activeSubItem = 'tabcontent-user-all'">用户</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#tabcontent-content" role="tab" data-toggle="tab">内容</a>
+          <a class="nav-link" href="#tabcontent-content" role="tab" data-toggle="tab" @click="activeItem='tabcontent-content', activeSubItem = 'tabcontent-content-feature-all'">内容</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#tabcontent-system" role="tab" data-toggle="tab">系统</a>
+          <a class="nav-link" href="#tabcontent-system" role="tab" data-toggle="tab" @click="activeItem='tabcontent-system', activeSubItem = 'tabcontent-system-state' ">系统</a>
         </li>
       </ul>
 
-      <!-- Tab panes -->
-      <div class="tab-content">
-        
-        <div role="tabpanel" class="tab-pane active" id="tabcontent-user">
-          <ul class="nav nav-tabs" role="tablist">
+      <div class="col-lg-12">
+          <div role="tabpanel" v-show="activeItem == 'tabcontent-user'" id="tabcontent-user">
+            <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" href="#home" role="tab" data-toggle="tab">全部</a>
+              <a class="nav-link active" href="#tabcontent-user-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-user-all'">
+              全部</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#home" role="tab" data-toggle="tab">待审核</a>
+              <a class="nav-link" @click="activeSubItem = 'tabcontent-user-verify'" href="#home" role="tab" data-toggle="tab">待审核</a>
+            </li>
+            </ul>
+          </div>
+
+          <div v-show="activeItem == 'tabcontent-content'" class="active" id="tabcontent-content">
+            <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-feature-all'||activeSubItem == 'tabcontent-content-feature-add')}"  href="#tabcontent-content-feature" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-all'">内容：专题</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#home" role="tab" data-toggle="tab">添加</a>
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-article-all'||activeSubItem == 'tabcontent-content-article-add')}"  href="#tabcontent-content-article" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-all'">内容：文章</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-discuss-all'||activeSubItem == 'tabcontent-content-discuss-verify')}"  href="#tabcontent-content-discuss" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-all'">内容：评论</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-message-all'||activeSubItem == 'tabcontent-content-message-verify')}"  href="#tabcontent-content-message" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-message-all'">内容：留言</a>
+            </li>
+            </ul>
+          </div>
+
+        <!-- 系统：菜单 -->
+        <div role="tabpanel" v-show="activeItem == 'tabcontent-system'" class="tab-pane" id="tabcontent-system">
+          <ul class="nav nav-tabs"  role="tablist">
+            <li class="nav-item">
+              <a class="nav-link" href="#home" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-system-state'">状态</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"  href="#home" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-system-log'">日志</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"  href="#home" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-system-database'">数据库</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"  href="#home" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-system-set'">设置</a>
             </li>
           </ul>
         </div>
 
-        <div role="tabpanel" class="tab-pane" id="tabcontent-content">
-          <ul class="nav nav-tabs" role="tablist">
+        <div class="tab-content" v-show="activeItem == 'tabcontent-content'">
+          <div  role="tabpanel" class="tab-pane" :class="{'active':(activeSubItem == 'tabcontent-content-feature-all'||activeSubItem == 'tabcontent-content-feature-add')}" id="tabcontent-content-feature">
+            <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" href="#home" role="tab" data-toggle="tab">专题</a>
+              <a class="nav-link" :class="{'active':activeSubItem == 'tabcontent-content-feature-all'}" href="#tabcontent-content-feature-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-all'"">专题：全部</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#home" role="tab" data-toggle="tab">文章</a>
+              <a class="nav-link" :class="{'active':activeSubItem == 'tabcontent-content-feature-add'}" href="#tabcontent-content-feature-add" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-add'"">专题：添加</a>
+            </li>
+            </ul>
+          </div>
+
+        <div role="tabpanel" class="tab-pane" :class="{'active':(activeSubItem == 'tabcontent-content-article-all'||activeSubItem == 'tabcontent-content-article-add')}" id="tabcontent-content-article">
+            <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-article-all')}" href="#tabcontent-content-article-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-all'"">文章：全部</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#home" role="tab" data-toggle="tab">评论</a>
+              <a class="nav-link" :class="{'active':activeSubItem == 'tabcontent-content-article-add'}" href="#tabcontent-content-article-add" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-add'"">文章：添加</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#home" role="tab" data-toggle="tab">留言</a>
-            </li>
-          </ul>
+            </ul>
         </div>
-        <div role="tabpanel" class="tab-pane" id="tabcontent-system">
-          <ul class="nav nav-tabs" role="tablist">
+
+        <div role="tabpanel" class="tab-pane" :class="{'active':(activeSubItem == 'tabcontent-content-discuss-all'||activeSubItem == 'tabcontent-content-discuss-verify')}" id="tabcontent-content-discuss">
+            <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" href="#home" role="tab" data-toggle="tab">状态</a>
+              <a class="nav-link active" href="#tabcontent-content-discuss-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-all'"">评论：全部</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#home" role="tab" data-toggle="tab">日志</a>
+              <a class="nav-link " href="#tabcontent-content-discuss-verify" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-verify'">评论：待审核</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#home" role="tab" data-toggle="tab">数据库</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#home" role="tab" data-toggle="tab">设置</a>
-            </li>
-          </ul>
+            </ul>
         </div>
-        <div role="tabpanel" class="tab-pane" id="settings">...</div>
+
+        <div role="tabpanel" class="tab-pane" :class="{'active':(activeSubItem == 'tabcontent-content-message-all'||activeSubItem == 'tabcontent-content-message-verify')}"  id="tabcontent-content-message">
+            <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" href="#tabcontent-content-message-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-message-all'">留言：全部</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#tabcontent-content-message-verify" role="tab" data-toggle="tab"
+               @click="activeSubItem = 'tabcontent-content-message-verify'">留言：待审核</a>
+            </li>
+            </ul>
+        </div>
+        
+        
       </div>
+      <!-- 实际的内容 -->
+      <div>
+          <div  v-show="activeItem == 'tabcontent-user'">
+            asdfas 
+            <div v-show="activeSubItem == 'tabcontent-user-all'"  id="tabcontent-user-all">a 全部用户
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-user-verify'"  id="tabcontent-user-all">审核用户
+            </div>
+        </div>
+
+        <div  v-show="activeItem == 'tabcontent-content'">
+            asdfas 
+            <div v-show="activeSubItem == 'tabcontent-content-feature-all'"  id="tabcontent-user-all">a 全部专题
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-content-feature-add'"  id="tabcontent-user-all">添加专题
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-content-article-all'"  id="tabcontent-user-all">a 全部文章
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-content-article-add'"  id="tabcontent-user-all">添加文章
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-content-discuss-all'"  id="tabcontent-user-all">a 全部评论
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-content-discuss-verify'"  id="tabcontent-user-all">待审核评论
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-content-message-all'"  id="tabcontent-message-all">a 全部留言
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-content-message-verify'"  id="tabcontent-message-all">待审核留言
+            </div>
+        </div>
+          <div  v-show="activeItem == 'tabcontent-system'">
+            <div v-show="activeSubItem == 'tabcontent-system-state'"  id="tabcontent-message-all">系统状态
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-system-log'"  id="tabcontent-message-all">日志
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-system-database'"  id="tabcontent-message-all">数据库
+            </div>
+            <div v-show="activeSubItem == 'tabcontent-system-set'"  id="tabcontent-message-all">设置
+            </div>
+        </div>
+      </div>
+      
+
       <div class="col-lg-offset-1 col-lg-10 text-center">
-		    <div id="div-tips"  class="alert" role="alert" hidden>
-		    </div>
-	    </div>
-	   </div>
+        <div id="div-tips"  class="alert" role="alert" hidden>
+        </div>
+      </div>
+     </div>
+      </div>
+
+ 
   
     <!-- 页脚 -->
 		<div id='div-footer' class="col-lg-12">
 			<!-- 页脚-版权 -->
 			<div id='div-footer--curtain'>
 				<div id='div-footer--curtain--copyright'>
-					Copyright © 2016 BadTudou. All rights reserved.				
+					<!-- Copyright © 2016 BadTudou. All rights reserved.	 -->	{{activeItem}}{{activeSubItem}}		
 		    </div>
 	   </div>
 
      <script>
+      var vue = new Vue({
+        el:'body',
+        data:{
+          activeItem:'tabcontent-user',
+          activeSubItem:'tabcontent-user-all'
+        }
+      });
+
      </script>
 </body>
 </html>
