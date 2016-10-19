@@ -7,7 +7,7 @@ var add = function add(user, callback)
 	//文章字段：name, nickname, password, question, anser, authority, timeCreate, state
 	
 	var values = database.escape(utility.objectValues(user));
-	var sqlString = `INSERT INTO tb_user (name, nickname, password, question, anser)
+	var sqlString = `INSERT INTO tb_user (name, nickname, password, question, anser, authority)
 		VALUES(${values});`;
 	database.query(sqlString, function(err, result)
 	 	{
@@ -35,6 +35,20 @@ var search = function search(fields, condition, callback) {
 	});
 };
 
+var list = function list(fields, range, callback) {
+	
+	var sqlString;
+	if(!range)
+		sqlString = `SELECT ${fields} FROM tb_user GROUP BY timeCreate`;
+	else
+		sqlString = `SELECT ${fields} FROM tb_user GROUP BY timeCreate LIMIT ${range.from},${range.to};`
+	
+	database.query(sqlString, function(err, result) {
+		callback(err, result);
+	 	return (err);
+	});
+};
+
 var del = function del(condition, callback)
 {
 	var conditionString = (utility.obj2array(condition)).join(' AND ');
@@ -50,3 +64,4 @@ exports.add = add;
 exports.del = del;
 exports.edit = edit;
 exports.search = search;
+exports.list = list;

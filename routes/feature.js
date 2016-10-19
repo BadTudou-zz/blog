@@ -4,6 +4,35 @@ var express = require('express');
 var router = express.Router();
 var feature = require('../servers/feature.js');
 
+router.put('/', function(req, res) {
+	var params = req.body;
+	if(typeof(params.action) === 'undefined')
+	{
+		return res.end(JSON.stringify({err:true, result:'illegal request action'}));
+	}
+	switch(params.action) {
+		case 'feature-add':
+			if(req.session.loginstate != 'true'){
+				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+			}
+			var newFeature = req.body.newFeature;
+			console.log(JSON.stringify(newFeature));
+			feature.add(newFeature, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result.insertId}));
+				else
+					res.end(JSON.stringify({err:true, result:'add new feature error'}));
+
+			});
+			break;
+
+		default:
+			res.end(JSON.stringify({err:true, result:'undefined request action'}));
+
+
+		}
+});
+
 router.get('/', function(req, res, next) {
 	var params = req.query;
 	var count = Object.keys(params).length;
@@ -57,6 +86,16 @@ router.get('/', function(req, res) {
 					res.end(JSON.stringify({err:false, result:result}));
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
+			});
+			break;
+
+		case 'feature-del':
+			var condition = {id:params.id};
+			feature.del(condition, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'delete feature error'}));
 			});
 			break;
 

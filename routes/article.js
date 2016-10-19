@@ -38,7 +38,6 @@ router.put('/', function(req, res) {
 				else
 					res.end(JSON.stringify({err:true, result:'add new article error'}));
 
-				console.log(JSON.stringify(err));
 			});
 			break;
 
@@ -124,6 +123,21 @@ router.get('/', function(req, res) {
 				res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
 			}
 			break;
+
+		case 'article-del':
+			if(req.session.loginstate != 'true'){
+				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+			}
+
+			var condition = {id:params.id};
+			article.del(condition, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'delete article error'}));
+			});
+			break;
+
 
 		default:
 			res.end(JSON.stringify({err:true, result:'undefined request action'}));

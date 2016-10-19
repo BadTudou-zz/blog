@@ -33,7 +33,6 @@ router.put('/', function(req, res) {
 				name: params.user.name,
 				password: params.user.password
 			};
-			console.log(JSON.stringify(condition));
 			user.search(fields, condition, (err, result)=> {
 
 				if(!err && result.length){
@@ -43,6 +42,21 @@ router.put('/', function(req, res) {
 				else{
 					res.end(JSON.stringify({err:true, result:'user not exists or password war wrong'}));
 				}
+
+			});
+			break;
+
+		case 'user-add':
+			if(req.session.loginstate != 'true'){
+				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+			}
+			var newUser = req.body.newUser;
+			console.log(JSON.stringify(newUser));
+			user.add(newUser, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:newUser.name}));
+				else
+					res.end(JSON.stringify({err:true, result:'add new user error'}));
 
 			});
 			break;
@@ -61,6 +75,34 @@ router.get('/', function(req, res) {
 	}
 
 	switch(params.action) {
+		case 'user-range':
+			if(req.session.loginstate != 'true'){
+				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+			}
+				
+			var range = {from: Number(params.from), to: Number(params.to)};
+			var fields = 'name, nickname, authority, timeCreate';
+			user.list(fields, range, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'error'}));
+			});
+			break;
+
+		case 'user-del':
+			if(req.session.loginstate != 'true'){
+				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+			}
+			
+			var condition = {name:params.name};
+			user.del(condition, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'delete user error'}));
+			});
+			break;
 		
 		default:
 			res.end(JSON.stringify({err:true, result:'undefined request action'}));

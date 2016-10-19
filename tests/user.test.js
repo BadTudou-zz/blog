@@ -5,7 +5,8 @@ var newUser = {
 	nickname:'杜小豆',
 	password:'admin',
 	question:'who are you?',
-	anser:'i am badtudou'
+	anser:'i am badtudou',
+	authority:'website'
 };
 
 describe('test user', function() {
