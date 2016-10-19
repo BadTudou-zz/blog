@@ -36,7 +36,19 @@ router.put('/', function(req, res) {
 				if(!err)
 					res.end(JSON.stringify({err:false, result:result.insertId}));
 				else
-					res.end(JSON.stringify({err:true, result:'error'}));
+					res.end(JSON.stringify({err:true, result:'add new article error'}));
+
+				console.log(JSON.stringify(err));
+			});
+			break;
+
+		case 'article-edit':
+			var newArticle = req.body.newArticle;
+			article.edit(newArticle, (err, result)=>{
+				if(!err)
+					res.end(JSON.stringify({err:false, result:true}));
+				else
+					res.end(JSON.stringify({err:true, result:'edit article error'}));
 			});
 			break;
 	}
@@ -93,6 +105,14 @@ router.get('/', function(req, res) {
 		case 'article-show':
 			var id = params.id;
 			res.sendFile(path.dirname(__dirname)+'/public/html/article.html');
+			break;
+
+		case 'article-edit':
+			if(req.session.loginstate != 'true'){
+				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+			}
+			var id = params.id;
+			res.sendFile(path.dirname(__dirname)+'/public/html/article-new.html');
 			break;
 
 		case 'article-new':

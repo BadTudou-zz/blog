@@ -9,6 +9,9 @@
 	<!-- bootstrap css -->
 	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
 
+  <!-- <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
 	<style type="text/css">
 	p
 	{
@@ -65,19 +68,19 @@
 		<div id="div-logo" class="img-circle img-thumbnail img-responsive center-block">
 			<a href="http://119.29.96.174/blog"><img src ="images/logo/logo.png" title="杜小豆的编程小道"></a>
 		</div>
-
+    
 		<div id="div-nav" class="navbar navbar-static-top navbar-dark bg-inverse">
 			<a class="navbar-brand" href="#">杜小豆的编程小道-管理中心</a>
     </div>
 
-    <div id="div-manage"  class="col-lg-11" >
+    <div id="div-manage"  class="col-lg-12" >
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" href="#tabcontent-user" role="tab" data-toggle="tab" @click="activeItem='tabcontent-user', activeSubItem = 'tabcontent-user-all'">用户</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#tabcontent-content" role="tab" data-toggle="tab" @click="activeItem='tabcontent-content', activeSubItem = 'tabcontent-content-feature-all'">内容</a>
+          <a class="nav-link" href="#tabcontent-content" role="tab" data-toggle="tab" @click="activeItem='tabcontent-content', activeSubItem = 'tabcontent-content-feature-all', getFeatureList(0,5)">内容</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#tabcontent-system" role="tab" data-toggle="tab" @click="activeItem='tabcontent-system', activeSubItem = 'tabcontent-system-state' ">系统</a>
@@ -100,10 +103,10 @@
           <div v-show="activeItem == 'tabcontent-content'" class="active" id="tabcontent-content">
             <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-feature-all'||activeSubItem == 'tabcontent-content-feature-add')}"  href="#tabcontent-content-feature" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-all'">内容：专题</a>
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-feature-all'||activeSubItem == 'tabcontent-content-feature-add')}"  href="#tabcontent-content-feature" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-all', getFeatureList(0, 5)">内容：专题</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-article-all'||activeSubItem == 'tabcontent-content-article-add')}"  href="#tabcontent-content-article" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-all'">内容：文章</a>
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-article-all'||activeSubItem == 'tabcontent-content-article-add')}"  href="#tabcontent-content-article" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-all', getArticleList(0, 5)">内容：文章</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-discuss-all'||activeSubItem == 'tabcontent-content-discuss-verify')}"  href="#tabcontent-content-discuss" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-all'">内容：评论</a>
@@ -184,21 +187,76 @@
       <div>
           <div  v-show="activeItem == 'tabcontent-user'">
             asdfas 
-            <div v-show="activeSubItem == 'tabcontent-user-all'"  id="tabcontent-user-all">a 全部用户
+            <div class="list-group" v-show="activeSubItem == 'tabcontent-user-all'"  id="tabcontent-user-all">
+              全部用户
+              
             </div>
             <div v-show="activeSubItem == 'tabcontent-user-verify'"  id="tabcontent-user-all">审核用户
             </div>
         </div>
 
         <div  v-show="activeItem == 'tabcontent-content'">
-            asdfas 
-            <div v-show="activeSubItem == 'tabcontent-content-feature-all'"  id="tabcontent-user-all">a 全部专题
+            <div v-show="activeSubItem == 'tabcontent-content-feature-all'"  id="tabcontent-user-all">
+              <ul class="list-group">
+                <li class="list-group-item" v-for="featureItem in featureList" style="height: 50px;">
+                  <div class="col-lg-4 text-center">
+                    <a href="feature?action=feature-show&id={{featureItem.id}}"><i class="fa fa-1x fa-archive" aria-hidden="true"></i>{{featureItem.title}}</a>
+                  </div>
+                  <div class="col-lg-1">
+                    <a href="author?action=author-show&id={{featureItem.author}}"><i class="fa fa-1x fa-user" aria-hidden="true"></i>{{featureItem.author}}</a>
+                  </div>
+                  <div class="col-lg-3">
+                    <i class="fa  fa-1x fa-clock-o" aria-hidden="true"></i>{{new Date(featureItem.timeCreate).toLocaleString()}}
+                  </div>
+                  <div class="col-lg-2">
+                    <a class="dropdown-item" href="feature?action=feature-show&id={{featureItem.id}}"><span class="label label-default label-pill">{{featureItem.countArticle}}</span></a>
+                  </div>
+                  <div class="btn-group col-lg-2" >
+                      <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-1x fa-cog" aria-hidden="true"></i>操作</button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="feature?action=feature-show&id={{featureItem.id}}"><i class="fa fa-1x fa-eye" aria-hidden="true"></i>预览</a>
+                        <a class="dropdown-item" href="feature?action=feature-edit&id={{featureItem.id}}"><i class="fa fa-1x fa-pencil-square-o" aria-hidden="true"></i>编辑</a>
+                        <a class="dropdown-item" href=""><i class="fa fa-1x fa-times" aria-hidden="true"></i>删除</a>
+                      </div>
+                    </div>
+                </li>
+              </ul>
             </div>
             <div v-show="activeSubItem == 'tabcontent-content-feature-add'"  id="tabcontent-user-all">添加专题
             </div>
-            <div v-show="activeSubItem == 'tabcontent-content-article-all'"  id="tabcontent-user-all">a 全部文章
+            <div v-show="activeSubItem == 'tabcontent-content-article-all'"  id="tabcontent-user-all">
+              <ul class="list-group">
+                <li class="list-group-item text-center vertical-center" v-for="articleItem in articleList" style="height: 50px; margin: 0 auto;">
+                  <div class="col-lg-4 text-center">
+                    <a href="article?action=article-show&id={{articleItem.id}}"><i class="fa fa-1x fa-file" aria-hidden="true"></i>{{articleItem.title+articleItem.subtitle}}</a>
+                  </div>
+                  <div class="col-lg-1">
+                    <a href="author?action=author-show&id={{articleItem.author}}"><i class="fa fa-1x fa-user" aria-hidden="true"></i>{{articleItem.author}}</a>
+                  </div>
+                  <div class="col-lg-3" >
+                    <i class="fa fa-1x fa-clock-o" aria-hidden="true"></i>{{new Date(articleItem.timeCreated).toLocaleString()}}
+                  </div>
+                  <span class="col-lg-2">
+                    <a href="feature?action=feature-show&id={{articleItem.featureID}}"><i class="fa fa-1x fa-archive" aria-hidden="true"></i>{{getFeatureName(articleItem.featureID)}}</a>
+                  </span>
+                    <div class="btn-group col-lg-2" >
+                      <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-1x fa-cog" aria-hidden="true"></i>操作</button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="article?action=article-show&id={{articleItem.id}}"><i class="fa fa-1x fa-eye" aria-hidden="true"></i>预览</a>
+                        <a class="dropdown-item" href="article?action=article-edit&id={{articleItem.id}}"><i class="fa fa-1x fa-pencil-square-o" aria-hidden="true"></i>编辑</a>
+                        <a class="dropdown-item" href=""><i class="fa fa-1x fa-times" aria-hidden="true"></i>删除</a>
+                      </div>
+                    </div>
+                  <span class="col-lg-1">
+                    <span class="label label-default label-pill pull-right">{{featureItem.id}}</span>
+                  </span>
+                  
+                  
+                </li>
+              </ul>
             </div>
             <div v-show="activeSubItem == 'tabcontent-content-article-add'"  id="tabcontent-user-all">添加文章
+              <iframe src="http://localhost:3000/article?action=article-new" style="width: 100%; height: 500px;"></iframe>
             </div>
             <div v-show="activeSubItem == 'tabcontent-content-discuss-all'"  id="tabcontent-user-all">a 全部评论
             </div>
@@ -236,7 +294,7 @@
 			<!-- 页脚-版权 -->
 			<div id='div-footer--curtain'>
 				<div id='div-footer--curtain--copyright'>
-					<!-- Copyright © 2016 BadTudou. All rights reserved.	 -->	{{activeItem}}{{activeSubItem}}		
+					Copyright © 2016 BadTudou. All rights reserved.		
 		    </div>
 	   </div>
 
@@ -245,7 +303,49 @@
         el:'body',
         data:{
           activeItem:'tabcontent-user',
-          activeSubItem:'tabcontent-user-all'
+          activeSubItem:'tabcontent-user-all',
+          featureList:null,
+          articleList:null
+        },
+        methods:{
+          getFeatureList: function(from, to)
+          {
+            var _this = this;
+            var fields = 'id, title, timeCreate, author, countArticle';
+            this.$http.get((`/feature?action=feature-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
+            {
+              var data = JSON.parse(response.body);
+              console.log(response.body);
+              if(!data.err){
+                _this.featureList = data.result;
+              }else{
+                console.log('获取专题列表失败');
+              }
+            });
+          },
+          getArticleList: function(from, to)
+          {
+            var _this = this;
+            var fields = 'id, featureID, title, author, subtitle, timeCreated, link, introduction';
+            this.$http.get((`/article?action=article-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
+            {
+              var data = JSON.parse(response.body);
+              console.log(response.body);
+              if(!data.err){
+                _this.articleList = data.result;;
+              }else{
+                console.log('获取文章列表失败');
+              }
+              return false;
+            });
+          },
+          getFeatureName:function(featureID){
+            for(var featureItem in this.featureList){
+              if (this.featureList[featureItem].id == featureID){
+                return this.featureList[featureItem].title;
+              }
+            }
+          }
         }
       });
 

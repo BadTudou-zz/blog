@@ -119,7 +119,7 @@
       	<ol class="breadcrumb">
   				<li><a href="#">Home</a></li>
   				<li><a href="#">管理</a></li>
-          <li class="active"><a href="#">添加文章</a></li>
+          <li class="active"><a href="#">{{editState?'编辑':'添加'}}文章</a></li>
 			  </ol>
     </div>
 
@@ -134,11 +134,11 @@
       <fieldset class="form-group">
         <div class="col-lg-4">
           <label for="input-title">标题</label>
-          <input type="text" class="form-control" id="input-title" placeholder="标题" v-model="newArticle.title">
+          <input type="text" class="form-control" id="input-title" placeholder="标题" v-model="article.title">
         </div>
         <div class="col-lg-6">
           <label for="input-subtitle">副标题</label>
-          <input type="text" class="form-control" id="input-subtitle" placeholder="副标题" v-model="newArticle.subtitle" style="font-size: 80%">
+          <input type="text" class="form-control" id="input-subtitle" placeholder="副标题" v-model="article.subtitle" style="font-size: 80%">
         </div>
       </fieldset>
 
@@ -146,7 +146,7 @@
       <fieldset class="form-group">
         <div class="col-lg-4">
           <label for="select-feature">所属专题</label>
-          <select class="form-control" id="select-feature" v-model="newArticle.featureID">
+          <select class="form-control" id="select-feature" v-model="article.featureID">
             <option value="{{featureItem.id}}" v-for="featureItem in featureList">{{featureItem.title}}</option>
           </select>
         </div>
@@ -156,7 +156,7 @@
           <div class="input-group">
           
             <span class="input-group-addon">https://example.com/</span>
-            <input type="text" class="form-control" id="input-link" placeholder="链接" v-model="newArticle.link">
+            <input type="text" class="form-control" id="input-link" placeholder="链接" v-model="article.link">
           </div>
         </div>
       
@@ -173,14 +173,14 @@
       <fieldset class="form-group">
         <div class="col-lg-12">
           <label for="textarea-introduction">简介</label>
-          <textarea class="form-control" id="textarea-introduction" rows="3" v-model="newArticle.introduction"></textarea>
+          <textarea class="form-control" id="textarea-introduction" rows="3" v-model="article.introduction"></textarea>
         </div>
       </fieldset>
 
       <fieldset class="form-group">
         <div class="col-lg-12">
           <label for="textarea-content">内容</label>
-          <textarea class="form-control" id="textarea-content" rows="10" v-model="newArticle.content"></textarea>
+          <textarea class="form-control" id="textarea-content" rows="10" v-model="article.content"></textarea>
         </div>
       </fieldset>
 
@@ -189,7 +189,7 @@
         </div>
       </div>
       <div class="col-lg-3 col-lg-offset-3">
-        <button type="button" id="btn_add" class="btn btn-primary" @click="add()">立即发布</button>
+        <button type="button" id="btn_add" class="btn btn-primary" @click="done()">立即{{editState?'更新':'发布'}}</button>
         </div>
     </form>
       	<!-- <iframe id="iframe-article" src="{{'http://localhost:3000/'+currentArticle.link}}" class="col-lg-12" style="border:none; height: 700px"></iframe> -->
@@ -245,7 +245,9 @@
         el: 'body',
         data: {
           featureList:null,
-          newArticle: {
+          editState:false,
+          article: {
+            id:0,
             featureID:-1, 
             title:'', 
             subtitle:'', 
@@ -274,16 +276,34 @@
               }
             });
           },
-          add: function()
+          getArticle: function(id)
           {
             var _this = this;
-            this.$http.put('/article?action=article-add',{newArticle:this.newArticle}).then((response)=>
+            var fields = 'id, featureID, title, subtitle, link, introduction, content';
+            this.$http.get((`/article?action=article-search&fields=${fields}&condition=id:${id}`)).then((response) => 
             {
               var data = JSON.parse(response.body);
               if(!data.err){
-                _this.showTip('alert alert-success', '添加新文章成功,<a href="article?action=article-show&id='+JSON.stringify(data.result)+'">立即预览</a>', 3000);
+                _this.article = data.result[0];
+              document.title = _this.article.title+_this.article.subtitle + '-' + document.title;
+             }
+            });
+          },
+          done: function()
+          {
+            var _this = this;
+            var action = this.editState?'article-edit':'article-add';
+            
+            this.$http.put('/article?action='+action,{newArticle:this.article}).then((response)=>
+            {
+              console.log(response.body);
+              var data = JSON.parse(response.body);
+              var action = _this.editState?'编辑':'添加';
+              if(!data.err){
+                var articleID = _this.editState?_this.article.id:JSON.stringify(data.result);
+                _this.showTip('alert alert-success', action+'文章成功,<a href="article?action=article-show&id='+articleID+'">立即预览</a>', 3000);
               }else{
-                _this.showTip('alert alert-danger', '错误：添加新文章失败', 3000);
+                _this.showTip('alert alert-danger', '错误：'+action+'文章失败', 3000);
               }
             });
           },
@@ -293,11 +313,25 @@
               {
                 $('#div-tips').attr('hidden', true);
               },time);
-            }
+          },
+          getQueryString: function(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+              return null;
+          }
         }
        });
 
        vue.getFeatureList();
+       switch(vue.getQueryString('action'))
+       {
+          case 'article-edit':
+            console.log('编辑状态');
+            vue.editState = true;
+            vue.getArticle(vue.getQueryString('id'));
+            break;
+       }
      </script>
 </body>
 </html>
