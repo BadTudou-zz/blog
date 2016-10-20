@@ -1,3 +1,5 @@
+var mysql = require('mysql');
+
 var objectValues = function objectValues(object)
 {
 	var values = [];  
@@ -21,7 +23,7 @@ var obj2array = function obj2array(object) {
 				tag = '"';
 				break;
 		}
-		values.push(pro+' = '+tag+object[pro]+tag);
+		values.push(pro+' = '+mysql.escape(object[pro]));
 	}
 	return values;
 };

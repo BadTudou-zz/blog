@@ -268,7 +268,7 @@
               if(!data.err){
                 _this.articleCurrent = data.result[0];
               document.title = _this.articleCurrent.title+_this.articleCurrent.subtitle + '-' + document.title;
-              $('#iframe-article').attr("src", _this.articleCurrent.link);
+              $('#iframe-article').attr("src", 'article/'+_this.articleCurrent.link+'.html');
               _this.featureCurrent = _this.getFeature(_this.articleCurrent.featureID);
              }
             });

@@ -117,8 +117,8 @@
 
     <div id="div-location" class="col-lg-9">
       	<ol class="breadcrumb">
-  				<li><a href="#">Home</a></li>
-  				<li><a href="#">管理</a></li>
+  				<li><a href="/">Home</a></li>
+  				<li><a href="manage">管理</a></li>
           <li class="active"><a href="#">{{editState?'编辑':'添加'}}文章</a></li>
 			  </ol>
     </div>
@@ -160,6 +160,13 @@
           </div>
         </div>
       
+      </fieldset>
+
+      <fieldset class="form-group">
+        <div class="col-lg-12">
+          <label for="input-coverLink">封面图片链接</label>
+          <input type="text" class="form-control" id="input-coverLink" placeholder="封面图片链接" v-model="article.coverLink">
+        </div>
       </fieldset>
       <!-- 作者 -->
       <!-- <fieldset class="form-group">
@@ -256,7 +263,7 @@
             license:'协议', 
             timeRelease: '20120901',
             introduction:'',
-            coverLink:'";封面图片链接"',
+            coverLink:'',
             content:'',
             labels:''
           }
@@ -279,7 +286,7 @@
           getArticle: function(id)
           {
             var _this = this;
-            var fields = 'id, featureID, title, subtitle, link, introduction, content';
+            var fields = 'id, featureID, title, subtitle, link, introduction, coverLink, content';
             this.$http.get((`/article?action=article-search&fields=${fields}&condition=id:${id}`)).then((response) => 
             {
               var data = JSON.parse(response.body);
@@ -330,6 +337,10 @@
             console.log('编辑状态');
             vue.editState = true;
             vue.getArticle(vue.getQueryString('id'));
+            break;
+
+          default:
+            delete vue.article.id;
             break;
        }
      </script>

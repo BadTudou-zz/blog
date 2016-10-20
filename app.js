@@ -11,6 +11,7 @@ var article = require('./routes/article');
 var feature = require('./routes/feature');
 var user = require('./routes/user');
 var manage = require('./routes/manage');
+var conf = require('./conf/conf');
 
 var app = express();
 
@@ -37,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/article', article);
+app.use('/article', express.static(path.join(__dirname, conf.system.articleStorePath)));
 app.use('/feature', feature);
 app.use('/user', user);
 app.use('/manage', manage);
