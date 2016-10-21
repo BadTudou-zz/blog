@@ -8,7 +8,7 @@
 	<!-- bootstrap css -->
 	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
 
-<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
+<link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
 	<style type="text/css">
 	p
 	{
@@ -74,10 +74,10 @@
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" href="#tabcontent-user" role="tab" data-toggle="tab" @click="activeItem='tabcontent-user', activeSubItem = 'tabcontent-user-all', getUserList(0, 5)">用户</a>
+          <a class="nav-link active" href="#tabcontent-user" role="tab" data-toggle="tab" @click="activeItem='tabcontent-user', activeSubItem = 'tabcontent-user-all', getList('user', 0, 5)">用户</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#tabcontent-content" role="tab" data-toggle="tab" @click="activeItem='tabcontent-content', activeSubItem = 'tabcontent-content-feature-all', getFeatureList(0,5)">内容</a>
+          <a class="nav-link" href="#tabcontent-content" role="tab" data-toggle="tab" @click="activeItem='tabcontent-content', activeSubItem = 'tabcontent-content-feature-all', getList('feature',0,5)">内容</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#tabcontent-system" role="tab" data-toggle="tab" @click="activeItem='tabcontent-system', activeSubItem = 'tabcontent-system-state' ">系统</a>
@@ -103,10 +103,10 @@
           <div v-show="activeItem == 'tabcontent-content'" class="active" id="tabcontent-content">
             <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-feature-all'||activeSubItem == 'tabcontent-content-feature-add')}"  href="#tabcontent-content-feature" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-all', getFeatureList(0, 5)">内容：专题</a>
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-feature-all'||activeSubItem == 'tabcontent-content-feature-add')}"  href="#tabcontent-content-feature" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-all', getList('feature', 0, 5)">内容：专题</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-article-all'||activeSubItem == 'tabcontent-content-article-add')}"  href="#tabcontent-content-article" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-all', getArticleList(0, 5)">内容：文章</a>
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-article-all'||activeSubItem == 'tabcontent-content-article-add')}"  href="#tabcontent-content-article" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-all', getList('article', 0, 5)">内容：文章</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-discuss-all'||activeSubItem == 'tabcontent-content-discuss-verify')}"  href="#tabcontent-content-discuss" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-all'">内容：评论</a>
@@ -198,7 +198,7 @@
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="user?action=user-show&name={{userItem.name}}"><i class="fa fa-1x fa-eye" aria-hidden="true"></i>预览</a>
                         <a class="dropdown-item" href="user?action=user-edit&name={{userItem.name}}"><i class="fa fa-1x fa-pencil-square-o" aria-hidden="true"></i>编辑</a>
-                        <a class="dropdown-item" href="user?action=user-del&name={{userItem.name}}"><i class="fa fa-1x fa-times" aria-hidden="true"></i>删除</a>
+                        <a class="dropdown-item" href="#" @click="delItem('user', 'name' ,userItem.name)"><i class="fa fa-1x fa-times" aria-hidden="true"></i>删除</a>
                       </div>
                     </div>
                 </li>
@@ -265,7 +265,7 @@
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="feature?action=feature-show&id={{featureItem.id}}"><i class="fa fa-1x fa-eye" aria-hidden="true"></i>预览</a>
                         <a class="dropdown-item" href="feature?action=feature-edit&id={{featureItem.id}}"><i class="fa fa-1x fa-pencil-square-o" aria-hidden="true"></i>编辑</a>
-                        <a class="dropdown-item" href="feature?action=feature-del&id={{featureItem.id}}"><i class="fa fa-1x fa-times" aria-hidden="true"></i>删除</a>
+                        <a class="dropdown-item" href="#" @click="delItem('feature', 'id' ,featureItem.id)"><i class="fa fa-1x fa-times" aria-hidden="true"></i>删除</a>
                       </div>
                     </div>
                 </li>
@@ -274,7 +274,7 @@
                 <nav>
                   <ul class="pagination">
                     <li class="{{page.currentFeature==1?'disabled':''}}">
-                        <a href="#" aria-label="Previous" @click="getFeatureList(5*(page.currentFeature-1), 5*page.currentFeature)">
+                        <a href="#" aria-label="Previous" @click="getList('feature', 5*(page.currentFeature-1), 5*page.currentFeature)">
                           <span aria-hidden="true">&laquo;</span>
                           <span class="sr-only">Previous</span>
                         </a>
@@ -283,7 +283,7 @@
                         <a href="#" >{{n}}</a>
                     </li> -->
                     <li>
-                      <a href="#" aria-label="Next" @click="getFeatureList(5*page.currentFeature, 5*(page.currentFeature+1))">
+                      <a href="#" aria-label="Next" @click="getList('feature', 5*page.currentFeature, 5*(page.currentFeature+1))">
                           <span aria-hidden="true">&raquo;</span>
                           <span class="sr-only">Next</span>
                         </a>
@@ -338,7 +338,7 @@
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="article?action=article-show&id={{articleItem.id}}"><i class="fa fa-1x fa-eye" aria-hidden="true"></i>预览</a>
                         <a class="dropdown-item" href="article?action=article-edit&id={{articleItem.id}}"><i class="fa fa-1x fa-pencil-square-o" aria-hidden="true"></i>编辑</a>
-                        <a class="dropdown-item" href="article?action=article-del&id={{articleItem.id}}"><i class="fa fa-1x fa-times" aria-hidden="true"></i>删除</a>
+                        <a class="dropdown-item" href="#" @click="delItem('article', 'id' ,articleItem.id)"><i class="fa fa-1x fa-times" aria-hidden="true"></i>删除</a>
                       </div>
                     </div>
                   <span class="col-lg-1">
@@ -350,7 +350,7 @@
                 <nav>
                   <ul class="pagination">
                     <li class="{{page.currentArticle==1?'disabled':''}}">
-                        <a href="#" aria-label="Previous" @click="getArticleList(5*(page.currentArticle-1), 5*page.currentArticle)">
+                        <a href="#" aria-label="Previous" @click="getList('article', 5*(page.currentArticle-1), 5*page.currentArticle)">
                           <span aria-hidden="true">&laquo;</span>
                           <span class="sr-only">Previous</span>
                         </a>
@@ -359,7 +359,7 @@
                         <a href="#" >{{n}}</a>
                     </li> -->
                     <li>
-                      <a href="#" aria-label="Next" @click="getArticleList(5*page.currentArticle, 5*(page.currentArticle+1))">
+                      <a href="#" aria-label="Next" @click="getList('article', 5*page.currentArticle, 5*(page.currentArticle+1))">
                           <span aria-hidden="true">&raquo;</span>
                           <span class="sr-only">Next</span>
                         </a>
@@ -450,52 +450,32 @@
           }
         },
         methods:{
-          getFeatureList: function(from, to)
+          getList:function(itemType, from, to)
           {
             var _this = this;
-            var fields = 'id, title, timeCreate, author, countArticle';
-            this.$http.get((`/feature?action=feature-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
+            var fields = '';
+            var fieldsAll = {
+              'feature':'id, title, timeCreate, author, countArticle',
+              'article':'id, featureID, title, author, subtitle, timeCreated, link, introduction',
+              'user':''
+            };
+            var fields = fieldsAll[itemType];
+            this.$http.get((`/${itemType}?action=${itemType}-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
             {
               var data = JSON.parse(response.body);
-              console.log(response.body);
               if(!data.err){
-                _this.featureList = data.result;
-              }else{
-                console.log('获取专题列表失败');
-              }
-            });
-          },
-          getArticleList: function(from, to)
-          {
-            var _this = this;
-            var fields = 'id, featureID, title, author, subtitle, timeCreated, link, introduction';
-            this.$http.get((`/article?action=article-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
-            {
-              var data = JSON.parse(response.body);
-              console.log(response.body);
-              if(!data.err){
-                _this.articleList = data.result;;
-              }else{
-                console.log('获取文章列表失败');
-              }
-              return false;
-            });
-          },
-          getUserList:function(from, to)
-          {
-            var _this = this;
-            this.$http.get((`/user?action=user-range&from=${from}&to=${to}`)).then((response) => 
-            {
-              var data = JSON.parse(response.body);
-              console.log(response.body);
-              if(!data.err){
-                _this.userList = data.result;;
-              }else{
-                console.log('获取用户列表失败');
-              }
-              return false;
-            });
+                switch(itemType)
+                {
+                  case 'user':
+                    _this.userList = data.result; break;
+                  case 'feature':
+                    _this.featureList = data.result; break;
+                  case 'article':
+                    _this.articleList = data.result; break;
 
+                }
+              }
+            });
           },
           getFeatureName:function(featureID){
             for(var featureItem in this.featureList){
@@ -508,32 +488,15 @@
             var _this = this;
             this.$http.put('user', {action:'user-add', newUser:this.newUser}).then((response)=>{
                   var data = JSON.parse(response.body);
-                  console.log(response);
-                  console.log(data);
-                 if(!data.err){
-                    _this.showTip('alert alert-success', '正确：添加用户成功', 3000);
-                    location.reload();
-                 }
-                  else{
-                    _this.showTip('alert alert-danger', '错误：添加用户失败', 3000);
-                  }
+                  _this.showOperateTip(!data.err, 'user', 'add');
                 });
           },
           addFeature:function(feature){
             var _this = this;
             this.$http.put('feature', {action:'feature-add', newFeature:this.newFeature}).then((response)=>{
                   var data = JSON.parse(response.body);
-                  console.log(response);
-                  console.log(data);
-                 if(!data.err){
-                    _this.showTip('alert alert-success', '正确：添加专题成功', 3000);
-                    location.reload();
-                 }
-                  else{
-                    _this.showTip('alert alert-danger', '错误：添加专题失败', 3000);
-                  }
+                  _this.showOperateTip(!data.err, 'feature', 'add');
                 });
-
           },
           showTip: function(classText, text, time){
               $('#div-tips').attr('hidden',false).attr('class', classText).html(text);
@@ -549,11 +512,35 @@
               pages.push(Number(start)+i);
             }
             return pages;
+          },
+          showOperateTip:function(state, itemType, operateType){
+            var itemTxt = {
+              'user':'用户',
+              'feature':'专题',
+              'article':'文章'
+            };
+            var actionTxt = {
+              'add': '添加',
+              'del': '删除'
+            };
+            var tipclass = state?'alert alert-success':'alert alert-danger';
+            var operateResultText = state?'正确:':'错误:';
+            var tipResultText = state?'成功':'失败';
+            this.showTip(tipclass, operateResultText+actionTxt[operateType]+itemTxt[itemType]+tipResultText, 3000);
+            location.reload();
+          },
+          delItem:function(itemType, conditionItem, conditionText){
+            console.log('执行'+itemType+conditionItem+conditionText);
+            var _this = this;
+            this.$http.get(itemType+'?action='+itemType+'-del'+'&'+conditionItem+'='+conditionText).then((response)=>{
+              var data = JSON.parse(response.body);
+              _this.showOperateTip(!data.err, itemType, 'del');
+            });
           }
-        }
+      }
       });
 
-      vue.getUserList(0, 5);
+      vue.getList('user', 0, 5);
 
      </script>
 </body>

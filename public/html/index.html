@@ -3,11 +3,12 @@
 <head>
 	<title>杜小豆的编程小道</title>
 	<meta charset="utf-8">
-  <base target="_blank">
 	<link rel="bookmark"  type="image/x-icon"  href="images/favicon.ico"/>
   <link rel="shortcut icon" href="images/favicon.ico">
 	<!-- bootstrap css -->
 	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
 
 	<style type="text/css">
 	p
@@ -118,8 +119,8 @@
     <div id="div-location" class="col-lg-9">
       	<ol class="breadcrumb">
   				<li><a href="#">Home</a></li>
-  				<li><a href="#">Library</a></li>
-  				<li class="active">Data</li>
+  				<li><a href="#">文章</a></li>
+  				<li class="active">全部</li>
 			  </ol>
     </div>
 
@@ -136,13 +137,14 @@
               </h4>
     					<h6 class="card-subtitle text-muted">{{articleItem.subtitle}}</h6>
   					</div>
-  					<a href="{{articleItem.link}}">
-              <img  alt="Card image" class="img-responsive" title="{{articleItem.title + articleItem.subtitle}}" src="{{articleItem.coverLink}}">
+  					<a href="article?action=article-show&id={{articleItem.id}}">
+              <img  alt="Card image" class="img-responsive" title="{{articleItem.title + articleItem.subtitle}}" src="{{articleItem.coverLink}}" style="height: 150px;">
             </a>
   					<div class="card-block">
     					<p class="card-text">{{articleItem.introduction.substr(0,40)}}......</p>
-    					<a href="#" class="card-link">Card link</a>
-    					<a href="#" class="card-link">Another link</a>
+    					<a href="article?action=article-show&id={{articleItem.id}}" class="card-link"> <i class="fa fa-1x fa-rocket" aria-hidden="true"></i>&nbsp;阅读</a>
+    					<a href="#" class="card-link"><i class="fa fa-1x fa-coffee" aria-hidden="true"></i>
+              &nbsp;评论</a>
   					</div>
 				</div>
 		</div>
@@ -223,10 +225,10 @@
 				<ol>
 					<li class="col-lg-2"><a href="#"><img src="images/logo/twitter-logo.png"></a></li>
 					<li class="col-lg-2"><a href="#"><img src="images/logo/facebook-logo.png"></a></li>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/wechat-logo.png"></a></li>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/weibo-logo.png"></a></li>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/qq-logo.png"></a></li>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/email-logo.png"></a></li>
+					<li class="col-lg-2"><a href="#" title="NiHaoHaoShaoNian"><img src="images/logo/wechat-logo.png"></a></li>
+					<li class="col-lg-2"><a href="http://weibo.com/badtudou" title="BadTudou"><img src="images/logo/weibo-logo.png"></a></li>
+					<li class="col-lg-2"><a href="#" title="1217473249"><img src="images/logo/qq-logo.png"></a></li>
+					<li class="col-lg-2"><a href="mailto:badtudou@gmail.com" title="badtudou@gmail.com"><img src="images/logo/email-logo.png"></a></li>
 				</ol>
 			</div>
 			<!-- 页脚-版权 -->
