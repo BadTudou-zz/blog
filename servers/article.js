@@ -4,6 +4,7 @@ var database = require('../servers/database.js');
 var fs = require('fs');
 var path = require('path');
 var markdown = require('markdown').markdown;
+var discuss = require('../servers/discuss.js');
 var add = function add(article, callback)
 {
 
@@ -76,6 +77,24 @@ var search = function search(fields, condition, callback) {
 	});
 };
 
+var addDiscuss = function addDiscuss(newDiscuss, callback){
+
+	newDiscuss.state='verify';
+	newDiscuss.mask='comman';
+	newDiscuss.type='disc';
+	discuss.add(newDiscuss, (err)=>{
+		callback(err);
+	});
+};
+
+var getDiscuss = function getDiscuss(articleID, callback){
+	var fields = 'id, author, discussID, timeCreate, content';
+	discuss.search(fields, {discussID:articleID, state:'pass', type:'disc'}, (err, result)=>{
+		callback(err, result);
+		return err;
+	});
+};
+
 var rendertoHTML = function renderMD(article, callback){
 	var rootPath = path.dirname(__dirname);
 	var sysconf = conf.system;
@@ -88,10 +107,13 @@ var rendertoHTML = function renderMD(article, callback){
           callback(err);
           return err;
       });
-} ;
+};
+
 
 exports.add = add;
 exports.del = del;
 exports.edit = edit;
 exports.list = list;
 exports.search = search;
+exports.addDiscuss = addDiscuss;
+exports.getDiscuss = getDiscuss;

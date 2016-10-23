@@ -168,42 +168,43 @@
         </div>  
       </div>
     </div>
-      
-    <!-- <div id="div-paging" class="col-lg-7 col-lg-offset-4">
-    	<nav>
-  		  <ul class="pagination">
-    		  <li class="disabled">
-    		  		<a href="#" aria-label="Previous">
-    		  			<span aria-hidden="true">&laquo;</span>
-    		  			<span class="sr-only">Previous</span>
-    		  		</a>
-    		  </li>
-    		  <li class="active">
-    		  		<a href="#">1 <span class="sr-only">(current)</span></a>
-    		  </li>
-    		  <li><a href="#">2</a></li>
-    		  <li><a href="#">3</a></li>
-    		  <li><a href="#">4</a></li>
-    		  <li><a href="#">5</a></li>
-    		  <li>
-    		  	<a href="#" aria-label="Next">
-    		  			<span aria-hidden="true">&raquo;</span>
-    		  			<span class="sr-only">Next</span>
-    		  		</a>
-    		  </li>
-    		  <li>
-    		  	<div id="div-goto" class="input-group col-lg-3" style="margin-top: 2px;">
-    		  			<input type="text" class="form-control" placeholder="页码">
-    		  				<span class="input-group-btn">
-    		  					<button class="btn btn-secondary" type="button">页</button>
-    		  				</span>
-    		  		</div>
-    		  </li>
-  		  </ul>
-  				
-			</nav>
-    </div>
- -->
+    
+    <div id="div-discuss" class="col-lg-offset-1 col-lg-10">
+      <div class="col-lg-10">
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" @click="getDiscuss()">全部评论</a>
+        <a class="btn btn-primary" data-toggle="collapse" href="#div-adddiscuss" aria-expanded="false" aria-controls="collapseExample">添加评论</a>
+        
+        <div class="collapse" id="div-adddiscuss">
+            <form>
+              <fieldset class="form-group">
+                <div class="col-lg-4">
+                  <label for="input-nickname">昵称</label>
+                  <input type="text" class="form-control" id="input-nickname" placeholder="昵称" v-model="newDiscuss.author">
+                </div>
+                <div class="col-lg-8">
+                  <label for="input-email">联系方式</label>
+                  <input type="email" class="form-control" id="input-email" placeholder="QQ/微信/电子邮箱" v-model="newDiscuss.contact">
+                </div>
+                </fieldset>
+                <fieldset class="form-group">
+                  <div class="col-lg-12">
+                  <label for="input-discuss">评论</label>
+                  <textarea type="text" class="form-control" id="exampleInputEmail1" placeholder="让我们的思想自由恋爱吧！" rows="3" v-model="newDiscuss.content"></textarea>
+                  </div>
+                  <div class="col-lg-offset-8 col-lg-3">
+                    <button type="button" id="btn_add" class="btn btn-primary" @click="addDiscuss()">发表评论</button>
+                  </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="collapse" id="collapseExample">
+          <div class="card card-block">
+            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+          </div>
+        </div>
+      </div>
+    </div>  
+    
     <!-- 页脚 -->
 		<div id='div-footer' class="col-lg-12">
 			<!-- 页脚-联系方式 -->
@@ -231,6 +232,12 @@
           featureCurrent:null,
           featureArticleList:null,
           articleCurrent:null,
+          newDiscuss:{
+            author:'', 
+            contact:'', 
+            discussID:-1, 
+            content:'',
+          },
           articleCountOfPerPage:6
         },
         methods: {
@@ -283,7 +290,30 @@
                _this.featureArticleList = data.result;
              }
             });
-          }     
+          },
+          addDiscuss:function(){
+              this.newDiscuss.discussID = this.getQueryString('id');
+              this.$http.put('/article?action=article-discuss',{newDiscuss:this.newDiscuss}).then((response)=>
+            {
+              console.log(response.body);
+              var data = JSON.parse(response.body);
+              if(!data.err){
+                console.log('添加评论成功');
+              }
+            });
+          },
+          getDiscuss:function(){
+            var articleID = this.getQueryString('id');
+            this.$http.get((`/article?action=article-discuss&id=${articleID}`)).then((response) => 
+            {
+              console.log(response.body);
+              var data = JSON.parse(response.body);
+              if(!data.err){
+                console.log('获取评论列表成功');
+              }
+            });
+          }
+
         }
        });
 

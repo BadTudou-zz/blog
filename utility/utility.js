@@ -14,15 +14,6 @@ var obj2array = function obj2array(object) {
 	var values = [];
 	for(var pro in object)
 	{
-		var tag ='';
-		switch(typeof(object[pro]))
-		{
-			case 'number':
-				break;
-			case 'string':
-				tag = '"';
-				break;
-		}
 		values.push(pro+' = '+mysql.escape(object[pro]));
 	}
 	return values;

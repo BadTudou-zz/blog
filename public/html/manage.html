@@ -8,7 +8,7 @@
 	<!-- bootstrap css -->
 	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
 
-<link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
+  <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
 	<style type="text/css">
 	p
 	{
@@ -33,17 +33,10 @@
 	
 	div#div-footer
 	{
-		width: 100%; height: 80px;  border-color: #0099F0;
+		width: 100%; height: 50px;  background-color: #0099F0;
+    color: #FFF; font-size: 150%; font-weight: bold; text-align: center;
 	}
-	div#div-footer--curtain
-	{
-		height: 50%; background-color: #0099F0;
-	}
-	div#div-footer--curtain--copyright
-	{
-		color: #FFF; font-size: 150%; font-weight: bold; text-align: center;
-	}
-	
+		
 	img#img-headProtrait
 	{
 		height: 100px; width: 100px;
@@ -63,14 +56,14 @@
 <body>
 	<div class="container">
 		<div id="div-logo" class="img-circle img-thumbnail img-responsive center-block">
-			<a href="/"><img src ="images/logo/logo.png" title="杜小豆的编程小道"></a>
+			<a href="/"><img src ="images/logo/logo.png" title="杜小豆的编程小道"/></a>
 		</div>
     
 		<div id="div-nav" class="navbar navbar-static-top navbar-dark bg-inverse">
 			<a class="navbar-brand" href="#">杜小豆的编程小道-管理中心</a>
     </div>
 
-    <div id="div-manage"  class="col-lg-12" >
+    <div id="div-manage"  class="col-lg-12">
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
@@ -109,7 +102,7 @@
               <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-article-all'||activeSubItem == 'tabcontent-content-article-add')}"  href="#tabcontent-content-article" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-all', getList('article', 0, 5)">内容：文章</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-discuss-all'||activeSubItem == 'tabcontent-content-discuss-verify')}"  href="#tabcontent-content-discuss" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-all'">内容：评论</a>
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-discuss-all'||activeSubItem == 'tabcontent-content-discuss-verify')}"  href="#tabcontent-content-discuss" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-all', getList('discuss', 0, 5);">内容：评论</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-message-all'||activeSubItem == 'tabcontent-content-message-verify')}"  href="#tabcontent-content-message" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-message-all'">内容：留言</a>
@@ -139,10 +132,10 @@
           <div  role="tabpanel" class="tab-pane" :class="{'active':(activeSubItem == 'tabcontent-content-feature-all'||activeSubItem == 'tabcontent-content-feature-add')}" id="tabcontent-content-feature">
             <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link" :class="{'active':activeSubItem == 'tabcontent-content-feature-all'}" href="#tabcontent-content-feature-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-all'"">专题：全部</a>
+              <a class="nav-link" :class="{'active':activeSubItem == 'tabcontent-content-feature-all'}" href="#tabcontent-content-feature-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-all'">专题：全部</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" :class="{'active':activeSubItem == 'tabcontent-content-feature-add'}" href="#tabcontent-content-feature-add" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-add'"">专题：添加</a>
+              <a class="nav-link" :class="{'active':activeSubItem == 'tabcontent-content-feature-add'}" href="#tabcontent-content-feature-add" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-feature-add'">专题：添加</a>
             </li>
             </ul>
           </div>
@@ -150,10 +143,10 @@
         <div role="tabpanel" class="tab-pane" :class="{'active':(activeSubItem == 'tabcontent-content-article-all'||activeSubItem == 'tabcontent-content-article-add')}" id="tabcontent-content-article">
             <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-article-all')}" href="#tabcontent-content-article-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-all'"">文章：全部</a>
+              <a class="nav-link" :class="{'active':(activeSubItem == 'tabcontent-content-article-all')}" href="#tabcontent-content-article-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-all'">文章：全部</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" :class="{'active':activeSubItem == 'tabcontent-content-article-add'}" href="#tabcontent-content-article-add" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-add'"">文章：添加</a>
+              <a class="nav-link" :class="{'active':activeSubItem == 'tabcontent-content-article-add'}" href="#tabcontent-content-article-add" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-article-add'">文章：添加</a>
             </li>
             </ul>
         </div>
@@ -161,7 +154,7 @@
         <div role="tabpanel" class="tab-pane" :class="{'active':(activeSubItem == 'tabcontent-content-discuss-all'||activeSubItem == 'tabcontent-content-discuss-verify')}" id="tabcontent-content-discuss">
             <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" href="#tabcontent-content-discuss-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-all'"">评论：全部</a>
+              <a class="nav-link active" href="#tabcontent-content-discuss-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-all', getList('discuss', 0, 5);">评论：全部</a>
             </li>
             <li class="nav-item">
               <a class="nav-link " href="#tabcontent-content-discuss-verify" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-content-discuss-verify'">评论：待审核</a>
@@ -205,8 +198,8 @@
               </ul>
               
             </div>
-            <!-- <div v-show="activeSubItem == 'tabcontent-user-verify'"  id="tabcontent-user-verify">审核用户
-            </div> -->
+            <div v-show="activeSubItem == 'tabcontent-user-verify'"  id="tabcontent-user-verify">审核用户
+            </div>
             <div v-show="activeSubItem == 'tabcontent-user-add'"  id="tabcontent-user-add">
               <form class="col-lg-8">
                 <fieldset class="form-group">
@@ -245,7 +238,7 @@
         </div>
 
         <div  v-show="activeItem == 'tabcontent-content'">
-            <div v-show="activeSubItem == 'tabcontent-content-feature-all'"  id="tabcontent-user-all">
+           <div v-show="activeSubItem == 'tabcontent-content-feature-all'"  id="tabcontent-user-all">
               <ul class="list-group">
                 <li class="list-group-item" v-for="featureItem in featureList" style="height: 50px;">
                   <div class="col-lg-3">
@@ -279,9 +272,7 @@
                           <span class="sr-only">Previous</span>
                         </a>
                     </li>
-                    <!-- <li v-bind:class="n == page.articleCurrent?'active':''" v-for="n in generatePage(page.currentArticle, 5)">
-                        <a href="#" >{{n}}</a>
-                    </li> -->
+                    
                     <li>
                       <a href="#" aria-label="Next" @click="getList('feature', 5*page.currentFeature, 5*(page.currentFeature+1))">
                           <span aria-hidden="true">&raquo;</span>
@@ -355,9 +346,6 @@
                           <span class="sr-only">Previous</span>
                         </a>
                     </li>
-                    <!-- <li v-bind:class="n == page.articleCurrent?'active':''" v-for="n in generatePage(page.currentArticle, 5)">
-                        <a href="#" >{{n}}</a>
-                    </li> -->
                     <li>
                       <a href="#" aria-label="Next" @click="getList('article', 5*page.currentArticle, 5*(page.currentArticle+1))">
                           <span aria-hidden="true">&raquo;</span>
@@ -380,7 +368,40 @@
             <div v-show="activeSubItem == 'tabcontent-content-article-add'"  id="tabcontent-user-all">添加文章
               <iframe src="http://localhost:3000/article?action=article-new" style="width: 100%; height: 500px;"></iframe>
             </div>
-            <div v-show="activeSubItem == 'tabcontent-content-discuss-all'"  id="tabcontent-user-all">a 全部评论
+            <div v-show="activeSubItem == 'tabcontent-content-discuss-all'"  id="tabcontent-user-all">
+               <ul class="list-group">
+                  <li class="list-group-item " v-for="discussItem in discussList" style="height: 50px; margin: 0 auto;">
+                      <div class="col-lg-4">
+                        <span class="col-lg-4">
+                          <a href=""><i class="fa fa-1x fa-user" aria-hidden="true"></i>{{discussItem.author}}</a>
+                        </span>
+                        <span class="col-lg-8">
+                          <a href=""><i class="fa fa-1x fa-user" aria-hidden="true"></i>{{discussItem.contact}}</a>
+                        </span>
+                      </div>
+                      <div class="col-lg-1">
+                        <a href=""><i class="fa fa-1x fa-user" aria-hidden="true"></i>{{discussItem.discussID}}</a>
+                      </div>
+                      <div class="col-lg-3" >
+                        <i class="fa fa-1x fa-clock-o" aria-hidden="true"></i>{{new Date(discussItem.timeCreate).toLocaleString()}}
+                      </div>
+                      <div class="col-lg-2">
+                        <i class="fa fa-1x" :class="{'fa-flask':discussItem.state=='verify', 'fa-ban':discussItem.state=='unpass', 'fa-check':discussItem.state=='pass'}" aria-hidden="true"></i>
+                        <i class="fa fa-1x " :class="{'fa-commenting-o':(discussItem.type=='disc'),'fa-commenting':(discussItem.type=='disc_res'),'fa-comments-o':(discussItem.type=='message'),'fa-comments':(discussItem.type=='message_res')}" aria-hidden="true"></i>
+
+                        <a class="btn " data-toggle="collapse" href="#div-discuss-content" aria-expanded="false" aria-controls="collapseExample" @click="showDiscussContent(true, discussItem.id)">内容</a>
+                      </div>
+                      <div class="btn-group col-lg-1" >
+                          <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-1x fa-cog" aria-hidden="true"></i>操作</button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="article?action=article-show&id={{articleItem.id}}"><i class="fa fa-1x fa-eye" aria-hidden="true"></i>预览</a>
+                            <a class="dropdown-item" href="article?action=article-edit&id={{articleItem.id}}"><i class="fa fa-1x fa-pencil-square-o" aria-hidden="true"></i>编辑</a>
+                            <a class="dropdown-item" href="#" @click="delItem('article', 'id' ,articleItem.id)"><i class="fa fa-1x fa-times" aria-hidden="true"></i>删除</a>
+                          </div>
+                      </div>
+                  </li>
+                <div id="div-discuss-content" class="col-lg-12 card  alert alert-info" role="alert"" ></div>
+              </ul>
             </div>
             <div v-show="activeSubItem == 'tabcontent-content-discuss-verify'"  id="tabcontent-user-all">待审核评论
             </div>
@@ -389,7 +410,7 @@
             <div v-show="activeSubItem == 'tabcontent-content-message-verify'"  id="tabcontent-message-all">待审核留言
             </div>
         </div>
-          <div  v-show="activeItem == 'tabcontent-system'">
+        <div  v-show="activeItem == 'tabcontent-system'">
             <div v-show="activeSubItem == 'tabcontent-system-state'"  id="tabcontent-message-all">系统状态
             </div>
             <div v-show="activeSubItem == 'tabcontent-system-log'"  id="tabcontent-message-all">日志
@@ -399,26 +420,21 @@
             <div v-show="activeSubItem == 'tabcontent-system-set'"  id="tabcontent-message-all">设置
             </div>
         </div>
-      </div>
+      
       
 
       <div class="col-lg-offset-1 col-lg-10 text-center">
-        <div id="div-tips"  class="alert" role="alert" hidden>
-        </div>
+        <div id="div-tips"  class="alert" role="alert" hidden></div>
       </div>
-     </div>
       </div>
-
- 
-  
+    </div>
+    </div>
     <!-- 页脚 -->
 		<div id='div-footer' class="col-lg-12">
 			<!-- 页脚-版权 -->
-			<div id='div-footer--curtain'>
-				<div id='div-footer--curtain--copyright'>
 					Copyright © 2016 BadTudou. All rights reserved.		
-		    </div>
-	   </div>
+    </div>
+  </div>
 
      <script>
       var vue = new Vue({
@@ -429,6 +445,7 @@
           featureList:null,
           articleList:null,
           userList:null,
+          discussList:null,
           newUser:
           {
             name:'',
@@ -457,11 +474,13 @@
             var fieldsAll = {
               'feature':'id, title, timeCreate, author, countArticle',
               'article':'id, featureID, title, author, subtitle, timeCreated, link, introduction',
-              'user':''
+              'user':'',
+              'discuss':''
             };
             var fields = fieldsAll[itemType];
             this.$http.get((`/${itemType}?action=${itemType}-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
             {
+              console.log(response.body);
               var data = JSON.parse(response.body);
               if(!data.err){
                 switch(itemType)
@@ -472,6 +491,8 @@
                     _this.featureList = data.result; break;
                   case 'article':
                     _this.articleList = data.result; break;
+                  case 'discuss':
+                    _this.discussList = data.result; break;
 
                 }
               }
@@ -483,6 +504,17 @@
                 return this.featureList[featureItem].title;
               }
             }
+          },
+          getDiscussContont: function(discussID)
+          {
+            for(var discussItem in this.discussList){
+              if (this.discussList[discussItem].id == discussID){
+                return this.discussList[discussItem].content;
+              }
+            }
+          },
+          showDiscussContent: function(state, discussID){
+            $('#div-discuss-content').text(this.getDiscussContont(discussID));
           },
           addUser:function(user){
             var _this = this;

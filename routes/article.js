@@ -18,8 +18,31 @@ router.put('/', function(req, res, next) {
 	if(req.session.loginstate == 'true'){
 		next();
 	}
-	else{
-		res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+	else
+	{
+		var params = req.query;
+		if(typeof(params.action) === 'undefined')
+		{
+			return res.end(JSON.stringify({err:true, result:'illegal request action'}));
+		}
+		switch(params.action) 
+		{
+			case 'article-discuss':
+				var newDiscuss = req.body.newDiscuss;
+				console.log(JSON.stringify(newDiscuss));
+				article.addDiscuss(newDiscuss, (err, result)=>
+				{
+					if(!err)
+						res.end(JSON.stringify({err:false, result:true}));
+					else
+						//res.end(JSON.stringify({err:true, result:JSON.stringify(err)}));
+						res.end(JSON.stringify({err:true, result:'add disscuss to article error'}));
+				});
+				break; 
+			default:
+				res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+				break;
+		}
 	}
 });
 
@@ -50,6 +73,7 @@ router.put('/', function(req, res) {
 					res.end(JSON.stringify({err:true, result:'edit article error'}));
 			});
 			break;
+		
 	}
 
 });
@@ -135,6 +159,16 @@ router.get('/', function(req, res) {
 					res.end(JSON.stringify({err:false, result:result}));
 				else
 					res.end(JSON.stringify({err:true, result:'delete article error'}));
+			});
+			break;
+
+		case 'article-discuss':
+			var articleID = params.id;
+			article.getDiscuss(articleID, (err, result)=>{
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'get article disscuss error'}));
 			});
 			break;
 
