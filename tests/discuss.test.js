@@ -33,13 +33,45 @@ describe('test discuss', function() {
 		it('should return true when search discuss is ok', function(done){
 			var articleID = 147;
 			var fields = 'id, author, discussID, timeCreate, content';
-			discuss.search(fields, {discussID:articleID, state:'pass', type:'disc'}, (err, result)=>{
+			discuss.search(fields, {from:0, to:5}, {discussID:articleID, state:'pass', type:'disc'}, (err, result)=>{
 				if (!err){
 					console.log(JSON.stringify(result));
 					done();
 				}
 				else
 					done(err);
+			});
+		});
+	});
+
+	describe('#edit', function()
+	{
+		it('should return true when edit discuss is ok', function(done){
+			var newDiscuss = {
+				id:3,
+				state:'pass'
+			};
+			discuss.edit(newDiscuss, (err, result)=>{
+				if (!err){
+					console.log('成功'+JSON.stringify(result));
+					done();
+				}
+				else
+					done(true);
+			});
+		});
+
+		it('should return true when edit discuss is error', function(done){
+			var newDiscuss = {
+				id:147,
+				state:'pass'
+			};
+			discuss.edit(newDiscuss, (err, result)=>{
+				if (!err){
+					done(err);
+				}
+				else
+					done();
 			});
 		});
 	});

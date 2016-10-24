@@ -47,7 +47,7 @@
 	}
 	div#div-footer
 	{
-		width: 100%; height: 160px; padding-top: 10px; border-color: #0099F0;
+		width: 100%; height: 100px; padding-top: 10px; border-color: #0099F0;
 	}
 	div#div-footer--curtain
 	{
@@ -57,7 +57,7 @@
 	{
 		color: #FFF; font-size: 150%; font-weight: bold; text-align: center;
 	}
-	div#div-footer--contact>ol
+	/*div#div-footer--contact>ol
 	{
 		height: 50%; margin-bottom: 36px;
 	}
@@ -68,7 +68,7 @@
 	div#div-footer--contact>ol>li>a>img
 	{
 		width: 72px; height: 72px;
-	}
+	}*/
 	img#img-headProtrait
 	{
 		height: 100px; width: 100px;
@@ -104,23 +104,26 @@
         		<li class="nav-item active">
         		  <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
         		</li>
+            <li class="nav-item">
+              <a class="nav-link" href="#article" @click="itemActive = '文章'">文章</a>
+            </li>
         		<li class="nav-item">
-        		  <a class="nav-link" href="#">专题</a>
+        		  <a class="nav-link" href="#feature" @click="itemActive = '专题'">专题</a>
         		</li>
         		<li class="nav-item">
-        		  <a class="nav-link" href="#">关于</a>
+        		  <a class="nav-link" href="#about" @click="itemActive = '关于'">关于</a>
         		</li>
         		<li class="nav-item">
-        		  <a class="nav-link" href="#">联系</a>
+        		  <a class="nav-link" href="#contact" @click="itemActive = '联系'">联系</a>
         		</li>
       </ul>
     </div>
 
     <div id="div-location" class="col-lg-9">
       	<ol class="breadcrumb">
-  				<li><a href="#">Home</a></li>
-  				<li><a href="#">文章</a></li>
-  				<li class="active">全部</li>
+  				<li><a href="/">Home</a></li>
+  				<li><a href="#">{{itemActive}}</a></li>
+  				<li class="active">{{subitemActive}}</li>
 			  </ol>
     </div>
 
@@ -129,7 +132,7 @@
       	<br><strong>让我们的思想自由恋爱吧！</strong>
     </div>
       	
-    <div id="div-postList"  class="col-lg-9" >
+    <div id="div-postList"  class="col-lg-9" v-show="itemActive == '文章'">
       	<div class="card col-lg-4" v-for="articleItem in articleList">
   					<div class="card-block">
     					<h4 class="card-title">
@@ -149,7 +152,54 @@
 				</div>
 		</div>
 
-    <div id="div-features" class="col-lg-3">
+    <div id="div-featureList" class="col-lg-9" v-show="itemActive == '专题'">
+        <div class="card col-lg-4" v-for="featureItem in featureList">
+            <div class="card-block">
+              <h4 class="card-title">
+                  <a href="article?action=article-show&id={{featureItem.id}}">{{featureItem.title}}</a>
+              </h4>
+              <h6 class="card-subtitle text-muted">{{featureItem.author}}</h6>
+            </div>
+            <a href="article?action=article-show&id={{articleItem.id}}">
+              <img  alt="Card image" class="img-responsive" title="{{introduction.title + introduction.subtitle}}" src="{{featureItem.coverLink}}" style="height: 150px;">
+            </a>
+            <div class="card-block">
+              <p class="card-text">{{featureItem.introduction.substr(0,40)}}......</p>
+              <a href="article?action=article-show&id={{featureItem.id}}" class="card-link"> <i class="fa fa-1x fa-rocket" aria-hidden="true"></i>&nbsp;{{featureItem.countArticle}}篇</a>
+              <a href="#" class="card-link"><i class="fa fa-1x fa-coffee" aria-hidden="true"></i>{{new Date(featureItem.timeCreate).toLocaleDateString()}}</a>
+            </div>
+        </div>
+    </div>
+
+     <div id="div-about" class="col-lg-9" v-show="itemActive == '关于'">
+        <div class="jumbotron" style="background-color: #FFF">
+          <h5 class="display-4 text-center">关于</h5>
+          <div style="color:#006DE0">
+            <p class="lead">写程序，写代码，写情书，这里是<b>杜小豆的编程小道</b>。漫路长行，始于2011。</p>
+            <p class="lead">生命，宇宙，以及一切的答案。</p>
+            <p class="lead"><b>让我们的思想自由的恋爱吧！</b></p>
+            <hr class="m-y-md">
+          </div>
+            <p>(the answer to life, the universe, and everything)</p>
+        </div>
+     </div>
+
+     <div id="div-about" class="col-lg-9" v-show="itemActive == '联系'">
+        <div class="jumbotron" style="background-color: #FFF;">
+          <h5 class="display-4 text-center">联系</h5>
+          <div style="color:#006DE0">
+            <P><br></P>
+            <p class="lead"><i class="fa fa-2x fa-qq" aria-hidden="true">&nbsp;1217473249</i></p>
+            <p class="lead"><i class="fa fa-2x fa-weibo" aria-hidden="true">&nbsp;<a href="http://weibo.com/badtudou" title="BadTudou">BadTudou</a></i></p>
+            <p class="lead"><i class="fa fa-2x fa-github" aria-hidden="true"><a href="https://github.com/BadTudou">&nbsp;github.com/BadTudou</a></i></p>
+            <p class="lead"><i class="fa fa-2x fa-rocket" aria-hidden="true"><a href="https://zhuanlan.zhihu.com/DuXiaoDou" title="知乎@杜小豆">&nbsp;知乎@杜小豆</a></i>
+            <hr class="m-y-md">
+        </div>
+            <p>众里寻他千百度，蓦然回首，那人却在，灯火阑珊处。</p>
+          </div>
+     </div>
+
+    <!-- <div id="div-features" class="col-lg-3">
       		<div class="list-group ">
       			<span class="list-group-item" style="background-color:#006DE0; color:#fff;">
       				专题列表
@@ -160,34 +210,50 @@
   				  </a>
 			   </div>
 
-         <div id="div-intro" style="margin-top: 10px; float: bottom">
+         
+    </div>
+    </div> -->
+    <div id="div-intro" class="col-lg-3">
           <div class="card">
-          <div class="card-header text-left" style="margin-bottom: 10px;  background-color: #006DE0; color:#fff;">
-            关于我
-          </div>
-          <img id="img-headProtrait" src="images/system/head-protrait.jpg" alt="Card image"  class="img-circle img-thumbnail img-responsive center-block" >
-          <div class="card-block" style="padding: 5px">
-            <h4 class="card-title text-center" style="padding: 0px">杜小豆</h4>
-            <h6 class="card-subtitle text-muted text-center">IT男,程序猿,技术型工作者.</h6>
-          </div>
+            <div class="card-header text-left" style="margin-bottom: 10px;  background-color: #006DE0; color:#fff;">
+              关于我
+            </div>
+           <img id="img-headProtrait" src="images/system/head-protrait.jpg" alt="Card image"  class="img-circle img-thumbnail img-responsive center-block" >
+               <div class="card-block" style="padding: 5px">
+                  <h4 class="card-title text-center" style="padding: 0px">杜小豆</h4>
+                 <h6 class="card-subtitle text-muted text-center">IT男,程序猿,技术型工作者.</h6>
+              </div>
           
-          <div class="card-block" style="padding: 5px; font-size: 80%;">
-            <p class="card-text">
-              一个农民的后代,不了解乡土,也不懂得城市.
-            </p>
-          </div>
+              <div class="card-block" style="padding: 5px; font-size: 80%;">
+                  <p class="card-text">
+                    一个农民的后代,不了解乡土,也不懂得城市.
+                  </p>
+              </div>
 
-          <div class="card-block" style="padding: 0px; font-size: 80%;">
-            <p class="card-text">
-              我有一个脑袋,装载思想、未来与梦想.
-            </p>
-          </div>
-      </div>  
+              <div class="card-block" style="padding: 0px; font-size: 80%;">
+                <p class="card-text">
+                  我有一个脑袋,装载思想、未来与梦想.
+                </p>
+              </div>
+
+              <div class="card-block" style="padding: 30px; margin-bottom:30px">
+                <div class="col-lg-4">
+                     <a href="http://weibo.com/badtudou" title="WeiBo"><i class="fa fa-2x fa-weibo" aria-hidden="true"></i></a></i>
+                     微博
+                </div>
+                <div class="col-lg-4">
+                  <a href="https://github.com/BadTudou" title="GitHub"><i class="fa fa-2x fa-github" aria-hidden="true"></i></a>
+                  Git
+                </div>
+                <div class="col-lg-4">
+                  <a href="https://zhuanlan.zhihu.com/DuXiaoDou" title="知乎@杜小豆"><i class="fa fa-2x fa-rocket" aria-hidden="true"></i></a>
+                  知乎
+                </div>
+              </div>
+          </div>  
     </div>
-    </div>
-      
     
-    <div id="div-paging" class="col-lg-7 col-lg-offset-4">
+    <div id="div-paging" class="col-lg-8 col-lg-offset-4" v-show="itemActive == '文章'">
     	<nav>
   		  <ul class="pagination">
     		  <li class="{{page.current==1?'disabled':''}}">
@@ -221,7 +287,7 @@
     <!-- 页脚 -->
 		<div id='div-footer' class="col-lg-12">
 			<!-- 页脚-联系方式 -->
-			<div id='div-footer--contact'>
+			<!-- <div id='div-footer--contact'>
 				<ol>
 					<li class="col-lg-2"><a href="#"><img src="images/logo/twitter-logo.png"></a></li>
 					<li class="col-lg-2"><a href="#"><img src="images/logo/facebook-logo.png"></a></li>
@@ -230,7 +296,7 @@
 					<li class="col-lg-2"><a href="#" title="1217473249"><img src="images/logo/qq-logo.png"></a></li>
 					<li class="col-lg-2"><a href="mailto:badtudou@gmail.com" title="badtudou@gmail.com"><img src="images/logo/email-logo.png"></a></li>
 				</ol>
-			</div>
+			</div> -->
 			<!-- 页脚-版权 -->
 			<div id='div-footer--curtain'>
 				<div id='div-footer--curtain--copyright'>
@@ -244,6 +310,8 @@
         data: {
           articleList:null,
           featureList:null,
+          itemActive:'文章',
+          subitemActive:'全部',
           page:{
             articleCountOfPerPage: 6,
             current:1,
@@ -274,7 +342,7 @@
           getFeatureList: function(from, to)
           {
             var _this = this;
-            var fields = 'id, title, countArticle';
+            var fields = 'id, title, author, introduction, timeCreate, countArticle, coverLink';
             this.$http.get((`/feature?action=feature-range&fields=${fields}&from=${from}&to=${to}`)).then((response) => 
             {
               var data = JSON.parse(response.body);

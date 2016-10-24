@@ -18,9 +18,10 @@ var add = function add(discuss, callback)
 	 	});
 };
 
-var search = function search(fields, condition, callback) {
+var search = function search(fields, range, condition, callback) {
 	var conditionString = (utility.obj2array(condition)).join(' AND ');
-	var sql = `SELECT ${fields} FROM tb_discuss WHERE ${conditionString} ;`;
+	var sql = `SELECT ${fields} FROM tb_discuss WHERE ${conditionString} LIMIT ${range.from},${range.to};`;
+	console.log(sql);
 	database.query(sql, function(err, result) {
 		callback(err, result);
 	 	return (err);
@@ -41,6 +42,18 @@ var list = function list(fields, range, callback) {
 
 };
 
+var edit = function edit(discuss, callback) {
+	
+	var values = (utility.obj2array(discuss)).join(' , ');
+	var sqlString = `UPDATE tb_discuss SET ${values} WHERE id = ${discuss.id} ;`;
+	database.query(sqlString , function(err, result) {
+		callback(err || !result.affectedRows, result);
+	 	return (err || result.affectedRows);
+	});
+
+};
+
 exports.add = add;
 exports.search = search;
 exports.list = list;
+exports.edit = edit;
