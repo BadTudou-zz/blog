@@ -31,9 +31,10 @@ describe('test discuss', function() {
 	describe('#search', function()
 	{
 		it('should return true when search discuss is ok', function(done){
-			var articleID = 147;
-			var fields = 'id, author, discussID, timeCreate, content';
-			discuss.search(fields, {from:0, to:5}, {discussID:articleID, state:'pass', type:'disc'}, (err, result)=>{
+			var fields = '*';
+			var condition = `author = 'wo'`;
+			var range = {from:0, count:3};
+			discuss.search(fields, condition, range, (err, result)=>{
 				if (!err){
 					console.log(JSON.stringify(result));
 					done();
@@ -73,6 +74,31 @@ describe('test discuss', function() {
 				else
 					done();
 			});
+		});
+	});
+
+	describe('#del', function()
+	{
+		it('should return true when del discuss is ok', function(done){
+			var condition = `author = 'wo'`;	// 手动指定要更新的用户名
+			discuss.del(condition,(err, result)=>
+				{
+					if (!err)
+						done();
+					else
+						done(err);
+				});
+		});
+
+		it('should return true when del user is error', function(done){
+			var condition = `name = 'test99' AND nickname = '新昵称'`	// 手动指定要更新的用户名
+			discuss.del(condition,(err, result)=>
+				{
+					if (!err)
+						done(err);
+					else
+						done();
+				});
 		});
 	});
 });

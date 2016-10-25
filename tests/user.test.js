@@ -49,8 +49,8 @@ describe('test user', function() {
 	describe('#del', function()
 	{
 		it('should return true when del user is ok', function(done){
-			var userDel = {name:'test', nickname:'新昵称'};	// 手动指定要更新的用户名
-			user.del(userDel,(err, result)=>
+			var condition = `name = 'test' AND nickname = '新昵称'`;	// 手动指定要更新的用户名
+			user.del(condition,(err, result)=>
 				{
 					if (!err)
 						done();
@@ -60,8 +60,8 @@ describe('test user', function() {
 		});
 
 		it('should return true when del user is error', function(done){
-			var userDel = {name:'test9'};	// 手动指定要更新的用户名
-			user.del(userDel,(err, result)=>
+			var condition = `name = 'test99' AND nickname = '新昵称'`	// 手动指定要更新的用户名
+			user.del(condition,(err, result)=>
 				{
 					if (!err)
 						done(err);
@@ -74,8 +74,9 @@ describe('test user', function() {
 	describe('#search', function() {
 		it('should return true when search user is ok', function(done) {
 			var fields = 'name, nickname';
-			var condition = {nickname:'杜小豆'};
-			user.search(fields, condition, (err, result)=> {
+			var condition = `nickname = '杜小豆'`;
+			var range = {from:0, count:1};
+			user.search(fields, condition, range, (err, result)=> {
 				if (!err)
 				{
 					done();
@@ -90,8 +91,9 @@ describe('test user', function() {
 
 		it('should return true when search user is error', function(done) {
 			var fields = 'name, nickname';
-			var condition = {};
-			user.search(fields, condition, (err, result)=> {
+			var condition = '';
+			var range = {from:0, count:1};
+			user.search(fields, condition, range, (err, result)=> {
 				if (!err)
 				{
 					done(err);
@@ -103,6 +105,4 @@ describe('test user', function() {
 			});
 		});
 	});
-
-
 });

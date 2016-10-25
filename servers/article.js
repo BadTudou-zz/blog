@@ -5,87 +5,83 @@ var fs = require('fs');
 var path = require('path');
 var markdown = require('markdown').markdown;
 var discuss = require('../servers/discuss.js');
+const TABLE_ARTICLE = conf.mysql.tables.TABLE_ARTICLE;
+
+/**
+ * [添加]
+ * @param {[object]}   article  [含有所有字段属性的对象]
+ * @param {Function}   callback [回调函数]
+ * @return {[Object/boolean]}  	 [有错误:Object;无错误;false]
+ */
 var add = function add(article, callback)
 {
 
 	//文章字段：id, featureID, title, subtitle, link, license, timeCreated, 
 	//		timeRelease, timeModify, author, introduction, coverLink, 
 	//		content, countRead, countShare, countDiscuss, labels
-	var values = database.escape(utility.objectValues(article));
-	var sql = `INSERT INTO tb_article (featureID, title, subtitle, author, link, license, 
-		timeRelease, introduction, coverLink, content, labels)
-		VALUES(${values});`;
-	database.query(sql, function(err, result)
-	 	{
-	 		if(!err){
+	var values = utility.objescape(article);
+	var sqlString = `INSERT INTO ${TABLE_ARTICLE}
+		(
+			featureID, title, subtitle, 
+			author, link, license, 
+			timeRelease, introduction, coverLink,
+			content, labels
+		)
+		VALUES
+		(
+			${values.featureID}, ${values.title}, ${values.subtitle},
+			${values.author}, ${values.link}, ${values.license}, 
+			${values.timeRelease}, ${values.introduction}, ${values.coverLink},
+			${values.content}, ${values.labels}
+		);`;
+		database.query(sqlString, function(err, result) {
+	 		if(!err) {
 	 			rendertoHTML(article, (err)=>{
 	 				callback(err || !result.affectedRows, result);
 	 				return false;
 	 			});
 	 		}
-	 		callback(err || !result.affectedRows, result);
-	 		return  (err || result.affectedRows);
-	 	});
-};
-
-var del = function del(condition, callback)
-{
-	var conditionString = (utility.obj2array(condition)).join(' AND ');
-	var sqlString = `DELETE FROM tb_article WHERE ${conditionString} ;`;
-	database.query(sqlString, function(err, result)
-	 	{
-	 		callback(err || !result.affectedRows, result);
-	 		return (err || result.affectedRows);
-	 	});
-};
-
-var edit = function edit(article, callback) {
-	var values = utility.obj2array(article).join(' , ');
-	var sqlString = `UPDATE tb_article SET ${values} WHERE id = ${article.id} ;`;
-	database.query(sqlString, function(err, result) {
-		if(!err){
-	 			rendertoHTML(article, (err)=>{
-	 				callback(err || !result.affectedRows, result);
-	 				return false;
-	 			});
+	 		else {
+	 			callback(err || !result.affectedRows, result);
+	 			return  (err || result.affectedRows);
 	 		}
-		callback(err || !result.affectedRows, result);
-	 	return (err || result.affectedRows);
-	});
+	 		
+	 	});
+};
+
+
+var edit = function edit(values, callback) {
+	var condition = `id = `+utility.escape(values.id);
+	database.update(TABLE_ARTICLE, values, condition, callback);
 };
 
 var list = function list(fields, range, callback) {
-	var sql;
-	if(!range)
-		sql = `SELECT ${fields} FROM tb_article`;
-	else
-		sql = `SELECT ${fields} FROM tb_article LIMIT ${range.from},${range.to};`
-	
-	database.query(sql, function(err, result) {
-		callback(err, result);
-	 	return (err);
-	});
-
+	database.list(TABLE_ARTICLE, fields, range, callback);
 };
 
-var search = function search(fields, condition, callback) {
-	var conditionString = (utility.obj2array(condition)).join(' AND ');
-	var sql = `SELECT ${fields} FROM tb_article WHERE ${conditionString} ;`;
-	database.query(sql, function(err, result) {
-		callback(err, result);
-	 	return (err);
-	});
+var search = function search(fields, condition, range, callback) {
+	database.search(TABLE_ARTICLE, fields, condition, range, callback);
 };
 
-var addDiscuss = function addDiscuss(newDiscuss, callback){
+var del = function del(condition, callback) {
+	database.del(TABLE_ARTICLE, condition, callback);
+};
 
+
+/**
+ * [添加评论]
+ * @param {[Object]}   newDiscuss [评论]
+ * @param {Function}   callback   [回调函数]
+ */
+var addDiscuss = function addDiscuss(newDiscuss, callback) {
 	newDiscuss.state='verify';
 	newDiscuss.mask='comman';
 	newDiscuss.type='disc';
-	discuss.add(newDiscuss, (err)=>{
+	discuss.add(newDiscuss, (err)=> {
 		callback(err);
 	});
 };
+
 
 var getDiscuss = function getDiscuss(articleID, callback){
 	var fields = 'id, author, discussID, timeCreate, content';
@@ -95,6 +91,12 @@ var getDiscuss = function getDiscuss(articleID, callback){
 	});
 };
 
+/**
+ * [解析为HTML]
+ * @param  {[Object]}   article  [含有所有字段属性的对象]
+ * @param  {Function}   callback [回调函数]
+ * @return {[Object/boolean]}  	 [有错误:Object;无错误;false]
+ */
 var rendertoHTML = function renderMD(article, callback){
 	var rootPath = path.dirname(__dirname);
 	var sysconf = conf.system;

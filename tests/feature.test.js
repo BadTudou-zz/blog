@@ -51,9 +51,9 @@ describe('test feature', function() {
 
 	describe('#del', function() {
 		it('should return true when del feature is ok', function(done) {
-			var featureDel = {id:insertId};	// 此处要删除的ID是#add 添加的记录，手动指定请启用下面的语句
-			//var featureDel = {id:60};	// 手动指定要删除的ID
-			feature.del(featureDel,(err, result)=> {
+			var condition = `id = ${insertId}`;	// 此处要删除的ID是#add 添加的记录，手动指定请启用下面的语句
+			//var condition = `id = 12345`;	// 手动指定要删除的ID
+			feature.del(condition,(err, result)=> {
 					if (!err)
 						done();
 					else
@@ -62,9 +62,9 @@ describe('test feature', function() {
 		});
 
 		it('should return true when del feature is error', function(done) {
-			var featureDel = {id:insertId+1};// 此处要删除的ID是#add 添加的记录+1，手动指定请启用下面的语句
-			//var featureDel = {id:-1234567};	// 手动指定要删除的ID
-			feature.del(featureDel,(err, result)=> {
+			var condition = `id = ${insertId+1}`;// 此处要删除的ID是#add 添加的记录+1，手动指定请启用下面的语句
+			//var condition = `id = -12345`;	// 手动指定要删除的ID
+			feature.del(condition,(err, result)=> {
 					if (!err)
 						done(err);
 					else
@@ -75,12 +75,14 @@ describe('test feature', function() {
 
 	describe('#search', function() {
 		it('should return true when search feature is ok', function(done) {
-			var condition = {author:'作者'};
+			var condition = `author = '杜小豆'`;
 			var fields = 'id, title';
-			feature.search(fields, condition, (err, result)=> {
+			var range = {from:0, count:1};
+			feature.search(fields, condition, range, (err, result)=> {
 				if (!err)
 				{
 					done();
+					console.log(JSON.stringify(result));
 				}
 				else
 				{
@@ -90,9 +92,10 @@ describe('test feature', function() {
 		});
 
 		it('should return true when search feature is error', function(done) {
-			var condition = {};
+			var condition = '';
 			var fields = 'id, title';
-			feature.search(fields, condition, (err, result)=> {
+			var range = {from:0, count:5};
+			feature.search(fields, condition, range, (err, result)=> {
 				if (!err)
 				{
 					done(err);
@@ -108,11 +111,12 @@ describe('test feature', function() {
 	describe('#list', function() {
 		it('should return true when list feature range is ok', function(done) {
 			var fields = 'id, title';
-			var range = {from:0, to:5};
+			var range = {from:0, count:5};
 			feature.list(fields, range, (err, result)=> {
 				if (!err)
 				{
 					done();
+					console.log(JSON.stringify(result));
 				}
 				else
 				{
@@ -123,7 +127,7 @@ describe('test feature', function() {
 
 		it('should return true when list feature range is error', function(done) {
 			var fields = 'id, title';
-			var range = {from:0, to:-1};
+			var range = {from:0, count:-1};
 			feature.list(fields ,range, (err, result)=> {
 				if (!err)
 				{

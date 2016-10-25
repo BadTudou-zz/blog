@@ -25,11 +25,13 @@ describe('test article', function() {
 			article.add(newArticle,(err, result)=>
 				{
 					if (!err)
+					{
 						done();
-					else
+						insertId = result.insertId;
+					}
+					else{
 						done(err);
-
-					insertId = result.insertId;
+					}
 				});
 		});
 
@@ -48,18 +50,24 @@ describe('test article', function() {
 	describe('#edit', function()
 	{
 		it('should return true when edit article is ok', function(done){
-			var articleEdit = {id:insertId, title:'新文章名'};	// 此处要更新内容的ID是#add 添加的记录，手动指定请启用下面的语句
+			var articleEdit = {
+				id:insertId,
+				title:'修改后的标题'
+			};	// 此处要更新内容的ID是#add 添加的记录，手动指定请启用下面的语句
 			//var featureDel = {id:60, title:'新文章名'};	// 手动指定要更新的ID
 			article.edit(articleEdit, (err, result)=> {
 					if (!err)
 						done();
 					else
-						done(err);
+						done(false);
 				});
 		});
 
 		it('should return true when edit article is error', function(done){
-			var articleEdit = {id:insertId+1, title:'新文章名'};	// 此处要更新内容的ID是#add 添加的记录+1，手动指定请启用下面的语句
+			var articleEdit = {
+				id:insertId+1,
+				title:'修改后的标题'
+			};		// 此处要更新内容的ID是#add 添加的记录+1，手动指定请启用下面的语句
 			//var featureDel = {id:-1234567, title:'新文章名'};	// 手动指定要更新的ID
 			article.edit(articleEdit, (err, result)=> {
 					if (!err)
@@ -73,20 +81,20 @@ describe('test article', function() {
 	describe('#del', function()
 	{
 		it('should return true when del article is ok', function(done){
-			var articleDel = {id:insertId}; // 此处要删除的ID是#add 添加的记录，手动指定请启用下面的语句
-			//var articleDel = {id: 60}; // 手动指定要删除的ID
+			var articleDel = `id = ${insertId}`; // 此处要删除的ID是#add 添加的记录，手动指定请启用下面的语句
+			//var articleDel = `id = ${insertId+1}`; // 手动指定要删除的ID
 			article.del(articleDel,(err, result)=>
 				{
 					if (!err)
 						done();
 					else
-						done(err);
+						done(JSON.stringify(err));
 				});
 		});
 
 		it('should return true when del article is error', function(done){
-			var articleDel = {id:insertId+1}; // 此处要删除的ID是#add 添加的记录+1，手动指定请启用下面的语句
-			//var articleDel = {id: -1234567}; // 手动指定要删除的ID
+			var articleDel = `id = ${insertId+1}`; // 此处要删除的ID是#add 添加的记录+1，手动指定请启用下面的语句
+			//var articleDel = `id = -1234567`; // 手动指定要删除的ID
 			article.del(articleDel,(err, result)=>
 				{
 					if (!err)
@@ -100,8 +108,9 @@ describe('test article', function() {
 	describe('#search', function() {
 		it('should return true when search article is ok', function(done) {
 			var fields = 'id, title';
-			var condition = {author:'作者', id:124};
-			article.search(fields, condition, (err, result)=> {
+			var condition = `author = '杜小豆'`;
+			var range = {from:0, count:2};
+			article.search(fields, condition, range, (err, result)=> {
 				if (!err)
 				{
 					done();
@@ -116,8 +125,9 @@ describe('test article', function() {
 
 		it('should return true when search article is error', function(done) {
 			var fields = 'id, title';
-			var condition = {};
-			article.search(fields, condition, (err, result)=> {
+			var condition = '';
+			var range = {from:0, count:5};
+			article.search(fields, condition, range, (err, result)=> {
 				if (!err)
 				{
 					done(err);
@@ -133,7 +143,7 @@ describe('test article', function() {
 	describe('#list', function() {
 		it('should return true when list article range is ok', function(done) {
 			var fields = 'id, title';
-			var range = {from:0, to:1};
+			var range = {from:0, count:1};
 			article.list(fields, range, (err, result)=> {
 				if (!err)
 				{
@@ -149,7 +159,7 @@ describe('test article', function() {
 
 		it('should return true when list article range is error', function(done) {
 			var fields = 'id, title';
-			var range = {from:0, to:-1};
+			var range = {from:0, count:-1};
 			article.list(fields, range, (err, result)=> {
 				if (!err)
 				{

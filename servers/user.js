@@ -1,14 +1,23 @@
 var conf = require('../conf/conf.js');
 var utility = require('../utility/utility.js');
 var database = require('../servers/database.js');
+const TABLE_USER = conf.mysql.tables.TABLE_USER;
+
 var add = function add(user, callback)
 {
 
 	//文章字段：name, nickname, password, question, anser, authority, timeCreate, state
-	
-	var values = database.escape(utility.objectValues(user));
-	var sqlString = `INSERT INTO tb_user (name, nickname, password, question, anser, authority)
-		VALUES(${values});`;
+	var values = utility.objescape(user);
+	var sqlString = `INSERT INTO ${TABLE_USER} 
+	(
+		name, nickname, password, 
+		question, anser, authority
+	)
+	VALUES
+	(
+		${values.name}, ${values.nickname}, ${values.password}, 
+		${values.question}, ${values.anser}, ${values.authority}
+	);`;
 	database.query(sqlString, function(err, result)
 	 	{
 	 		callback(err || !result.affectedRows, result);
@@ -16,48 +25,22 @@ var add = function add(user, callback)
 	 	});
 };
 
-var edit = function edit(user, callback) {
-	var values = (utility.obj2array(user)).join(' , ')
-	var sqlString = `UPDATE tb_user SET ${values} WHERE name = '${user.name}' ;`
-	database.query(sqlString, function(err, result) {
-		callback(err || !result.affectedRows, result);
-	 	return (err || result.affectedRows);
-	});
-
+var edit = function edit(values, callback) {
+	var condition = `name = ` + utility.escape(values.name);
+	console.log(condition);
+	database.update(TABLE_USER, values, condition, callback);
 };
 
-var search = function search(fields, condition, callback) {
-
-	var conditionString = (utility.obj2array(condition)).join(' AND ');
-	var query = database.query(`SELECT ${fields} FROM tb_user WHERE ${conditionString} ;`, function(err, result) {
-		callback(err, result);
-	 	return (err);
-	});
+var search = function search(fields, condition, range, callback) {
+	database.search(TABLE_USER, fields, condition, range, callback);
 };
 
 var list = function list(fields, range, callback) {
-	
-	var sqlString;
-	if(!range)
-		sqlString = `SELECT ${fields} FROM tb_user GROUP BY timeCreate`;
-	else
-		sqlString = `SELECT ${fields} FROM tb_user GROUP BY timeCreate LIMIT ${range.from},${range.to};`
-	
-	database.query(sqlString, function(err, result) {
-		callback(err, result);
-	 	return (err);
-	});
+	database.list(TABLE_USER, fields, range, callback);
 };
 
-var del = function del(condition, callback)
-{
-	var conditionString = (utility.obj2array(condition)).join(' AND ');
-	var sqlString = `DELETE FROM tb_user WHERE ${conditionString} ;`;
-	database.query(sqlString, function(err, result)
-	 	{
-	 		callback(err || !result.affectedRows, result);
-	 		return (err || result.affectedRows);
-	 	});
+var del = function del(condition, callback) {
+	database.del(TABLE_USER, condition, callback);
 };
 
 exports.add = add;
