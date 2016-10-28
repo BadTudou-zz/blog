@@ -7,6 +7,8 @@
   <link rel="shortcut icon" href="images/favicon.ico">
 	<!-- bootstrap css -->
 	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
+  <!-- font-awesome css -->
+  <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
 
 	<style type="text/css">
 	p
@@ -141,34 +143,13 @@
   			 {{featureArticleItem.title}}
   			 <span class="label label-pill label-info pull-right">1</span>
   		  </a>
-			  </div>
-
-      <div id="div-intro" style="padding-top: 10px;">
-        <div class="card">
-            <div class="card-header text-left" style="margin-bottom: 10px;  background-color: #006DE0; color:#fff;">
-              关于我
-            </div>
-            <img id="img-headProtrait" src="images/system/head-protrait.jpg" alt= "Card image"  class="img-circle img-thumbnail img-responsive   center-block" >
-            <div class="card-block" style="padding: 5px">
-              <h4 class="card-title text-center" style="padding: 0px">杜小豆</h4>
-              <h6 class="card-subtitle text-muted text-center"> IT男,程序猿,技术型工作者.</h6>
-            </div>
-            
-            <div class="card-block" style="padding: 5px; font-size: 80%;">
-              <p class="card-text">
-                一个农民的后代,不了解乡土,也不懂得城市.
-              </p>
-            </div>
-  
-            <div class="card-block" style="padding: 0px; font-size: 80%;">
-              <p class="card-text">
-                我有一个脑袋,装载思想、未来与梦想.
-              </p>
-            </div>
-        </div>  
-      </div>
+			</div>
     </div>
-    
+    <div id="app">
+        <Personal></Personal>
+    </div>
+  
+  
     <div id="div-discuss" class="col-lg-offset-1 col-lg-10">
       <div class="col-lg-offset-1 col-lg-10 text-center">
         <div id="div-tips"  class="alert" role="alert" hidden>
@@ -232,7 +213,7 @@
 					Copyright © 2016 BadTudou. All rights reserved.				
 		    </div>
 	   </div>
-
+     <script src="../javascripts/bin/article.bundle.js"></script>
      <script>
        var vue = new Vue({
         el: 'body',
@@ -250,23 +231,23 @@
           articleCountOfPerPage:6
         },
         methods: {
-          getFeature: function(id)
-          {
-            var _this = this;
-            var fields = 'id, title';
-            this.$http.get((`/feature?action=feature-search&fields=${fields}&condition=id:${id}`)).then((response) => 
-            {
-              var data = JSON.parse(response.body);
-              console.log(response.body);
-              if(!data.err){
-                _this.featureCurrent = data.result[0];
-                _this.getFeatureArticle(_this.featureCurrent.id);
-              }else{
-                console.log('获取专题列表失败');
-              }
+          // getFeature: function(id)
+          // {
+          //   var _this = this;
+          //   var fields = 'id, title';
+          //   this.$http.get((`/feature?action=feature-search&fields=${fields}&condition=id:${id}`)).then((response) => 
+          //   {
+          //     var data = JSON.parse(response.body);
+          //     console.log(response.body);
+          //     if(!data.err){
+          //       _this.featureCurrent = data.result[0];
+          //       _this.getFeatureArticle(_this.featureCurrent.id);
+          //     }else{
+          //       console.log('获取专题列表失败');
+          //     }
               
-            });
-          },
+          //   });
+          // },
           getQueryString: function(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
             var r = window.location.search.substr(1).match(reg);
@@ -275,10 +256,13 @@
           },
           getArticle: function(id)
           {
+            var id = this.getQueryString('id');
+            var from = 0;
+            var count = 5;
             var _this = this;
-            var fields = 'id, featureID, title, subtitle, link';
-            this.$http.get((`/article?action=article-search&fields=${fields}&condition=id:${id}`)).then((response) => 
+            this.$http.put(`/article?action=article-search`, {condition:`id = ${id}`, from:0, count:1}).then((response) => 
             {
+              console.log(response.body);
               var data = JSON.parse(response.body);
               if(!data.err){
                 _this.articleCurrent = data.result[0];

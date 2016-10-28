@@ -50,29 +50,18 @@ router.get('/', function(req, res) {
 	}
 	switch(params.action) {
 		case 'feature-range':
-			var range = {from: Number(params.from), to: Number(params.to)};
-			var fields = params.fields;
+			var range = {from: Number(params.from), count: Number(params.count)};
+			var fields = `*`;
 			feature.list(fields, range, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify({err:false, result:result}));
 				else
-					res.end(JSON.stringify({err:true, result:'error'}));
-			});
-			break;
-
-		case 'feature-all':
-			var fields = params.fields;
-			feature.list(fields, null, (err, result)=> {
-				if(!err)
-					res.end(JSON.stringify({err:false, result:result}));
-				else
-					res.end(JSON.stringify({err:true, result:'error'}));
+					res.end(JSON.stringify({err:true, result:'get feature range error'}));
 			});
 			break;
 
 		case 'feature-search':
 			var conditionArray = params.condition.split(',');
-			var fields = params.fields;
 			var condition = {};
 			for(var item in conditionArray) {
 				var ele = conditionArray[item];
