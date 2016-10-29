@@ -10,127 +10,29 @@
   <!-- font-awesome css -->
   <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
 
-	<style type="text/css">
-	p
-	{
-		text-indent:2em;
-	}
-	div#div-logo
-	{
-		height: 140px; width: 140px; margin-top: 10px; margin-bottom: 10px; background: #FFF; border-color: #0099F0;
-		border-width: 2px;
-	}
-	div#div-logo>a>img
-	{
-		height: 60%; width: 70%; margin: 15%;
-	}
-	div#div-searchbox
-	{
-		width: 50%;	margin: auto;
-	}
-	div#div-nav
-	{
-		margin-top: 10px;
-		margin-bottom: 10px;
-	}
-	div#div-location>ol
-	{
-		background-color: #FFF; border:solid 1px; border-color: #DDD;
-	}
-	div#div-features
-	{
-		margin-top: 0px;
-	}
-	div#div-article,div#div-features
-	{
-		margin-bottom: 10px;
-	}
-	div#div-footer
-	{
-		width: 100%; height: 160px; padding-top: 10px; border-color: #0099F0;
-	}
-	div#div-footer--curtain
-	{
-		height: 50%; background-color: #0099F0;
-	}
-	div#div-footer--curtain--copyright
-	{
-		color: #FFF; font-size: 150%; font-weight: bold; text-align: center;
-	}
-	div#div-footer--contact>ol
-	{
-		height: 50%; margin-bottom: 36px;
-	}
-	div#div-footer--contact>ol>li
-	{
-		display: inline;
-	}
-	div#div-footer--contact>ol>li>a>img
-	{
-		width: 72px; height: 72px;
-	}
-	img#img-headProtrait
-	{
-		height: 100px; width: 100px;
-	}
-		
-	</style>
 
 	<!-- jquery js -->
 	<script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
 	<!-- bootstrap js -->
 	<script src="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
   <!-- vue js -->
-  <script src="http://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
-  <!-- vue-resource js -->
-  <script src="https://cdn.jsdelivr.net/vue.resource/1.0.1/vue-resource.min.js"></script>
-</head>
+<!--   <script src="http://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
+ -->  <!-- vue-resource js -->
+<!--   <script src="https://cdn.jsdelivr.net/vue.resource/1.0.1/vue-resource.min.js"></script>
+ --></head>
 <body>
-	<div class="container">
-		<div id="div-logo" class="img-circle img-thumbnail img-responsive center-block">
-			<a href="/"><img src ="images/logo/logo.png" title="杜小豆的编程小道"></a>
-		</div>
-
-		<div id="div-searchbox" class="input-group">
-      		<input type="text" class="form-control" placeholder="搜索文章...">
-      		<span class="input-group-btn">
-        		<button class="btn btn-secondary" type="button">搜索!</button>
-      		</span>
-    </div>
-
-		<div id="div-nav" class="navbar navbar-static-top navbar-dark bg-inverse" style="background-color: #0099F0">
-			<a class="navbar-brand" href="#">杜小豆的编程小道</a>
-			<ul class="nav navbar-nav">
-        		<li class="nav-item active">
-        		  <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-        		</li>
-        		<li class="nav-item">
-        		  <a class="nav-link" href="#">专题</a>
-        		</li>
-        		<li class="nav-item">
-        		  <a class="nav-link" href="#">关于</a>
-        		</li>
-        		<li class="nav-item">
-        		  <a class="nav-link" href="#">联系</a>
-        		</li>
-      </ul>
-    </div>
-
-    <div id="div-location" class="col-lg-9">
-      	<ol class="breadcrumb">
-  				<li><a href="/">Home</a></li>
-  				<li><a href="#">专题</a></li>
-          <li><a href="#">{{featureCurrent.title}}</a></li>
-  				<li class="active">{{articleCurrent.title + '-' + articleCurrent.subtitle}}</li>
-			  </ol>
-    </div>
-
-    <div class="col-lg-3 text-center">
-      	生命，宇宙，以及一切的答案。
-      	<br><strong>让我们的思想自由恋爱吧！</strong>
-    </div>
-      	
-    <div id="div-article"  class="col-lg-9" >
+	<div id="app" class="container">
+    <Logo></Logo>
+    <Searchbox></Searchbox>
+    <Navigation title="杜小豆的编程小道"></Navigation>
+    <Location name="location"></Location>
+    <Ad></Ad>
+    <Contact show="false"></Contact>
+    <About show="true"></About>
+    <Footerbar></Footerbar>
+  </div>
+  <script src="../javascripts/bin/article.bundle.js"></script>
+    <!-- <div id="div-article"  class="col-lg-9" >
       	<iframe id="iframe-article" src="{{'http://localhost:3000/'+currentArticle.link}}" class="col-lg-12" style="border:none; height: 700px"></iframe>
 		</div>
 
@@ -144,9 +46,6 @@
   			 <span class="label label-pill label-info pull-right">1</span>
   		  </a>
 			</div>
-    </div>
-    <div id="app">
-        <Personal></Personal>
     </div>
   
   
@@ -192,29 +91,10 @@
              </ul>
         </div>
       </div>
-    </div>  
-    
-    <!-- 页脚 -->
-		<div id='div-footer' class="col-lg-12">
-			<!-- 页脚-联系方式 -->
-			<div id='div-footer--contact'>
-				<ol>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/twitter-logo.png"></a></li>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/facebook-logo.png"></a></li>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/wechat-logo.png"></a></li>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/weibo-logo.png"></a></li>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/qq-logo.png"></a></li>
-					<li class="col-lg-2"><a href="#"><img src="images/logo/email-logo.png"></a></li>
-				</ol>
-			</div>
-			<!-- 页脚-版权 -->
-			<div id='div-footer--curtain'>
-				<div id='div-footer--curtain--copyright'>
-					Copyright © 2016 BadTudou. All rights reserved.				
-		    </div>
-	   </div>
-     <script src="../javascripts/bin/article.bundle.js"></script>
-     <script>
+    </div>   -->
+
+
+     <!-- <script>
        var vue = new Vue({
         el: 'body',
         data: {
@@ -327,6 +207,6 @@
        //vue.getArtileListOfPage(1);
        console.log('当前文章ID'+vue.getQueryString('id'));
        vue.getArticle(vue.getQueryString('id'));
-     </script>
+     </script> -->
 </body>
 </html>

@@ -2,7 +2,7 @@
 <div id="div-intro" class="col-lg-3">
     <div class="card">
         <div id="div-intro--cardheader" class="card-header text-left">
-         关于我
+         作者信息
        	</div>
       	<img id="img-headProtrait" src="images/system/head-protrait.jpg" alt="Card image"  class="img-circle img-thumbnail img-responsive center-block" >
         <div class="card-block" style="padding: 5px">

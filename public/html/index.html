@@ -17,57 +17,25 @@
 	<!-- bootstrap js -->
 	<script src="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
   <!-- vue js -->
-  <script src="http://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
-  <!-- vue-resource js -->
-  <script src="https://cdn.jsdelivr.net/vue.resource/1.0.1/vue-resource.min.js"></script>
-</head>
+<!--   <script src="http://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
+ -->  <!-- vue-resource js -->
+<!--   <script src="https://cdn.jsdelivr.net/vue.resource/1.0.1/vue-resource.min.js"></script>
+ --></head>
 <body>
-	<div class="container">
-		<div id="div-logo" class="img-circle img-thumbnail img-responsive center-block">
-			<a href="/"><img src ="images/logo/logo.png" title="杜小豆的编程小道"></a>
-		</div>
-
-		<div id="div-searchbox" class="input-group">
-      		<input type="text" class="form-control" placeholder="搜索文章...">
-      		<span class="input-group-btn">
-        		<button class="btn btn-secondary" type="button">搜索!</button>
-      		</span>
-    </div>
-
-		<div id="div-nav" class="navbar navbar-static-top navbar-dark bg-inverse">
-			<a class="navbar-brand" href="#">杜小豆的编程小道</a>
-			<ul class="nav navbar-nav">
-        		<li class="nav-item active">
-        		  <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-        		</li>
-            <li class="nav-item">
-              <a class="nav-link" href="#article" @click="itemActive = '文章'">文章</a>
-            </li>
-        		<li class="nav-item">
-        		  <a class="nav-link" href="#feature" @click="itemActive = '专题'">专题</a>
-        		</li>
-        		<li class="nav-item">
-        		  <a class="nav-link" href="#about" @click="itemActive = '关于'">关于</a>
-        		</li>
-        		<li class="nav-item">
-        		  <a class="nav-link" href="#contact" @click="itemActive = '联系'">联系</a>
-        		</li>
-      </ul>
-    </div>
-
-    <div id="div-location" class="col-lg-9">
-      	<ol class="breadcrumb">
-  				<li><a href="/">Home</a></li>
-  				<li><a href="#">{{itemActive}}</a></li>
-  				<li class="active">{{subitemActive}}</li>
-			  </ol>
-    </div>
-
-    <div class="col-lg-3 text-center">
-      	生命，宇宙，以及一切的答案。
-      	<br><strong>让我们的思想自由恋爱吧！</strong>
-    </div>
-      	
+  <div id="app" class="container">
+    <Logo></Logo>
+    <Searchbox></Searchbox>
+    <Navigation title="杜小豆的编程小道"></Navigation>
+    <Location name="location"></Location>
+    <Ad></Ad>
+    <Contact show="false"></Contact>
+    <About show="true"></About>
+    <Personal></Personal>
+    <Footerbar></Footerbar>
+    <script src="../javascripts/bin/index.bundle.js"></script>
+  </div>
+	<!-- <div class="container">
+		  	
     <div id="div-article"  class="col-lg-9" v-show="itemActive == '文章'">
       	<div class="card col-lg-4" v-for="articleItem in articleList">
   					<div class="card-block">
@@ -107,37 +75,7 @@
         </div>
     </div>
 
-     <div id="div-about" class="col-lg-9" v-show="itemActive == '关于'">
-        <div class="jumbotron" style="background-color: #FFF">
-          <h5 class="display-4 text-center">关于</h5>
-          <div style="color:#006DE0">
-            <p class="lead">写程序，写代码，写情书，这里是<b>杜小豆的编程小道</b>。漫路长行，始于2011。</p>
-            <p class="lead">生命，宇宙，以及一切的答案。</p>
-            <p class="lead"><b>让我们的思想自由的恋爱吧！</b></p>
-            <hr class="m-y-md">
-          </div>
-            <p>(the answer to life, the universe, and everything)</p>
-        </div>
-     </div>
 
-     <div id="div-about" class="col-lg-9" v-show="itemActive == '联系'">
-        <div class="jumbotron" style="background-color: #FFF;">
-          <h5 class="display-4 text-center">联系</h5>
-          <div style="color:#006DE0">
-            <P><br></P>
-            <p class="lead"><i class="fa fa-2x fa-qq" aria-hidden="true">&nbsp;1217473249</i></p>
-            <p class="lead"><i class="fa fa-2x fa-weibo" aria-hidden="true">&nbsp;<a href="http://weibo.com/badtudou" title="BadTudou">BadTudou</a></i></p>
-            <p class="lead"><i class="fa fa-2x fa-github" aria-hidden="true"><a href="https://github.com/BadTudou">&nbsp;github.com/BadTudou</a></i></p>
-            <p class="lead"><i class="fa fa-2x fa-rocket" aria-hidden="true"><a href="https://zhuanlan.zhihu.com/DuXiaoDou" title="知乎@杜小豆">&nbsp;知乎@杜小豆</a></i>
-            <hr class="m-y-md">
-        </div>
-            <p>众里寻他千百度，蓦然回首，那人却在，灯火阑珊处。</p>
-          </div>
-     </div>
-
-     <div id="app">
-      <Personal></Personal>
-     </div>
 
     
     <div id="div-paging" class="col-lg-8 col-lg-offset-4" v-show="itemActive == '文章'">
@@ -172,76 +110,73 @@
     </div>
       <script src="../javascripts/bin/index.bundle.js"></script>
 
-    <!-- 页脚 -->
-		<div id='div-footer' class="col-lg-12">
-					Copyright © 2016 BadTudou. All rights reserved.				
-	   </div>
+		
 
      <script>
-       var vue = new Vue({
-        el: 'body',
-        data: {
-          articleList:null,
-          featureList:null,
-          itemActive:'文章',
-          subitemActive:'全部',
-          page:{
-            articleCountOfPerPage: 6,
-            current:1,
-            bottom:1,
-            top:5
-          }
-        },
-        methods: {
-          getArtileListOfPage: function(page){
-            var _this = this;
-            var from = (page-1)*this.page.articleCountOfPerPage;
-            var count = page * this.page.articleCountOfPerPage;
-            this.$http.get((`/article?action=article-range&from=${from}&count=${count}`)).then((response) => 
-            {
-              var data = JSON.parse(response.body);
-              console.log(response.body);
-              if(!data.err){
-                _this.page.current = page;
-                _this.articleList = data.result;;
-              }else{
-                console.log('获取数据失败');
-              }
-              return false;
-            });
-          },
+       // var vue = new Vue({
+       //  el: 'body',
+       //  data: {
+       //    articleList:null,
+       //    featureList:null,
+       //    itemActive:'文章',
+       //    subitemActive:'全部',
+       //    page:{
+       //      articleCountOfPerPage: 6,
+       //      current:1,
+       //      bottom:1,
+       //      top:5
+       //    }
+       //  },
+       //  methods: {
+       //    getArtileListOfPage: function(page){
+       //      var _this = this;
+       //      var from = (page-1)*this.page.articleCountOfPerPage;
+       //      var count = page * this.page.articleCountOfPerPage;
+       //      this.$http.get((`/article?action=article-range&from=${from}&count=${count}`)).then((response) => 
+       //      {
+       //        var data = JSON.parse(response.body);
+       //        console.log(response.body);
+       //        if(!data.err){
+       //          _this.page.current = page;
+       //          _this.articleList = data.result;;
+       //        }else{
+       //          console.log('获取数据失败');
+       //        }
+       //        return false;
+       //      });
+       //    },
 
-          getFeatureList: function(from, count)
-          {
-            var _this = this;
-            this.$http.get((`/feature?action=feature-range&from=${from}&count=${count}`)).then((response) => 
-            {
-              var data = JSON.parse(response.body);
-              console.log(response.body);
-              if(!data.err){
-                _this.featureList = data.result;
-              }else{
-                console.log('获取专题列表失败');
-              }
-            });
-          },
-          generatePage: function(){
-            var pages = [];
-            for(var i = 0;i < this.page.top-this.page.bottom+1; i++){
-              pages.push(Number(this.page.current)+i);
-            }
-            console.log(pages);
-            return pages;
-          }
-        }
-       });
+       //    getFeatureList: function(from, count)
+       //    {
+       //      var _this = this;
+       //      this.$http.get((`/feature?action=feature-range&from=${from}&count=${count}`)).then((response) => 
+       //      {
+       //        var data = JSON.parse(response.body);
+       //        console.log(response.body);
+       //        if(!data.err){
+       //          _this.featureList = data.result;
+       //        }else{
+       //          console.log('获取专题列表失败');
+       //        }
+       //      });
+       //    },
+       //    generatePage: function(){
+       //      var pages = [];
+       //      for(var i = 0;i < this.page.top-this.page.bottom+1; i++){
+       //        pages.push(Number(this.page.current)+i);
+       //      }
+       //      console.log(pages);
+       //      return pages;
+       //    }
+       //  }
+       // });
 
-       vue.getArtileListOfPage(1);
-       vue.getFeatureList(0, 10);
-       $('#div-paging').on('click', 'a', function(event){
-          vue.getArtileListOfPage($(this ).text());
-          return false;
-       });
-     </script>
+       // vue.getArtileListOfPage(1);
+       // vue.getFeatureList(0, 10);
+       // $('#div-paging').on('click', 'a', function(event){
+       //    vue.getArtileListOfPage($(this ).text());
+       //    return false;
+       // });
+     </script>-->
 </body>
 </html>
