@@ -1,6 +1,6 @@
 <template>
 <div id="div-nav" class="navbar navbar-static-top navbar-dark bg-inverse">
-	<a class="navbar-brand" href="#">{{title}}</a>
+	<a class="navbar-brand" href="/">{{title}}</a>
 	<ul class="nav navbar-nav">
         <li class="nav-item" :class="{'active':index ===0}" v-for="menuItem,index in menu">
             <a class="nav-link" :href="menuItem.link" @click="changeItem">{{menuItem.text}}</a>
@@ -20,18 +20,27 @@
  			return {
  				title: '杜小豆的编程小道',
  				menu: [
- 					{link:'/',			text:'主页'},
  					{link:'#article',	text:'文章'},
  					{link:'#feature',	text:'专题'},
  					{link:'#about',		text:'关于'},
- 					{link:'#contact',	text:'联系'}]
+ 					{link:'#contact',	text:'联系'}],
+ 				events:{
+ 					'#article':'articleCardListPageChange',
+ 					'#feature':'featureCardListPageChange'
  				}
+ 			}
+ 				
  		},
  		methods:
  		{
  			changeItem: function(e){
  				var parentnavitem = {text:e.target.text, link:e.target.href};
  				this.$store.commit('parentNavItemChange', parentnavitem);
+ 				var hashKeyIndex = e.target.href.indexOf('#');
+ 				var parentNavLink = e.target.href.substring(hashKeyIndex);
+
+ 				console.assert(this.$store.state.DEBUG, parentNavLink);
+ 				this.$store.commit(this.events[parentNavLink], 1);
  			}
  		}
 }

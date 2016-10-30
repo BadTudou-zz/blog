@@ -16,11 +16,7 @@
 	<script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
 	<!-- bootstrap js -->
 	<script src="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
-  <!-- vue js -->
-<!--   <script src="http://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
- -->  <!-- vue-resource js -->
-<!--   <script src="https://cdn.jsdelivr.net/vue.resource/1.0.1/vue-resource.min.js"></script>
- --></head>
+</head>
 <body>
   <div id="app" class="container">
     <Logo></Logo>
@@ -28,56 +24,16 @@
     <Navigation title="杜小豆的编程小道"></Navigation>
     <Location name="location"></Location>
     <Ad></Ad>
+    <Articlelist></Articlelist>
+    <Featurelist></Featurelist>
     <Contact show="false"></Contact>
     <About show="true"></About>
     <Personal></Personal>
     <Footerbar></Footerbar>
     <script src="../javascripts/bin/index.bundle.js"></script>
   </div>
-	<!-- <div class="container">
-		  	
-    <div id="div-article"  class="col-lg-9" v-show="itemActive == '文章'">
-      	<div class="card col-lg-4" v-for="articleItem in articleList">
-  					<div class="card-block">
-    					<h4 class="card-title">
-                  <a href="article?action=article-show&id={{articleItem.id}}">{{articleItem.title}}</a>
-              </h4>
-    					<h6 class="card-subtitle text-muted">{{articleItem.subtitle}}</h6>
-  					</div>
-  					<a href="article?action=article-show&id={{articleItem.id}}">
-              <img  alt="Card image" class="img-responsive" title="{{articleItem.title + articleItem.subtitle}}" src="{{articleItem.coverLink}}" style="height: 150px;">
-            </a>
-  					<div class="card-block">
-    					<p class="card-text">{{articleItem.introduction.substr(0,40)}}......</p>
-    					<a href="article?action=article-show&id={{articleItem.id}}" class="card-link"> <i class="fa fa-1x fa-rocket" aria-hidden="true"></i>&nbsp;阅读</a>
-    					<a href="#" class="card-link"><i class="fa fa-1x fa-coffee" aria-hidden="true"></i>
-              &nbsp;评论</a>
-  					</div>
-				</div>
-		</div>
-
-    <div id="div-feature" class="col-lg-9" v-show="itemActive == '专题'">
-        <div class="card col-lg-4" v-for="featureItem in featureList">
-            <div class="card-block">
-              <h4 class="card-title">
-                  <a href="article?action=article-show&id={{featureItem.id}}">{{featureItem.title}}</a>
-              </h4>
-              <h6 class="card-subtitle text-muted">{{featureItem.author}}</h6>
-            </div>
-            <a href="article?action=article-show&id={{articleItem.id}}">
-              <img  alt="Card image" class="img-responsive" title="{{introduction.title + introduction.subtitle}}" src="{{featureItem.coverLink}}" style="height: 150px;">
-            </a>
-            <div class="card-block">
-              <p class="card-text">{{featureItem.introduction.substr(0,40)}}......</p>
-              <a href="article?action=article-show&id={{featureItem.id}}" class="card-link"> <i class="fa fa-1x fa-rocket" aria-hidden="true"></i>&nbsp;{{featureItem.countArticle}}篇</a>
-              <a href="#" class="card-link"><i class="fa fa-1x fa-coffee" aria-hidden="true"></i>{{new Date(featureItem.timeCreate).toLocaleDateString()}}</a>
-            </div>
-        </div>
-    </div>
-
-
-
-    
+	
+    <!--
     <div id="div-paging" class="col-lg-8 col-lg-offset-4" v-show="itemActive == '文章'">
     	<nav>
   		  <ul class="pagination">

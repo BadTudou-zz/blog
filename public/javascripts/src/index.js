@@ -7,6 +7,8 @@ import Searchbox 	from './components/SearchBox.vue';
 import Navigation 	from './components/Navigation.vue';
 import Location 	from './components/Location.vue';
 import Ad 			from './components/AD.vue';
+import Articlelist 	from './components/ArticleCardList.vue';
+import Featurelist 	from './components/FeatureCardList.vue';
 import Personal 	from './components/Personal.vue';
 import Contact 		from './components/ContactMe.vue';
 import About 		from './components/AboutMe.vue';
@@ -17,7 +19,11 @@ var vm = new Vue({
   store,
   el: '#app',
   components: { 
-  	Logo, Searchbox, Navigation, Location, Personal, 
+  	Logo, Searchbox, Navigation, Location, Articlelist, Featurelist, Personal, 
   	Contact, About, Footerbar, Ad
+  },
+  created: function(){
+  	console.log('准备好了 ');
+	this.$store.commit('articleCardListPageChange', this.$store.state.articleCurrentPage);
   }
 });
