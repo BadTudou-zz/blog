@@ -9,6 +9,7 @@ import Location 	from './components/Location.vue';
 import Ad 			from './components/AD.vue';
 import Articlelist 	from './components/ArticleCardList.vue';
 import Featurelist 	from './components/FeatureCardList.vue';
+import Pagination 	from './components/Pagination.vue';
 import Personal 	from './components/Personal.vue';
 import Contact 		from './components/ContactMe.vue';
 import About 		from './components/AboutMe.vue';
@@ -19,7 +20,7 @@ var vm = new Vue({
   store,
   el: '#app',
   components: { 
-  	Logo, Searchbox, Navigation, Location, Articlelist, Featurelist, Personal, 
+  	Logo, Searchbox, Navigation, Location, Articlelist, Featurelist, Pagination, Personal, 
   	Contact, About, Footerbar, Ad
   },
   created: function(){

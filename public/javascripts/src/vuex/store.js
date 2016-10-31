@@ -17,6 +17,9 @@ Vue.use(VueResource);
     featureCurrentPage:1
   },
   actions:{
+  	articleCardListPageChange(context, page){
+  		context.commit('articleCardListPageChange',page);
+  	}
   	// menuitemchange(context){
   	// 	context.emit('menuitemchange');
   	// }
@@ -35,11 +38,11 @@ Vue.use(VueResource);
         {
           console.assert(state.DEBUG, response.body);
           var data = JSON.parse(response.body);
-          if(!data.err){
+          if(!data.err && data.result.length){
           	state.articleCurrentPage = page;
-            state.articleCardList = data.result;;
+            state.articleCardList = data.result;
           }else{
-            console.log('获取数据失败');
+            console.assert(state.DEBUG, '获取文章数据失败');
           }
         });
     },
@@ -51,13 +54,15 @@ Vue.use(VueResource);
         {
           console.assert(state.DEBUG, response.body);
           var data = JSON.parse(response.body);
-          if(!data.err){
+          if(!data.err && data.result.length){
           	state.featureCurrentPage = page;
-            state.featureCardList = data.result;;
+            state.featureCardList = data.result;
           }else{
-            console.log('获取数据失败');
+            console.log('获取专题数据失败');
           }
+          callback(data.err);
         });
     }
+
   }
 });

@@ -15,33 +15,32 @@
 }
 </style>
 <script>
-	export default {
- 		data () {
- 			return {
- 				title: '杜小豆的编程小道',
- 				menu: [
- 					{link:'#article',	text:'文章'},
- 					{link:'#feature',	text:'专题'},
- 					{link:'#about',		text:'关于'},
- 					{link:'#contact',	text:'联系'}],
- 				events:{
- 					'#article':'articleCardListPageChange',
- 					'#feature':'featureCardListPageChange'
- 				}
+export default {
+ 	data () {
+ 		return {
+ 			title: '杜小豆的编程小道',
+ 			menu: [
+ 				{link:'#article',	text:'文章'},
+ 				{link:'#feature',	text:'专题'},
+ 				{link:'#about',		text:'关于'},
+ 				{link:'#contact',	text:'联系'}],
+ 			events:{
+ 				'#article':'articleCardListPageChange',
+ 				'#feature':'featureCardListPageChange'
  			}
- 				
- 		},
- 		methods:
- 		{
- 			changeItem: function(e){
- 				var parentnavitem = {text:e.target.text, link:e.target.href};
- 				this.$store.commit('parentNavItemChange', parentnavitem);
- 				var hashKeyIndex = e.target.href.indexOf('#');
- 				var parentNavLink = e.target.href.substring(hashKeyIndex);
+ 		}			
+ 	},
+ 	methods:
+ 	{
+ 		changeItem: function(e){
+ 			var parentnavitem = {text:e.target.text, link:e.target.href};
+ 			this.$store.commit('parentNavItemChange', parentnavitem);
+ 			var hashKeyIndex = e.target.href.indexOf('#');
+ 			var parentNavLink = e.target.href.substring(hashKeyIndex);
 
- 				console.assert(this.$store.state.DEBUG, parentNavLink);
- 				this.$store.commit(this.events[parentNavLink], 1);
- 			}
+ 			console.assert(this.$store.state.DEBUG, parentNavLink);
+ 			this.$store.commit(this.events[parentNavLink], 1);
  		}
+ 	}
 }
 </script>

@@ -86,30 +86,36 @@
 
 	var _FeatureCardList2 = _interopRequireDefault(_FeatureCardList);
 
-	var _Personal = __webpack_require__(33);
+	var _Pagination = __webpack_require__(33);
+
+	var _Pagination2 = _interopRequireDefault(_Pagination);
+
+	var _Personal = __webpack_require__(36);
 
 	var _Personal2 = _interopRequireDefault(_Personal);
 
-	var _ContactMe = __webpack_require__(37);
+	var _ContactMe = __webpack_require__(40);
 
 	var _ContactMe2 = _interopRequireDefault(_ContactMe);
 
-	var _AboutMe = __webpack_require__(42);
+	var _AboutMe = __webpack_require__(45);
 
 	var _AboutMe2 = _interopRequireDefault(_AboutMe);
 
-	var _Footer = __webpack_require__(47);
+	var _Footer = __webpack_require__(50);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	//Vue.use(Vuex);
+
+	//import App from './components/App.vue';
 	var vm = new _vue2.default({
 	  store: _store2.default,
 	  el: '#app',
 	  components: {
-	    Logo: _Logo2.default, Searchbox: _SearchBox2.default, Navigation: _Navigation2.default, Location: _Location2.default, Articlelist: _ArticleCardList2.default, Featurelist: _FeatureCardList2.default, Personal: _Personal2.default,
+	    Logo: _Logo2.default, Searchbox: _SearchBox2.default, Navigation: _Navigation2.default, Location: _Location2.default, Articlelist: _ArticleCardList2.default, Featurelist: _FeatureCardList2.default, Pagination: _Pagination2.default, Personal: _Personal2.default,
 	    Contact: _ContactMe2.default, About: _AboutMe2.default, Footerbar: _Footer2.default, Ad: _AD2.default
 	  },
 	  created: function created() {
@@ -117,7 +123,6 @@
 	    this.$store.commit('articleCardListPageChange', this.$store.state.articleCurrentPage);
 	  }
 	});
-	//import App from './components/App.vue';
 
 /***/ },
 /* 1 */
@@ -8213,9 +8218,13 @@
 	    featureCurrentPage: 1
 	  },
 	  actions: {
+	    articleCardListPageChange: function articleCardListPageChange(context, page) {
+	      context.commit('articleCardListPageChange', page);
+	    }
 	    // menuitemchange(context){
 	    // 	context.emit('menuitemchange');
 	    // }
+
 	  },
 	  mutations: {
 	    parentNavItemChange: function parentNavItemChange(state, parentNavItem) {
@@ -8230,11 +8239,11 @@
 	      _vue2.default.http.get('/article?action=article-range&from=' + from + '&count=' + count).then(function (response) {
 	        console.assert(state.DEBUG, response.body);
 	        var data = JSON.parse(response.body);
-	        if (!data.err) {
+	        if (!data.err && data.result.length) {
 	          state.articleCurrentPage = page;
-	          state.articleCardList = data.result;;
+	          state.articleCardList = data.result;
 	        } else {
-	          console.log('获取数据失败');
+	          console.assert(state.DEBUG, '获取文章数据失败');
 	        }
 	      });
 	    },
@@ -8245,12 +8254,13 @@
 	      _vue2.default.http.get('/feature?action=feature-range&from=' + from + '&count=' + count).then(function (response) {
 	        console.assert(state.DEBUG, response.body);
 	        var data = JSON.parse(response.body);
-	        if (!data.err) {
+	        if (!data.err && data.result.length) {
 	          state.featureCurrentPage = page;
-	          state.featureCardList = data.result;;
+	          state.featureCardList = data.result;
 	        } else {
-	          console.log('获取数据失败');
+	          console.log('获取专题数据失败');
 	        }
+	        callback(data.err);
 	      });
 	    }
 	  }
@@ -11023,11 +11033,242 @@
 
 	var __vue_exports__, __vue_options__
 
-	/* styles */
-	__webpack_require__(34)
+	/* script */
+	__vue_exports__ = __webpack_require__(34)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(36)
+	var __vue_template__ = __webpack_require__(35)
+	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+	if (
+	  typeof __vue_exports__.default === "object" ||
+	  typeof __vue_exports__.default === "function"
+	) {
+	if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+	__vue_options__ = __vue_exports__ = __vue_exports__.default
+	}
+	if (typeof __vue_options__ === "function") {
+	  __vue_options__ = __vue_options__.options
+	}
+	__vue_options__.__file = "/Users/badtudou/Docs/Sources/Git/blog/public/javascripts/src/components/Pagination.vue"
+	__vue_options__.render = __vue_template__.render
+	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+
+	/* hot reload */
+	if (false) {(function () {
+	  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  module.hot.accept()
+	  if (!module.hot.data) {
+	    hotAPI.createRecord("data-v-e321f4be", __vue_options__)
+	  } else {
+	    hotAPI.reload("data-v-e321f4be", __vue_options__)
+	  }
+	})()}
+	if (__vue_options__.functional) {console.error("[vue-loader] Pagination.vue: functional components are not supported and should be defined in plain js files using render functions.")}
+
+	module.exports = __vue_exports__
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+
+	exports.default = {
+	  data: function data() {
+	    return {
+	      targetPage: ''
+	    };
+	  },
+
+	  props: ['trigger', 'show', 'current'],
+	  computed: {
+	    generateNumbers: function generateNumbers() {
+	      var numbers = [];
+	      for (var i = 0; i < 5; i++) {
+	        numbers.push(Number(this.currentPage) + i);
+	      }
+	      return numbers;
+	    },
+	    currentPage: function currentPage() {
+	      return this.$store.state[this.current];
+	    }
+	  },
+	  methods: {
+	    previous: function previous() {
+	      this.$store.dispatch(this.trigger, this.currentPage - 1);
+	    },
+	    next: function next() {
+	      this.$store.dispatch(this.trigger, this.currentPage + 1);
+	    },
+	    goto: function goto(page) {
+	      this.$store.dispatch(this.trigger, page);
+	      this.targetPage = '';
+	    }
+	  }
+	};
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports={render:function (){with(this) {
+	  return _h('div', {
+	    directives: [{
+	      name: "show",
+	      rawName: "v-show",
+	      value: (show == 'true'),
+	      expression: "show == 'true'"
+	    }],
+	    staticClass: "col-lg-8 col-lg-offset-4"
+	  }, [_h('nav', [_h('ul', {
+	    staticClass: "pagination"
+	  }, [_h('li', {
+	    class: currentPage == 1 ? 'disabled' : ''
+	  }, [_h('a', {
+	    attrs: {
+	      "href": "#",
+	      "aria-label": "Previous"
+	    },
+	    on: {
+	      "click": previous
+	    }
+	  }, [_m(0), " ", _m(1)])]), " ", _l((generateNumbers), function(number) {
+	    return _h('li', {
+	      class: currentPage == number ? 'active' : ''
+	    }, [_h('a', {
+	      attrs: {
+	        "href": "#"
+	      },
+	      on: {
+	        "click": function($event) {
+	          goto(number)
+	        }
+	      }
+	    }, [_s(number)])])
+	  }), " ", _h('li', [_h('a', {
+	    attrs: {
+	      "href": "#",
+	      "aria-label": "Next"
+	    },
+	    on: {
+	      "click": next
+	    }
+	  }, [_m(2), " ", _m(3)])]), " ", _h('li', [_h('div', {
+	    staticClass: "input-group col-lg-3",
+	    attrs: {
+	      "style": "margin-top: 2px;"
+	    }
+	  }, [_h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (targetPage),
+	      expression: "targetPage"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "页码"
+	    },
+	    domProps: {
+	      "value": _s(targetPage)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        targetPage = $event.target.value
+	      }
+	    }
+	  }), " ", _h('span', {
+	    staticClass: "input-group-btn"
+	  }, [_h('button', {
+	    staticClass: "btn btn-secondary",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": function($event) {
+	        goto(targetPage)
+	      }
+	    }
+	  }, ["页"])])])])])])])
+	}},staticRenderFns: [function (){with(this) {
+	  return _h('span', {
+	    attrs: {
+	      "aria-hidden": "true"
+	    }
+	  }, ["«"])
+	}},function (){with(this) {
+	  return _h('span', {
+	    staticClass: "sr-only"
+	  }, ["Previous"])
+	}},function (){with(this) {
+	  return _h('span', {
+	    attrs: {
+	      "aria-hidden": "true"
+	    }
+	  }, ["»"])
+	}},function (){with(this) {
+	  return _h('span', {
+	    staticClass: "sr-only"
+	  }, ["Next"])
+	}}]}
+	if (false) {
+	  module.hot.accept()
+	  if (module.hot.data) {
+	     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-e321f4be", module.exports)
+	  }
+	}
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_exports__, __vue_options__
+
+	/* styles */
+	__webpack_require__(37)
+
+	/* template */
+	var __vue_template__ = __webpack_require__(39)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11061,13 +11302,13 @@
 
 
 /***/ },
-/* 34 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(35);
+	var content = __webpack_require__(38);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -11087,7 +11328,7 @@
 	}
 
 /***/ },
-/* 35 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -11101,7 +11342,7 @@
 
 
 /***/ },
-/* 36 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -11200,19 +11441,19 @@
 	}
 
 /***/ },
-/* 37 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(38)
+	__webpack_require__(41)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(40)
+	__vue_exports__ = __webpack_require__(43)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(41)
+	var __vue_template__ = __webpack_require__(44)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11246,13 +11487,13 @@
 
 
 /***/ },
-/* 38 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(39);
+	var content = __webpack_require__(42);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -11272,7 +11513,7 @@
 	}
 
 /***/ },
-/* 39 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -11286,7 +11527,7 @@
 
 
 /***/ },
-/* 40 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11329,7 +11570,7 @@
 	//
 
 /***/ },
-/* 41 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -11405,19 +11646,19 @@
 	}
 
 /***/ },
-/* 42 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(43)
+	__webpack_require__(46)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(45)
+	__vue_exports__ = __webpack_require__(48)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(46)
+	var __vue_template__ = __webpack_require__(49)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11451,13 +11692,13 @@
 
 
 /***/ },
-/* 43 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(44);
+	var content = __webpack_require__(47);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -11477,7 +11718,7 @@
 	}
 
 /***/ },
-/* 44 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -11491,7 +11732,7 @@
 
 
 /***/ },
-/* 45 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11530,7 +11771,7 @@
 	//
 
 /***/ },
-/* 46 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -11576,16 +11817,16 @@
 	}
 
 /***/ },
-/* 47 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(48)
+	__webpack_require__(51)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(50)
+	var __vue_template__ = __webpack_require__(53)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11619,13 +11860,13 @@
 
 
 /***/ },
-/* 48 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(49);
+	var content = __webpack_require__(52);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -11645,7 +11886,7 @@
 	}
 
 /***/ },
-/* 49 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -11659,7 +11900,7 @@
 
 
 /***/ },
-/* 50 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
