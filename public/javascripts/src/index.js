@@ -23,8 +23,13 @@ var vm = new Vue({
   	Logo, Searchbox, Navigation, Location, Articlelist, Featurelist, Pagination, Personal, 
   	Contact, About, Footerbar, Ad
   },
+  methods:{
+  	isArticleShow:function(){
+  		return state.parentNavItem.text == '文章';
+  	}
+  },
   created: function(){
   	console.log('准备好了 ');
-	this.$store.commit('articleCardListPageChange', this.$store.state.articleCurrentPage);
+	this.$store.dispatch('articleCardListPageChange', this.$store.state.articleCurrentPage);
   }
 });

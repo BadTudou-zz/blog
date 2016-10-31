@@ -2,7 +2,7 @@
 <div id="div-nav" class="navbar navbar-static-top navbar-dark bg-inverse">
 	<a class="navbar-brand" href="/">{{title}}</a>
 	<ul class="nav navbar-nav">
-        <li class="nav-item" :class="{'active':index ===0}" v-for="menuItem,index in menu">
+        <li class="nav-item" :class="{'active':isActivite(menuItem)}" v-for="menuItem,index in menu">
             <a class="nav-link" :href="menuItem.link" @click="changeItem">{{menuItem.text}}</a>
         </li>
       </ul>
@@ -34,12 +34,15 @@ export default {
  	{
  		changeItem: function(e){
  			var parentnavitem = {text:e.target.text, link:e.target.href};
- 			this.$store.commit('parentNavItemChange', parentnavitem);
+ 			this.$store.dispatch('parentNavItemChange', parentnavitem);
  			var hashKeyIndex = e.target.href.indexOf('#');
  			var parentNavLink = e.target.href.substring(hashKeyIndex);
 
  			console.assert(this.$store.state.DEBUG, parentNavLink);
- 			this.$store.commit(this.events[parentNavLink], 1);
+ 			this.$store.dispatch(this.events[parentNavLink], 1);
+ 		},
+ 		isActivite:function(menuItem){
+ 			return this.$store.state.parentNavItem.text == menuItem.text;
  		}
  	}
 }

@@ -16,124 +16,26 @@
 	<script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
 	<!-- bootstrap js -->
 	<script src="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+
 </head>
 <body>
   <div id="app" class="container">
     <Logo></Logo>
-    <Searchbox></Searchbox>
+    <Searchbox trigger="articleCardSearchPage"></Searchbox>
     <Navigation title="杜小豆的编程小道"></Navigation>
     <Location name="location"></Location>
     <Ad></Ad>
+    <Contact show="false"></Contact>
+    <About show="true"></About>
     <Articlelist></Articlelist>
     <Featurelist></Featurelist>
     <Personal></Personal>
-    <Pagination show="true" trigger="articleCardListPageChange" current="articleCurrentPage"></Pagination>
-    <Contact show="false"></Contact>
-    <About show="true"></About>
+    <Pagination parentshow="文章" childshow="全部" trigger="articleCardListPageChange" current="articleCurrentPage"></Pagination>
+    <Pagination parentshow="文章" childshow="搜索" trigger="articleCardSearchPage" current="articleSearchCurrentPage"></Pagination>
+    <Pagination parentshow="专题" childshow="全部" trigger="featureCardListPageChange" current="featureCurrentPage"></Pagination>
     <Footerbar></Footerbar>
     <script src="../javascripts/bin/index.bundle.js"></script>
   </div>
-	
-    <!--
-    <div id="div-paging" class="col-lg-8 col-lg-offset-4" v-show="itemActive == '文章'">
-    	<nav>
-  		  <ul class="pagination">
-    		  <li class="{{page.current==1?'disabled':''}}">
-    		  		<a href="#" aria-label="Previous" @click="getArtileListOfPage(page.current-1)">
-    		  			<span aria-hidden="true">&laquo;</span>
-    		  			<span class="sr-only">Previous</span>
-    		  		</a>
-    		  </li>
-    		  <li v-bind:class="n == page.current?'active':''" v-for="n in generatePage()">
-    		  		<a href="#" >{{n}}</a>
-    		  </li>
-    		  <li>
-    		  	<a href="#" aria-label="Next" @click="getArtileListOfPage(page.current+1)>
-    		  			<span aria-hidden="true">&raquo;</span>
-    		  			<span class="sr-only">Next</span>
-    		  		</a>
-    		  </li>
-    		  <li>
-    		  	<div id="div-goto" class="input-group col-lg-3" style="margin-top: 2px;">
-    		  			<input type="text" class="form-control" placeholder="页码">
-    		  				<span class="input-group-btn">
-    		  					<button class="btn btn-secondary" type="button">页</button>
-    		  				</span>
-    		  		</div>
-    		  </li>
-  		  </ul>
-  				
-			</nav>
-    </div>
-      <script src="../javascripts/bin/index.bundle.js"></script>
 
-		
-
-     <script>
-       // var vue = new Vue({
-       //  el: 'body',
-       //  data: {
-       //    articleList:null,
-       //    featureList:null,
-       //    itemActive:'文章',
-       //    subitemActive:'全部',
-       //    page:{
-       //      articleCountOfPerPage: 6,
-       //      current:1,
-       //      bottom:1,
-       //      top:5
-       //    }
-       //  },
-       //  methods: {
-       //    getArtileListOfPage: function(page){
-       //      var _this = this;
-       //      var from = (page-1)*this.page.articleCountOfPerPage;
-       //      var count = page * this.page.articleCountOfPerPage;
-       //      this.$http.get((`/article?action=article-range&from=${from}&count=${count}`)).then((response) => 
-       //      {
-       //        var data = JSON.parse(response.body);
-       //        console.log(response.body);
-       //        if(!data.err){
-       //          _this.page.current = page;
-       //          _this.articleList = data.result;;
-       //        }else{
-       //          console.log('获取数据失败');
-       //        }
-       //        return false;
-       //      });
-       //    },
-
-       //    getFeatureList: function(from, count)
-       //    {
-       //      var _this = this;
-       //      this.$http.get((`/feature?action=feature-range&from=${from}&count=${count}`)).then((response) => 
-       //      {
-       //        var data = JSON.parse(response.body);
-       //        console.log(response.body);
-       //        if(!data.err){
-       //          _this.featureList = data.result;
-       //        }else{
-       //          console.log('获取专题列表失败');
-       //        }
-       //      });
-       //    },
-       //    generatePage: function(){
-       //      var pages = [];
-       //      for(var i = 0;i < this.page.top-this.page.bottom+1; i++){
-       //        pages.push(Number(this.page.current)+i);
-       //      }
-       //      console.log(pages);
-       //      return pages;
-       //    }
-       //  }
-       // });
-
-       // vue.getArtileListOfPage(1);
-       // vue.getFeatureList(0, 10);
-       // $('#div-paging').on('click', 'a', function(event){
-       //    vue.getArtileListOfPage($(this ).text());
-       //    return false;
-       // });
-     </script>-->
 </body>
 </html>

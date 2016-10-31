@@ -16,11 +16,13 @@ router.get('/', function(req, res, next) {
 });
 
 router.put('/', function(req, res) {
-	
 	var params = req.query;
 	if(typeof(params.action) === 'undefined')
 	{
 		return res.end(JSON.stringify({err:true, result:'illegal request action'}));
+	}
+	if(req.session.loginstate == 'true'){
+		next();
 	}
 	switch(params.action) 
 	{
@@ -38,21 +40,29 @@ router.put('/', function(req, res) {
 			break; 
 
 		case 'article-search':
-			var fields = '*';
-			var condition = utility.objescape(req.body.condition);
-			var range = {from: Number(req.body.from), count: Number(req.body.count)};
-			console.log(JSON.stringify(condition));
+			var condition = utility.obj2array(req.body.condition);
+			// 此处没有break，是为了下面的代码可用复用，他们只是搜索条件不同
+
+		case 'article-search-title':
+			var condition = `title LIKE `+utility.escape("%"+req.body.condition+"%");
+
+
+		var fields = `id, featureID, title, subtitle, link, license, 
+			timeCreated, author, introduction, coverLink, countDiscuss`;
+		var range = {from: Number(req.body.from), count: Number(req.body.count)};
 			article.search(fields, condition, range, (err, result) =>{
 				if(!err)
 				{
 					res.end(JSON.stringify({err:false, result:result}));
-					console.log(JSON.stringify(result));
+					console.log(JSON.stringify(err));
 				}
-				else
+				else{
+					console.log(JSON.stringify(result));
 					res.end(JSON.stringify({err:true, result:'search article error'}));
-				});
+				}
+			});
 			break;
-		
+
 		default:
 			res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
 			break;
@@ -61,10 +71,6 @@ router.put('/', function(req, res) {
 
 router.put('/', function(req, res) {
 	var params = req.query;
-	if(typeof(params.action) === 'undefined')
-	{
-		return res.end(JSON.stringify({err:true, result:'illegal request action'}));
-	}
 	switch(params.action) {
 		case 'article-add':
 			var newArticle = req.body.newArticle;
@@ -86,7 +92,6 @@ router.put('/', function(req, res) {
 					res.end(JSON.stringify({err:true, result:'edit article error'}));
 			});
 			break;
-		
 	}
 
 });
@@ -99,7 +104,7 @@ router.get('/', function(req, res) {
 	}
 	switch(params.action) {
 		case 'article-range':
-			var fields = `id, featureID, title, subtitle, link, license, timeCreated, 
+			var fields = `id, featureID, title, subtitle, link, timeCreated, 
 						author, introduction, coverLink`;
 			var range = {from: Number(params.from), count: Number(params.count)};
 			article.list(fields, range, (err, result)=> {
@@ -155,7 +160,6 @@ router.get('/', function(req, res) {
 					res.end(JSON.stringify({err:true, result:'get article disscuss error'}));
 			});
 			break;
-
 
 		default:
 			res.end(JSON.stringify({err:true, result:'undefined request action'}));

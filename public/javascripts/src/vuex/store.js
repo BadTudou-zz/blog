@@ -12,23 +12,43 @@ Vue.use(VueResource);
     articleCardList:'',
     articlePerPage:6,
     articleCurrentPage:1,
+    articleSearchCurrentPage:1,
+    articleSearchText:'',
     featureCardList:'',
     featurePerPage:6,
     featureCurrentPage:1
   },
   actions:{
+  	parentNavItemChange(context, parentNavItem)
+  	{
+  		context.commit('parentNavItemChange', parentNavItem);
+  	},
+  	childNavItemChange(context, childNavItem)
+  	{
+  		context.commit('childNavItemChange', childNavItem);
+  	},
   	articleCardListPageChange(context, page){
   		context.commit('articleCardListPageChange',page);
+  	},
+  	featureCardListPageChange(context, page){
+  		context.commit('featureCardListPageChange',page);
+  	},
+  	articleCardSearchPageTextChange(context, text){
+  		context.commit('articleCardSearchPageTextChange', text);
+  	},
+  	articleCardSearchPage(context, page){
+  		console.log('页码'+page);
+  		context.commit('articleCardSearchPage', page);
   	}
-  	// menuitemchange(context){
-  	// 	context.emit('menuitemchange');
-  	// }
   },
   mutations: {
     parentNavItemChange (state, parentNavItem) {
     	console.log('store mutations parentmenuitemchange');
     	state.parentNavItem = parentNavItem;
     	state.childNavItem = {text:'全部', link:'#'};
+    },
+    childNavItemChange (state, childNavItem) {
+    	state.childNavItem = childNavItem;
     },
     articleCardListPageChange (state, page){
     	console.log('store article list page change'+page);
@@ -58,10 +78,29 @@ Vue.use(VueResource);
           	state.featureCurrentPage = page;
             state.featureCardList = data.result;
           }else{
-            console.log('获取专题数据失败');
+            console.assert(state.DEBUG, '获取专题数据失败');
           }
-          callback(data.err);
         });
+    },
+    articleCardSearchPageTextChange (state, text){
+    	state.articleSearchText = text;
+    },
+    articleCardSearchPage (state, page){
+    	var text = state.articleSearchText;
+    	var from = (page-1)*state.articlePerPage;
+    	var count = state.articlePerPage;
+    	Vue.http.put(`article?action=article-search-title`,{condition:text,from:from,count:count}).then((response)=>
+    	{
+    		console.assert(state.DEBUG, response.body);
+    		var data = JSON.parse(response.body);
+          	if(!data.err){
+            	state.articleCardList = data.result;
+            	if(data.result.length)
+          			state.articleSearchCurrentPage = page;
+          	}else{
+            	console.assert(state.DEBUG, '搜索文章数据失败');
+          	}
+    	});
     }
 
   }

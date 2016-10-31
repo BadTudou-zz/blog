@@ -1,5 +1,5 @@
 <template>
-<div class="col-lg-8 col-lg-offset-4" v-show="show == 'true'">
+<div class="col-lg-8 col-lg-offset-4" v-show="isShow">
     <nav>
   		<ul class="pagination">
     		<li :class="currentPage==1?'disabled':''">
@@ -36,7 +36,7 @@ export default {
  			targetPage:''
  		}
  	},
- 	props:['trigger', 'show','current'],
+ 	props:['trigger', 'parentshow', 'childshow', 'current'],
  	computed:{
  		generateNumbers: function(){
             var numbers = [];
@@ -47,6 +47,10 @@ export default {
         },
         currentPage:function(){
         	return this.$store.state[this.current];
+        },
+        isShow:function(){
+        	return (this.$store.state.parentNavItem.text == this.parentshow && 
+        		this.$store.state.childNavItem.text == this.childshow);
         }
    	},
  	methods:{

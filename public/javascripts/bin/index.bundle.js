@@ -66,43 +66,43 @@
 
 	var _SearchBox2 = _interopRequireDefault(_SearchBox);
 
-	var _Navigation = __webpack_require__(15);
+	var _Navigation = __webpack_require__(16);
 
 	var _Navigation2 = _interopRequireDefault(_Navigation);
 
-	var _Location = __webpack_require__(20);
+	var _Location = __webpack_require__(21);
 
 	var _Location2 = _interopRequireDefault(_Location);
 
-	var _AD = __webpack_require__(25);
+	var _AD = __webpack_require__(26);
 
 	var _AD2 = _interopRequireDefault(_AD);
 
-	var _ArticleCardList = __webpack_require__(27);
+	var _ArticleCardList = __webpack_require__(28);
 
 	var _ArticleCardList2 = _interopRequireDefault(_ArticleCardList);
 
-	var _FeatureCardList = __webpack_require__(30);
+	var _FeatureCardList = __webpack_require__(31);
 
 	var _FeatureCardList2 = _interopRequireDefault(_FeatureCardList);
 
-	var _Pagination = __webpack_require__(33);
+	var _Pagination = __webpack_require__(34);
 
 	var _Pagination2 = _interopRequireDefault(_Pagination);
 
-	var _Personal = __webpack_require__(36);
+	var _Personal = __webpack_require__(37);
 
 	var _Personal2 = _interopRequireDefault(_Personal);
 
-	var _ContactMe = __webpack_require__(40);
+	var _ContactMe = __webpack_require__(41);
 
 	var _ContactMe2 = _interopRequireDefault(_ContactMe);
 
-	var _AboutMe = __webpack_require__(45);
+	var _AboutMe = __webpack_require__(46);
 
 	var _AboutMe2 = _interopRequireDefault(_AboutMe);
 
-	var _Footer = __webpack_require__(50);
+	var _Footer = __webpack_require__(51);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -118,9 +118,14 @@
 	    Logo: _Logo2.default, Searchbox: _SearchBox2.default, Navigation: _Navigation2.default, Location: _Location2.default, Articlelist: _ArticleCardList2.default, Featurelist: _FeatureCardList2.default, Pagination: _Pagination2.default, Personal: _Personal2.default,
 	    Contact: _ContactMe2.default, About: _AboutMe2.default, Footerbar: _Footer2.default, Ad: _AD2.default
 	  },
+	  methods: {
+	    isArticleShow: function isArticleShow() {
+	      return state.parentNavItem.text == '文章';
+	    }
+	  },
 	  created: function created() {
 	    console.log('准备好了 ');
-	    this.$store.commit('articleCardListPageChange', this.$store.state.articleCurrentPage);
+	    this.$store.dispatch('articleCardListPageChange', this.$store.state.articleCurrentPage);
 	  }
 	});
 
@@ -8213,24 +8218,41 @@
 	    articleCardList: '',
 	    articlePerPage: 6,
 	    articleCurrentPage: 1,
+	    articleSearchCurrentPage: 1,
+	    articleSearchText: '',
 	    featureCardList: '',
 	    featurePerPage: 6,
 	    featureCurrentPage: 1
 	  },
 	  actions: {
+	    parentNavItemChange: function parentNavItemChange(context, parentNavItem) {
+	      context.commit('parentNavItemChange', parentNavItem);
+	    },
+	    childNavItemChange: function childNavItemChange(context, childNavItem) {
+	      context.commit('childNavItemChange', childNavItem);
+	    },
 	    articleCardListPageChange: function articleCardListPageChange(context, page) {
 	      context.commit('articleCardListPageChange', page);
+	    },
+	    featureCardListPageChange: function featureCardListPageChange(context, page) {
+	      context.commit('featureCardListPageChange', page);
+	    },
+	    articleCardSearchPageTextChange: function articleCardSearchPageTextChange(context, text) {
+	      context.commit('articleCardSearchPageTextChange', text);
+	    },
+	    articleCardSearchPage: function articleCardSearchPage(context, page) {
+	      console.log('页码' + page);
+	      context.commit('articleCardSearchPage', page);
 	    }
-	    // menuitemchange(context){
-	    // 	context.emit('menuitemchange');
-	    // }
-
 	  },
 	  mutations: {
 	    parentNavItemChange: function parentNavItemChange(state, parentNavItem) {
 	      console.log('store mutations parentmenuitemchange');
 	      state.parentNavItem = parentNavItem;
 	      state.childNavItem = { text: '全部', link: '#' };
+	    },
+	    childNavItemChange: function childNavItemChange(state, childNavItem) {
+	      state.childNavItem = childNavItem;
 	    },
 	    articleCardListPageChange: function articleCardListPageChange(state, page) {
 	      console.log('store article list page change' + page);
@@ -8258,9 +8280,26 @@
 	          state.featureCurrentPage = page;
 	          state.featureCardList = data.result;
 	        } else {
-	          console.log('获取专题数据失败');
+	          console.assert(state.DEBUG, '获取专题数据失败');
 	        }
-	        callback(data.err);
+	      });
+	    },
+	    articleCardSearchPageTextChange: function articleCardSearchPageTextChange(state, text) {
+	      state.articleSearchText = text;
+	    },
+	    articleCardSearchPage: function articleCardSearchPage(state, page) {
+	      var text = state.articleSearchText;
+	      var from = (page - 1) * state.articlePerPage;
+	      var count = state.articlePerPage;
+	      _vue2.default.http.put('article?action=article-search-title', { condition: text, from: from, count: count }).then(function (response) {
+	        console.assert(state.DEBUG, response.body);
+	        var data = JSON.parse(response.body);
+	        if (!data.err) {
+	          state.articleCardList = data.result;
+	          if (data.result.length) state.articleSearchCurrentPage = page;
+	        } else {
+	          console.assert(state.DEBUG, '搜索文章数据失败');
+	        }
 	      });
 	    }
 	  }
@@ -10189,8 +10228,11 @@
 	/* styles */
 	__webpack_require__(12)
 
+	/* script */
+	__vue_exports__ = __webpack_require__(14)
+
 	/* template */
-	var __vue_template__ = __webpack_require__(14)
+	var __vue_template__ = __webpack_require__(15)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -10265,21 +10307,75 @@
 
 /***/ },
 /* 14 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+
+	exports.default = {
+	  data: function data() {
+	    return {
+	      searchText: ''
+	    };
+	  },
+
+	  props: ['trigger'],
+	  methods: {
+	    search: function search() {
+	      this.$store.dispatch('childNavItemChange', { text: '搜索', link: '#search' });
+	      this.$store.dispatch(this.trigger + 'TextChange', this.searchText);
+	      this.$store.dispatch(this.trigger, 1);
+	    }
+	  }
+	};
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
-	  return _m(0)
-	}},staticRenderFns: [function (){with(this) {
 	  return _h('div', {
 	    staticClass: "input-group",
 	    attrs: {
 	      "id": "div-searchbox"
 	    }
 	  }, [_h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (searchText),
+	      expression: "searchText"
+	    }],
 	    staticClass: "form-control",
 	    attrs: {
 	      "type": "text",
 	      "placeholder": "搜索文章..."
+	    },
+	    domProps: {
+	      "value": _s(searchText)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        searchText = $event.target.value
+	      }
 	    }
 	  }), " ", _h('span', {
 	    staticClass: "input-group-btn"
@@ -10287,9 +10383,12 @@
 	    staticClass: "btn btn-secondary",
 	    attrs: {
 	      "type": "button"
+	    },
+	    on: {
+	      "click": search
 	    }
 	  }, ["搜索!"])])])
-	}}]}
+	}},staticRenderFns: []}
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
@@ -10298,19 +10397,19 @@
 	}
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(16)
+	__webpack_require__(17)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(18)
+	__vue_exports__ = __webpack_require__(19)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(19)
+	var __vue_template__ = __webpack_require__(20)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -10344,13 +10443,13 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(17);
+	var content = __webpack_require__(18);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -10370,7 +10469,7 @@
 	}
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -10384,7 +10483,7 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10424,18 +10523,21 @@
 	  methods: {
 	    changeItem: function changeItem(e) {
 	      var parentnavitem = { text: e.target.text, link: e.target.href };
-	      this.$store.commit('parentNavItemChange', parentnavitem);
+	      this.$store.dispatch('parentNavItemChange', parentnavitem);
 	      var hashKeyIndex = e.target.href.indexOf('#');
 	      var parentNavLink = e.target.href.substring(hashKeyIndex);
 
 	      console.assert(this.$store.state.DEBUG, parentNavLink);
-	      this.$store.commit(this.events[parentNavLink], 1);
+	      this.$store.dispatch(this.events[parentNavLink], 1);
+	    },
+	    isActivite: function isActivite(menuItem) {
+	      return this.$store.state.parentNavItem.text == menuItem.text;
 	    }
 	  }
 	};
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -10455,7 +10557,7 @@
 	    return _h('li', {
 	      staticClass: "nav-item",
 	      class: {
-	        'active': index === 0
+	        'active': isActivite(menuItem)
 	      }
 	    }, [_h('a', {
 	      staticClass: "nav-link",
@@ -10476,19 +10578,19 @@
 	}
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(21)
+	__webpack_require__(22)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(23)
+	__vue_exports__ = __webpack_require__(24)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(24)
+	var __vue_template__ = __webpack_require__(25)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -10522,13 +10624,13 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(22);
+	var content = __webpack_require__(23);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -10548,7 +10650,7 @@
 	}
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -10562,7 +10664,7 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10602,7 +10704,7 @@
 	//
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -10635,13 +10737,13 @@
 	}
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* template */
-	var __vue_template__ = __webpack_require__(26)
+	var __vue_template__ = __webpack_require__(27)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -10675,7 +10777,7 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -10696,16 +10798,16 @@
 	}
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* script */
-	__vue_exports__ = __webpack_require__(28)
+	__vue_exports__ = __webpack_require__(29)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(29)
+	var __vue_template__ = __webpack_require__(30)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -10739,7 +10841,7 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10781,7 +10883,7 @@
 	//
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -10864,16 +10966,16 @@
 	}
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* script */
-	__vue_exports__ = __webpack_require__(31)
+	__vue_exports__ = __webpack_require__(32)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(32)
+	var __vue_template__ = __webpack_require__(33)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -10907,7 +11009,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10949,7 +11051,7 @@
 	//
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -11028,16 +11130,16 @@
 	}
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* script */
-	__vue_exports__ = __webpack_require__(34)
+	__vue_exports__ = __webpack_require__(35)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(35)
+	var __vue_template__ = __webpack_require__(36)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11071,7 +11173,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11118,7 +11220,7 @@
 	    };
 	  },
 
-	  props: ['trigger', 'show', 'current'],
+	  props: ['trigger', 'parentshow', 'childshow', 'current'],
 	  computed: {
 	    generateNumbers: function generateNumbers() {
 	      var numbers = [];
@@ -11129,6 +11231,9 @@
 	    },
 	    currentPage: function currentPage() {
 	      return this.$store.state[this.current];
+	    },
+	    isShow: function isShow() {
+	      return this.$store.state.parentNavItem.text == this.parentshow && this.$store.state.childNavItem.text == this.childshow;
 	    }
 	  },
 	  methods: {
@@ -11146,7 +11251,7 @@
 	};
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -11154,8 +11259,8 @@
 	    directives: [{
 	      name: "show",
 	      rawName: "v-show",
-	      value: (show == 'true'),
-	      expression: "show == 'true'"
+	      value: (isShow),
+	      expression: "isShow"
 	    }],
 	    staticClass: "col-lg-8 col-lg-offset-4"
 	  }, [_h('nav', [_h('ul', {
@@ -11259,16 +11364,16 @@
 	}
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(37)
+	__webpack_require__(38)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(39)
+	var __vue_template__ = __webpack_require__(40)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11302,13 +11407,13 @@
 
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(38);
+	var content = __webpack_require__(39);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -11328,7 +11433,7 @@
 	}
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -11342,7 +11447,7 @@
 
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -11441,19 +11546,19 @@
 	}
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(41)
+	__webpack_require__(42)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(43)
+	__vue_exports__ = __webpack_require__(44)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(44)
+	var __vue_template__ = __webpack_require__(45)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11487,13 +11592,13 @@
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(42);
+	var content = __webpack_require__(43);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -11513,7 +11618,7 @@
 	}
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -11527,7 +11632,7 @@
 
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11570,7 +11675,7 @@
 	//
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -11646,19 +11751,19 @@
 	}
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(46)
+	__webpack_require__(47)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(48)
+	__vue_exports__ = __webpack_require__(49)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(49)
+	var __vue_template__ = __webpack_require__(50)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11692,13 +11797,13 @@
 
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(47);
+	var content = __webpack_require__(48);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -11718,7 +11823,7 @@
 	}
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -11732,7 +11837,7 @@
 
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11771,7 +11876,7 @@
 	//
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -11817,16 +11922,16 @@
 	}
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(51)
+	__webpack_require__(52)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(53)
+	var __vue_template__ = __webpack_require__(54)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11860,13 +11965,13 @@
 
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(52);
+	var content = __webpack_require__(53);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -11886,7 +11991,7 @@
 	}
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -11900,7 +12005,7 @@
 
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
