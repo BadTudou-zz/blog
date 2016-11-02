@@ -3,7 +3,7 @@
     <ol class="breadcrumb">
   		<li><a href="/">主页</a></li>
   		<li><a :href="parentNavItemLink">{{parentNavItemText}}</a></li>
-		<li class="active">{{childNavItemText}}</li>
+		  <li class="active">{{childNavItemText}}</li>
  	</ol>
 </div>
 </template>

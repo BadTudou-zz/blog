@@ -3,7 +3,7 @@
   <div class="card col-lg-4" v-for="articleCardItem in articleCardList">
   	<div class="card-block">
    		<h4 class="card-title">
-          <a :href="'article?action=article-show&id='+articleCardItem.id">{{articleCardItem.title}}</a>
+          <a href="#" @click="view(articleCardItem)">{{articleCardItem.title}}</a>
       </h4>
    		<h6 class="card-subtitle text-muted" :value="articleCardItem.subtitle"></h6>
   	</div>
@@ -22,8 +22,18 @@
 import { mapState } from 'vuex';
 export default {
   computed: mapState({
-      isShow: state=> state.parentNavItem.text == '文章',
-      articleCardList: state=> state.articleCardList
-  })
+      articleCardList: state=> state.articleCardList,
+      isShow:function(){
+          return (this.$store.state.parentNavItem.text == '文章' && 
+            this.$store.state.childNavItem.text == '全部');
+        }
+  }),
+  methods:{
+    view:function(articleCardItem){
+      this.$store.dispatch('articleCardChange', articleCardItem);
+      this.$store.dispatch('childNavItemChange', {text:'查看', link:'#'});
+    }
+  }
+  
 }
 </script>

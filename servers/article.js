@@ -85,7 +85,11 @@ var addDiscuss = function addDiscuss(newDiscuss, callback) {
 
 var getDiscuss = function getDiscuss(articleID, callback){
 	var fields = 'id, author, discussID, timeCreate, content';
-	discuss.search(fields, {discussID:articleID, state:'pass', type:'disc'}, (err, result)=>{
+	var conditionObj = {discussID:articleID, state:'pass', type:'disc'};
+	var condition = utility.obj2array(conditionObj).join(' AND ');
+	var range = {from:0, count:100};
+	console.log(condition);
+	discuss.search(fields, condition, range, (err, result)=>{
 		callback(err, result);
 		return err;
 	});

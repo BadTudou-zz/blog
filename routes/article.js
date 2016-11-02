@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 		next();
 });
 
-router.put('/', function(req, res) {
+router.put('/', function(req, res, next) {
 	var params = req.query;
 	if(typeof(params.action) === 'undefined')
 	{
@@ -42,10 +42,9 @@ router.put('/', function(req, res) {
 		case 'article-search':
 			var condition = utility.obj2array(req.body.condition);
 			// 此处没有break，是为了下面的代码可用复用，他们只是搜索条件不同
-
+			
 		case 'article-search-title':
 			var condition = `title LIKE `+utility.escape("%"+req.body.condition+"%");
-
 
 		var fields = `id, featureID, title, subtitle, link, license, 
 			timeCreated, author, introduction, coverLink, countDiscuss`;
