@@ -36,7 +36,6 @@ export default {
  	},
  	methods:{
  		addDiscuss: function(){
- 			console.log('天津评论');
  			this.$store.dispatch('addArticleDiscuss',this.newDiscuss);
         }
  	}

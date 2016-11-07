@@ -23,10 +23,8 @@ import { mapState } from 'vuex';
 export default {
   computed: mapState({
       articleCardList: state=> state.articleCardList,
-      isShow:function(){
-          return (this.$store.state.parentNavItem.text == '文章' && 
-            this.$store.state.childNavItem.text == '全部');
-        }
+      isShow: state=> (state.parentNavItem.text == '文章') && 
+          ((state.childNavItem.text == '全部') || (state.childNavItem.text == '搜索'))
   }),
   methods:{
     view:function(articleCardItem){

@@ -7,54 +7,36 @@
   <link rel="shortcut icon" href="images/favicon.ico">
 	<!-- bootstrap css -->
 	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
-
+  <!-- font-awesome css -->
   <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
-	<style type="text/css">
-	p
-	{
-		text-indent:2em;
-	}
-	div#div-logo
-	{
-		height: 140px; width: 140px; margin-top: 10px; margin-bottom: 10px; background: #FFF; border-color: #0099F0;
-		border-width: 2px;
-	}
-	div#div-logo>a>img
-	{
-		height: 60%; width: 70%; margin: 15%;
-	}
-	
-	div#div-nav
-	{
-		margin-top: 10px;
-		margin-bottom: 10px;
-    background-color: #0099F0;
-	}
-	
-	div#div-footer
-	{
-		width: 100%; height: 50px;  background-color: #0099F0;
-    color: #FFF; font-size: 150%; font-weight: bold; text-align: center;
-	}
-		
-	img#img-headProtrait
-	{
-		height: 100px; width: 100px;
-	}
-		
-	</style>
+
+  <style type="text/css">
+    #div-nav
+    {
+      margin-top: 10px; margin-bottom: 10px; background-color: #0099F0;
+    }
+  </style>
 
 	<!-- jquery js -->
 	<script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
 	<!-- bootstrap js -->
 	<script src="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
-  <!-- vue js -->
-  <script src="http://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
-  <!-- vue-resource js -->
-  <script src="https://cdn.jsdelivr.net/vue.resource/1.0.1/vue-resource.min.js"></script>
 </head>
 <body>
-	<div class="container">
+  <div id="app" class="container">
+    <Logo></Logo>
+    <div id="div-nav" class="navbar navbar-static-top navbar-dark bg-inverse">
+    <a class="navbar-brand" href="/">杜小豆的编程小道-管理中心</a>
+    </div>
+    <Messagebox></Messagebox>
+    <Navtabs></Navtabs>
+    <Login></Login>
+    <Footerbar></Footerbar>
+    <script src="../javascripts/bin/manage.bundle.js"></script>
+  </div>
+</body>
+</html>
+	<!-- <div class="container">
 		<div id="div-logo" class="img-circle img-thumbnail img-responsive center-block">
 			<a href="/"><img src ="images/logo/logo.png" title="杜小豆的编程小道"/></a>
 		</div>
@@ -64,7 +46,6 @@
     </div>
 
     <div id="div-manage"  class="col-lg-12">
-      <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" href="#tabcontent-user" role="tab" data-toggle="tab" @click="activeItem='tabcontent-user', activeSubItem = 'tabcontent-user-all', getList('user', 0, 5)">用户</a>
@@ -84,9 +65,9 @@
               <a class="nav-link active" href="#tabcontent-user-all" role="tab" data-toggle="tab" @click="activeSubItem = 'tabcontent-user-all'">
               全部</a>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link" @click="activeSubItem = 'tabcontent-user-verify'" href="#tabcontent-user-verify" role="tab" data-toggle="tab">待审核</a>
-            </li> -->
+            </li>
             <li class="nav-item">
               <a class="nav-link" @click="activeSubItem = 'tabcontent-user-add'" href="#tabcontent-user-add" role="tab" data-toggle="tab">添加</a>
             </li>
@@ -110,7 +91,7 @@
             </ul>
           </div>
 
-        <!-- 系统：菜单 -->
+         系统：菜单 
         <div role="tabpanel" v-show="activeItem == 'tabcontent-system'" class="tab-pane" id="tabcontent-system">
           <ul class="nav nav-tabs"  role="tablist">
             <li class="nav-item">
@@ -176,7 +157,7 @@
         
         
       </div>
-      <!-- 实际的内容 -->
+       实际的内容 
       <div>
           <div  v-show="activeItem == 'tabcontent-user'">
             <div class="list-group" v-show="activeSubItem == 'tabcontent-user-all'"  id="tabcontent-user-all">
@@ -458,9 +439,9 @@
       </div>
     </div>
     </div>
-    <!-- 页脚 -->
+     页脚 
 		<div id='div-footer' class="col-lg-12">
-			<!-- 页脚-版权 -->
+			 页脚-版权 
 					Copyright © 2016 BadTudou. All rights reserved.		
     </div>
   </div>
@@ -620,6 +601,4 @@
 
       vue.getList('user', 0, 5);
 
-     </script>
-</body>
-</html>
+     </script> -->

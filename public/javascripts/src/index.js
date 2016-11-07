@@ -33,7 +33,6 @@ var vm = new Vue({
   	}
   },
   created: function(){
-  	console.log('准备好了 ');
 	this.$store.dispatch('articleCardListPageChange', this.$store.state.articleCurrentPage);
   }
 });

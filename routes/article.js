@@ -6,24 +6,8 @@ var article = require('../servers/article.js');
 var utility = require('../utility/utility');
 var path = require('path');
 
-router.get('/', function(req, res, next) {
+router.put('/', function(req, res) {
 	var params = req.query;
-	var count = Object.keys(params).length;
-	if(Object.keys(params).length === 0)
-		return res.end('静态网页处理');
-	else
-		next();
-});
-
-router.put('/', function(req, res, next) {
-	var params = req.query;
-	if(typeof(params.action) === 'undefined')
-	{
-		return res.end(JSON.stringify({err:true, result:'illegal request action'}));
-	}
-	if(req.session.loginstate == 'true'){
-		next();
-	}
 	switch(params.action) 
 	{
 		case 'article-discuss':
@@ -34,7 +18,6 @@ router.put('/', function(req, res, next) {
 				if(!err)
 					res.end(JSON.stringify({err:false, result:true}));
 				else
-					//res.end(JSON.stringify({err:true, result:JSON.stringify(err)}));
 					res.end(JSON.stringify({err:true, result:'add disscuss to article error'}));
 			});
 			break; 
@@ -45,62 +28,32 @@ router.put('/', function(req, res, next) {
 			
 		case 'article-search-title':
 			var condition = `title LIKE `+utility.escape("%"+req.body.condition+"%");
-
-		var fields = `id, featureID, title, subtitle, link, license, 
+			var fields = `id, featureID, title, subtitle, link, license, 
 			timeCreated, author, introduction, coverLink, countDiscuss`;
-		var range = {from: Number(req.body.from), count: Number(req.body.count)};
+			var range = {from: Number(req.body.from), count: Number(req.body.count)};
 			article.search(fields, condition, range, (err, result) =>{
-				if(!err)
-				{
+				if(!err){
 					res.end(JSON.stringify({err:false, result:result}));
-					console.log(JSON.stringify(err));
+					console.log('搜索文章成功'+JSON.stringify(result));
 				}
 				else{
-					console.log(JSON.stringify(result));
 					res.end(JSON.stringify({err:true, result:'search article error'}));
+					console.log('搜索文章失败');
 				}
 			});
 			break;
 
 		default:
-			res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
+			res.end(JSON.stringify({err:true, result:'undefined action with unlogin user'}));
 			break;
 	}
 });
 
-router.put('/', function(req, res) {
-	var params = req.query;
-	switch(params.action) {
-		case 'article-add':
-			var newArticle = req.body.newArticle;
-			article.add(newArticle, (err, result)=> {
-				if(!err)
-					res.end(JSON.stringify({err:false, result:result.insertId}));
-				else
-					res.end(JSON.stringify({err:true, result:'add new article error'}));
 
-			});
-			break;
 
-		case 'article-edit':
-			var newArticle = req.body.newArticle;
-			article.edit(newArticle, (err, result)=>{
-				if(!err)
-					res.end(JSON.stringify({err:false, result:true}));
-				else
-					res.end(JSON.stringify({err:true, result:'edit article error'}));
-			});
-			break;
-	}
-
-});
-
+// 普通用户获取信息
 router.get('/', function(req, res) {
 	var params = req.query;
-	if(typeof(params.action) === 'undefined')
-	{
-		return res.end(JSON.stringify({err:true, result:'illegal request action'}));
-	}
 	switch(params.action) {
 		case 'article-range':
 			var fields = `id, featureID, title, subtitle, link, timeCreated, 
@@ -111,42 +64,6 @@ router.get('/', function(req, res) {
 					res.end(JSON.stringify({err:false, result:result}));
 				else
 					res.end(JSON.stringify({err:true, result:'get article range error'}));
-			});
-			break;
-
-		case 'article-show':
-			var id = params.id;
-			res.sendFile(path.dirname(__dirname)+'/public/html/article.html');
-			break;
-
-		case 'article-edit':
-			if(req.session.loginstate != 'true'){
-				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
-			}
-			var id = params.id;
-			res.sendFile(path.dirname(__dirname)+'/public/html/article-new.html');
-			break;
-
-		case 'article-new':
-			if(req.session.loginstate == 'true'){
-				res.sendFile(path.dirname(__dirname)+'/public/html/article-new.html');
-			}
-			else{
-				res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
-			}
-			break;
-
-		case 'article-del':
-			if(req.session.loginstate != 'true'){
-				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
-			}
-
-			var condition = {id:params.id};
-			article.del(condition, (err, result)=> {
-				if(!err)
-					res.end(JSON.stringify({err:false, result:result}));
-				else
-					res.end(JSON.stringify({err:true, result:'delete article error'}));
 			});
 			break;
 
@@ -161,7 +78,7 @@ router.get('/', function(req, res) {
 			break;
 
 		default:
-			res.end(JSON.stringify({err:true, result:'undefined request action'}));
+			res.end(JSON.stringify({err:true, result:'undefined request action with unlogin user'}));
 	}
 });
 module.exports = router;

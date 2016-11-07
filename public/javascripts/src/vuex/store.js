@@ -19,7 +19,11 @@ Vue.use(VueResource);
     featurePerPage:6,
     featureCurrentPage:1,
     discussList:'',
-    msgboxIsShow:false
+    msgboxIsShow:false,
+    msgType:'info',
+    msgText:'',
+    user:'',
+    loginState:false
   },
   actions:{
   	parentNavItemChange(context, parentNavItem)
@@ -60,6 +64,11 @@ Vue.use(VueResource);
     },
     showMessage(context, message){
       context.commit('showMessage', message);
+    },
+    login(context, user){
+      context.commit('login', user);
+      if (!context.state.loginState)
+        context.commit('showMessage',{type:'err', text:'登陆失败。'});
     }
   },
   mutations: {
@@ -115,9 +124,10 @@ Vue.use(VueResource);
     	var count = state.articlePerPage;
     	Vue.http.put(`article?action=article-search-title`,{condition:text,from:from,count:count}).then((response)=>
     	{
-    		console.assert(state.DEBUG, response.body);
+    		console.assert(state.DEBUG, '搜索文章结果'+response.body);
     		var data = JSON.parse(response.body);
         if(!data.err){
+          console.log('搜索文章成功'+response.body);
           state.articleCardList = data.result;
           if(data.result.length)
           	state.articleSearchCurrentPage = page;
@@ -157,6 +167,22 @@ Vue.use(VueResource);
       setTimeout(function(){
         state.msgboxIsShow = false;
       }, 2000);
+    },
+    login (state, user) {
+      console.log(JSON.stringify(user));
+      console.log(`/user?action=user-login&name=${user.name}&password=${user.password}`);
+      Vue.http.get(`/user?action=user-login&name=${user.name}&password=${user.password}`).then((response)=>{
+          var data = JSON.parse(response.body);
+          if(!data.err){
+            state.user = user;
+            state.loginState = true;
+            state.msgType = 'success';
+          }
+          else{
+            state.loginState = false;
+            state.msgType = 'err';
+          }
+      });
     }
   }
 });
