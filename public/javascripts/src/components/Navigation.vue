@@ -22,6 +22,7 @@ export default {
  			menu: [
  				{link:'#article',	text:'文章'},
  				{link:'#feature',	text:'专题'},
+ 				{link:'#manage',	text:'管理'},
  				{link:'#about',		text:'关于'},
  				{link:'#contact',	text:'联系'}],
  			events:{

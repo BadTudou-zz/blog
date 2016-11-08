@@ -4,31 +4,66 @@ var express = require('express');
 var session = require('express-session');
 var router = express.Router();
 var path = require('path');
+var user = require('../servers/user.js');
+var utility = require('../utility/utility.js');
 
 router.get('/', function(req, res, next) {
-	if(req.session.loginstate == 'true'){
-		next();
+	if(req.session.loginstate == 'true')
+		return next();
+
+	console.log('请求manage get'+req.query.action);
+	var params = req.query;
+	switch(params.action) {
+		case 'user-login':
+			var fields = 'name';
+			var condition = {
+				name: params.name,
+				password: params.password
+			};
+			var conditionString = utility.obj2array(condition).join(' AND ');
+			var range = {from:0, count:1};
+			user.search(fields, conditionString, range, (err, result)=> {
+				if(!err && result.length){
+					req.session.loginstate = 'true';
+					res.end(JSON.stringify({err:false, result:result}));
+				}
+				else{
+					res.end(JSON.stringify({err:true, result:'user not exists or password war wrong'}));
+				}
+
+			});
+			break;
+
+		default:
+			return res.sendFile(path.dirname(__dirname)+'/public/html/manage.html');
 	}
-	else{
-		return res.sendFile(path.dirname(__dirname)+'/public/html/manage.html');
-	}
+
 });
 
 router.get('/', function(req, res) {
-
+	var params = req.query;
 	switch(params.action) {
-		
+		case 'user-range':		
+			console.log('执行get user-range');		
+			var range = {from: Number(params.from), count: Number(params.count)};
+			var fields = 'name, nickname, authority, timeCreate';
+			user.list(fields, range, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'error'}));
+			});
+			break;
+
 		default:
-			res.end(JSON.stringify({err:true, result:'undefined request action'}));
+			return res.sendFile(path.dirname(__dirname)+'/public/html/manage.html');
 	}
 });
 
 // 管理员提交信息
 router.put('/', function(req, res) {
-	if(req.session.loginstate != 'true')
-		return res.sendFile(path.dirname(__dirname)+'/public/html/manage.html');
-
 	var params = req.query;
+	console.log('管理员请求提交信息'+params.action);
 	switch(params.action) {
 		case 'article-add':
 			var newArticle = req.body.newArticle;
@@ -85,6 +120,18 @@ router.put('/', function(req, res) {
 			});
 			break;
 
+		case 'discuss-range':
+			var range = {from: Number(params.from), to: Number(params.to)};
+			var fields = '*';
+			var condition = {type:'disc'};
+			discuss.search(fields, range, condition, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'error'}));
+			});
+			break;
+			
 		case 'discuss-state':
 			var newDiscuss = {
 				id:req.body.id,
@@ -114,27 +161,8 @@ router.put('/', function(req, res) {
 			});
 			break;
 
-		case 'user-range':
-			if(req.session.loginstate != 'true'){
-				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
-			}
-				
-			var range = {from: Number(params.from), to: Number(params.to)};
-			var fields = 'name, nickname, authority, timeCreate';
-			user.list(fields, range, (err, result)=> {
-				if(!err)
-					res.end(JSON.stringify({err:false, result:result}));
-				else
-					res.end(JSON.stringify({err:true, result:'error'}));
-			});
-			break;
-
 		case 'user-del':
-			if(req.session.loginstate != 'true'){
-				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
-			}
-			
-			var condition = {name:params.name};
+			var condition = 'name = '+utility.escape(req.body.name);
 			user.del(condition, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify({err:false, result:result}));

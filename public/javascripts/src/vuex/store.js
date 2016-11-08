@@ -23,13 +23,20 @@ Vue.use(VueResource);
     msgType:'info',
     msgText:'',
     user:'',
-    loginState:false
+    loginState:false,
+    manageParentNavItem:{text:'用户'},
+    userList:'',
+    userPerPage:5,
+    userCurrentPage:1
   },
   actions:{
   	parentNavItemChange(context, parentNavItem)
   	{
   		context.commit('parentNavItemChange', parentNavItem);
   	},
+    manageParentNavItemChange(context, manageParentNavItem){
+      context.commit('manageParentNavItemChange', manageParentNavItem);
+    },
   	childNavItemChange(context, childNavItem)
   	{
   		context.commit('childNavItemChange', childNavItem);
@@ -69,6 +76,12 @@ Vue.use(VueResource);
       context.commit('login', user);
       if (!context.state.loginState)
         context.commit('showMessage',{type:'err', text:'登陆失败。'});
+    },
+    userListPageChange(context, page){
+      context.commit('userListPageChange',page);
+    },
+    delUser(context, name){
+      context.commit('delUser', name);
     }
   },
   mutations: {
@@ -76,6 +89,9 @@ Vue.use(VueResource);
     	console.log('store mutations parentmenuitemchange');
     	state.parentNavItem = parentNavItem;
     	state.childNavItem = {text:'全部', link:'#'};
+    },
+    manageParentNavItemChange (state, manageParentNavItem){
+      state.manageParentNavItem = manageParentNavItem;
     },
     childNavItemChange (state, childNavItem) {
     	state.childNavItem = childNavItem;
@@ -170,8 +186,8 @@ Vue.use(VueResource);
     },
     login (state, user) {
       console.log(JSON.stringify(user));
-      console.log(`/user?action=user-login&name=${user.name}&password=${user.password}`);
-      Vue.http.get(`/user?action=user-login&name=${user.name}&password=${user.password}`).then((response)=>{
+      console.log(`/manage?action=user-login&name=${user.name}&password=${user.password}`);
+      Vue.http.get(`/manage?action=user-login&name=${user.name}&password=${user.password}`).then((response)=>{
           var data = JSON.parse(response.body);
           if(!data.err){
             state.user = user;
@@ -182,6 +198,32 @@ Vue.use(VueResource);
             state.loginState = false;
             state.msgType = 'err';
           }
+      });
+    },
+    userListPageChange (state, page){
+      console.log('store user list page change'+page);
+        var from = (page-1)*state.userPerPage;
+        var count = state.userPerPage;
+        Vue.http.get(`/manage?action=user-range&from=${from}&count=${count}`).then((response) => 
+        {
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err && data.result.length){
+            state.userCurrentPage = page;
+            state.userList = data.result;
+          }else{
+            console.assert(state.DEBUG, '获取用户数据失败');
+          }
+        });
+    },
+    delUser (state, name){
+      Vue.http.put(`manage?action=user-del`,{name:name}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err){
+          console.log('删除成功');
+        }
+
       });
     }
   }

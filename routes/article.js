@@ -29,16 +29,14 @@ router.put('/', function(req, res) {
 		case 'article-search-title':
 			var condition = `title LIKE `+utility.escape("%"+req.body.condition+"%");
 			var fields = `id, featureID, title, subtitle, link, license, 
-			timeCreated, author, introduction, coverLink, countDiscuss`;
+			timeCreated, author, introduction, content, coverLink, countDiscuss`;
 			var range = {from: Number(req.body.from), count: Number(req.body.count)};
 			article.search(fields, condition, range, (err, result) =>{
 				if(!err){
 					res.end(JSON.stringify({err:false, result:result}));
-					console.log('搜索文章成功'+JSON.stringify(result));
 				}
 				else{
 					res.end(JSON.stringify({err:true, result:'search article error'}));
-					console.log('搜索文章失败');
 				}
 			});
 			break;
@@ -57,7 +55,7 @@ router.get('/', function(req, res) {
 	switch(params.action) {
 		case 'article-range':
 			var fields = `id, featureID, title, subtitle, link, timeCreated, 
-						author, introduction, coverLink`;
+						author, introduction, content, coverLink, countDiscuss`;
 			var range = {from: Number(params.from), count: Number(params.count)};
 			article.list(fields, range, (err, result)=> {
 				if(!err)
