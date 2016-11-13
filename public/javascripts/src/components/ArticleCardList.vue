@@ -12,7 +12,7 @@
     </a>
   	<div class="card-block">
    		<p class="card-text">{{articleCardItem.introduction.substr(0,40)+'.....'}}</p>
-   		<a :href="'article?action=article-show&id='+articleCardItem.id" class="card-link" target="_blank"> <i class="fa fa-1x fa-rocket" aria-hidden="true"></i>&nbsp;阅读</a>
+   		<a href="#" class="card-link"  @click="view(articleCardItem)"> <i class="fa fa-1x fa-rocket" aria-hidden="true"></i>&nbsp;阅读</a>
    		<a href="#" class="card-link"><i class="fa fa-1x fa-coffee" aria-hidden="true"></i>&nbsp;评论</a>
   		</div>
 	</div>

@@ -26,7 +26,7 @@ Vue.use(VueResource);
     loginState:false,
     manageParentNavItem:{text:'用户'},
     userList:'',
-    userPerPage:5,
+    userPerPage:6,
     userCurrentPage:1
   },
   actions:{
@@ -82,6 +82,20 @@ Vue.use(VueResource);
     },
     delUser(context, name){
       context.commit('delUser', name);
+      if (context.state.msgType == 'success')
+        context.commit('showMessage',{type:'success', text:'删除用户成功'});
+      else
+        context.commit('showMessage',{type:'err', text:'删除用户失败'});
+    },
+    updateUser(context, user){
+      context.commit('updateUser', user);
+      if (context.state.msgType == 'success')
+        context.commit('showMessage',{type:'success', text:'修改用户成功'});
+      else
+        context.commit('showMessage',{type:'err', text:'修改用户失败'});
+    },
+    delArticle(context, articleId){
+      context.commit('delArticle', articleId);
     }
   },
   mutations: {
@@ -186,7 +200,6 @@ Vue.use(VueResource);
     },
     login (state, user) {
       console.log(JSON.stringify(user));
-      console.log(`/manage?action=user-login&name=${user.name}&password=${user.password}`);
       Vue.http.get(`/manage?action=user-login&name=${user.name}&password=${user.password}`).then((response)=>{
           var data = JSON.parse(response.body);
           if(!data.err){
@@ -217,13 +230,30 @@ Vue.use(VueResource);
         });
     },
     delUser (state, name){
+      console.log('store delUser'+name);
       Vue.http.put(`manage?action=user-del`,{name:name}).then((response)=>{
         var data = JSON.parse(response.body);
         console.log(response.body);
-        if(!data.err){
-          console.log('删除成功');
-        }
-
+        if(!data.err)
+          state.msgType = 'success';
+      });
+    },
+    updateUser (state, user){
+      console.log('store updateUser'+JSON.stringify(user));
+      Vue.http.put(`manage?action=user-edit`,{user:user}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';        
+      });
+    },
+    delArticle (state, articleId){
+      console.log('store delArticle'+articleId);
+      Vue.http.put(`manage?action=article-del`,{id:articleId}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';
       });
     }
   }

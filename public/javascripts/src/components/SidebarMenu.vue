@@ -19,8 +19,8 @@ export default {
  			menu:[
  				{text:'仪表盘', href:'', trigger:'', icon:'fa-tachometer'},
  				{text:'用户', href:'', trigger:'userListPageChange', icon:'fa-child'},
- 			 	{text:'文章', href:'', trigger:'', icon:'fa-file'},
- 			 	{text:'专题', href:'', trigger:'', icon:'fa-briefcase'},
+ 			 	{text:'文章', href:'', trigger:'articleCardListPageChange', icon:'fa-file'},
+ 			 	{text:'专题', href:'', trigger:'featureCardListPageChange', icon:'fa-briefcase'},
  			 	{text:'评论', href:'', trigger:'', icon:'fa-commenting'},
  				{text:'系统', href:'', trigger:'', icon:'fa-cog'}
  			],

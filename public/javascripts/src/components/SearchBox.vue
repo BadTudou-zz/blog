@@ -2,7 +2,7 @@
 <div id="div-searchbox" class="input-group">
     <input type="text" class="form-control" placeholder="搜索文章..." v-model="searchText">
     <span class="input-group-btn">
-       	<button class="btn btn-secondary" type="button" @click="search">搜索!</button>
+       	<button class="btn btn-secondary" type="button" @click="search"><i class="fa fa-search" aria-hidden="true"></i>搜索</button>
     </span>
 </div>
 </template>

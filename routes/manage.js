@@ -4,6 +4,7 @@ var express = require('express');
 var session = require('express-session');
 var router = express.Router();
 var path = require('path');
+var article = require('../servers/article.js');
 var user = require('../servers/user.js');
 var utility = require('../utility/utility.js');
 
@@ -86,7 +87,7 @@ router.put('/', function(req, res) {
 			break;
 
 		case 'article-del':
-			var condition = {id:req.body.id};
+			var condition = 'id = '+utility.escape(req.body.id);
 			article.del(condition, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify({err:false, result:result}));
@@ -158,6 +159,17 @@ router.put('/', function(req, res) {
 				else
 					res.end(JSON.stringify({err:true, result:'add new user error'}));
 
+			});
+			break;
+
+		case 'user-edit':
+			var newUser = req.body.user;
+			console.log(JSON.stringify(newUser));
+			user.edit(newUser, (err, result)=>{
+				if(!err)
+					res.end(JSON.stringify({err:false, result:true}));
+				else
+					res.end(JSON.stringify({err:true, result:'edit user error'}));
 			});
 			break;
 
