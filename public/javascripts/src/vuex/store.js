@@ -18,6 +18,15 @@ Vue.use(VueResource);
     featureCardList:'',
     featurePerPage:6,
     featureCurrentPage:1,
+    featureCurrent:{
+      id:'', 
+      title:'', 
+      timeCreate:'', 
+      author:'', 
+      introduction:'',
+      countArticle:0
+    },
+    isFeatureEdit:false,
     discussList:'',
     msgboxIsShow:false,
     msgType:'info',
@@ -53,6 +62,10 @@ Vue.use(VueResource);
   	featureCardListPageChange(context, page){
   		context.commit('featureCardListPageChange',page);
   	},
+    featureCardChange(context, featureCard)
+    {
+      context.commit('featureCardChange',featureCard);
+    },
   	articleCardSearchPageTextChange(context, text){
   		context.commit('articleCardSearchPageTextChange', text);
   	},
@@ -96,6 +109,15 @@ Vue.use(VueResource);
     },
     delArticle(context, articleId){
       context.commit('delArticle', articleId);
+    },
+    addFeature(context, feature){
+      context.commit('addFeature', feature);
+    },
+    updateFeature(context, feature){
+      context.commit('updateFeature', feature);
+    },
+    delFeature(context, featureId){
+      context.commit('delFeature', featureId);
     }
   },
   mutations: {
@@ -165,6 +187,9 @@ Vue.use(VueResource);
             console.assert(state.DEBUG, '搜索文章数据失败');
           }
     	});
+    },
+    featureCardChange(state, featureCard){
+      state.featureCurrent = featureCard;
     },
     discussListChange (state, articleId) {
       console.log(articleId);
@@ -250,6 +275,31 @@ Vue.use(VueResource);
     delArticle (state, articleId){
       console.log('store delArticle'+articleId);
       Vue.http.put(`manage?action=article-del`,{id:articleId}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';
+      });
+    },
+    addFeature (state, feature){
+      Vue.http.put(`manage?action=feature-add`,{feature:feature}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';
+      });
+    },
+    updateFeature (state, feature){
+      Vue.http.put(`manage?action=feature-edit`,{feature:feature}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';
+      });
+    },
+    delFeature (state, featureId){
+      console.log('store delFeature'+featureId);
+      Vue.http.put(`manage?action=feature-del`,{id:featureId}).then((response)=>{
         var data = JSON.parse(response.body);
         console.log(response.body);
         if(!data.err)

@@ -10,11 +10,11 @@ var add = function add(feature, callback)
 	var values = utility.objescape(feature);
 	var sqlString = `INSERT INTO ${TABLE_FEATURE} 
 	(
-		title, author, introduction
+		title, author, coverLink, introduction
 	)
 	VALUES
 	(
-		${values.title}, ${values.author}, ${values.introduction}
+		${values.title}, ${values.author}, ${values.coverLink}, ${values.introduction}
 	)`;
 	database.query(sqlString, function(err, result) {
 			callback(err || !result.affectedRows, result);

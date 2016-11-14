@@ -6,6 +6,7 @@ var router = express.Router();
 var path = require('path');
 var article = require('../servers/article.js');
 var user = require('../servers/user.js');
+var feature = require('../servers/feature.js');
 var utility = require('../utility/utility.js');
 
 router.get('/', function(req, res, next) {
@@ -97,10 +98,7 @@ router.put('/', function(req, res) {
 			break;
 
 		case 'feature-add':
-			if(req.session.loginstate != 'true'){
-				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
-			}
-			var newFeature = req.body.newFeature;
+			var newFeature = req.body.feature;
 			console.log(JSON.stringify(newFeature));
 			feature.add(newFeature, (err, result)=> {
 				if(!err)
@@ -111,8 +109,19 @@ router.put('/', function(req, res) {
 			});
 			break;
 
+		case 'feature-edit':
+			var newArticle = req.body.feature;
+			delete newArticle.timeCreate;
+			feature.edit(newArticle, (err, result)=>{
+				if(!err)
+					res.end(JSON.stringify({err:false, result:true}));
+				else
+					res.end(JSON.stringify({err:true, result:'edit article error'}));
+			});
+			break;
+
 		case 'feature-del':
-			var condition = {id:params.id};
+			var condition ='id = '+utility.escape(req.body.id);
 			feature.del(condition, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify({err:false, result:result}));

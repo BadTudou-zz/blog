@@ -10,6 +10,7 @@
     <button class="btn btn-primary" type="submit" @click="search">
     搜索&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
   </div>
+  <Featureedit v-show="currentToolbar == 'add'"></Featureedit>
     <ul class="list-group" v-show="currentToolbar != 'add'">
       <li class="list-group-item " v-for="featureItem in featureList" style="height: 50px; margin: 0 auto;">
         <div class="col-lg-4">
@@ -28,11 +29,11 @@
                 <i class="fa fa-1x fa-eye" aria-hidden="true"></i>
                 预览
               </a>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="#" @click="editFeature(featureItem)">
                 <i class="fa fa-1x fa-pencil-square-o" aria-hidden="true"></i>
                 编辑
               </a>
-              <a class="dropdown-item" href="#" @click="delArticle(featureItem.id)">
+              <a class="dropdown-item" href="#" @click="delFeature(featureItem.id)">
                 <i class="fa fa-1x fa-times" aria-hidden="true"></i>
                 删除
               </a>
@@ -52,13 +53,14 @@ select
 {
   height:30px; line-height:30px;
 }
-#div-manage--articlelist--toolbar
+#div-manage--featurelist--toolbar
 {
   margin-bottom: 10px;
 }
 </style>
 <script>
 import { mapState } from 'vuex';
+import Featureedit  from './FeatureEdit.vue';
 import Pagination 	from './Pagination.vue';
 export default {
   data () {
@@ -71,7 +73,7 @@ export default {
       isShow: state=> (state.parentNavItem.text == '管理') && (state.manageParentNavItem.text == '专题')
     }),
   components:{
-  	Pagination
+  	Featureedit, Pagination
   },
   methods:{
       all:function(){
@@ -86,8 +88,13 @@ export default {
       search:function(){
         this.currentToolbar = 'search';
       },
-      delArticle:function(articleId){
-        this.$store.dispatch('delArticle', articleId);
+      editFeature:function(feature){
+        this.$store.state.isFeatureEdit = true;
+        this.currentToolbar = 'add';
+        this.$store.dispatch('featureCardChange', feature);
+      },
+      delFeature:function(featureId){
+        this.$store.dispatch('delFeature', featureId);
       }
   }
  }
