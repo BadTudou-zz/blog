@@ -14,7 +14,12 @@ Vue.use(VueResource);
     articleCurrentPage:1,
     articleSearchCurrentPage:1,
     articleSearchText:'',
-    articleCurrent:'',
+    articleCurrent:{
+      id:'', featureID:'', title:'', subtitle:'', link:'', 
+      author:'', introduction:'', coverLink:'', content:'', countRead:0,
+      countShare:0, countDiscuss:0, labels:''
+    },
+    isArticleEdit:false,
     featureCardList:'',
     featurePerPage:6,
     featureCurrentPage:1,
@@ -36,7 +41,13 @@ Vue.use(VueResource);
     manageParentNavItem:{text:'用户'},
     userList:'',
     userPerPage:6,
-    userCurrentPage:1
+    userCurrentPage:1,
+    userCurrent:{
+      name:'',
+      nickname:'',
+      authority:''
+    },
+    isUserEdit:false
   },
   actions:{
   	parentNavItemChange(context, parentNavItem)
@@ -81,6 +92,10 @@ Vue.use(VueResource);
       else
         context.commit('showMessage',{type:'err', text:'添加评论失败。'});
 
+    },
+    userCardChange(context, userCard)
+    {
+      context.commit('userCardChange',userCard);
     },
     showMessage(context, message){
       context.commit('showMessage', message);
@@ -190,6 +205,9 @@ Vue.use(VueResource);
     },
     featureCardChange(state, featureCard){
       state.featureCurrent = featureCard;
+    },
+    userCardChange(state, userCard){
+      state.userCurrent = userCard;
     },
     discussListChange (state, articleId) {
       console.log(articleId);

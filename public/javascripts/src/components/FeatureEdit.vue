@@ -1,5 +1,5 @@
 <template>
-<div id="div-manage--addfeature" class="col-lg-12">
+<div id="div-manage--editfeature" class="col-lg-12">
 	<form class="col-lg-12">
         <input type="text" class="form-control" placeholder="专题名" size="20" v-model="newFeature.title">
         <input type="text" class="form-control" placeholder="作者" size="20" v-model="newFeature.author">
@@ -13,7 +13,7 @@
 </div>
 </template>
 <style type="text/css">
-#div-manage--addfeature>form>input
+#div-manage--editfeature>form>input
 {
   margin-top: 15px;
 }

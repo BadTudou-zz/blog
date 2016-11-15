@@ -81,6 +81,7 @@ export default {
       },
       add:function(){
         this.currentToolbar = 'add';
+        this.$store.dispatch('featureCardChange', null);
       },
       del:function(){
         this.currentToolbar = 'del';

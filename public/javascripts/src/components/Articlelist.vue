@@ -3,13 +3,34 @@
   <div id="div-manage--articlelist--toolbar">
     <button class="btn btn-primary" type="submit" @click="all">
     全部&nbsp;<i class="fa fa-list" aria-hidden="true"></i></button>
-    <button class="btn btn-primary" type="submit" @click="add">
+    <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#div--manage--editarticle" @click="add">
     添加&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="btn btn-primary" type="submit" @click="del">
     删除&nbsp;<i class="fa fa-times" aria-hidden="true"></i></button>
     <button class="btn btn-primary" type="submit" @click="search">
     搜索&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
+</button>
   </div>
+  
+  <div class="modal fade" id="div--manage--editarticle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" v-show="currentToolbar == 'add'">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">编辑文章</h4>
+        </div>
+        <div class="modal-body">
+          <Articleedit ></Articleedit>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
     <ul class="list-group" v-show="currentToolbar != 'add'">
       <li class="list-group-item " v-for="articleItem in articleList" style="height: 50px; margin: 0 auto;">
         <div class="col-lg-4">
@@ -28,7 +49,7 @@
                 <i class="fa fa-1x fa-eye" aria-hidden="true"></i>
                 预览
               </a>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#div--manage--editarticle" @click="editArticle(articleItem)">
                 <i class="fa fa-1x fa-pencil-square-o" aria-hidden="true"></i>
                 编辑
               </a>
@@ -59,6 +80,7 @@ select
 </style>
 <script>
 import { mapState } from 'vuex';
+import Articleedit  from './ArticleEdit.vue';
 import Pagination 	from './Pagination.vue';
 export default {
   data () {
@@ -71,7 +93,7 @@ export default {
       isShow: state=> (state.parentNavItem.text == '管理') && (state.manageParentNavItem.text == '文章')
     }),
   components:{
-  	Pagination
+  	Articleedit, Pagination
   },
   methods:{
       all:function(){
@@ -79,12 +101,18 @@ export default {
       },
       add:function(){
         this.currentToolbar = 'add';
+        this.$store.dispatch('articleCardChange', null);
       },
       del:function(){
         this.currentToolbar = 'del';
       },
       search:function(){
         this.currentToolbar = 'search';
+      },
+      editArticle:function(article){
+        this.$store.state.isArticleEdit = true;
+        this.currentToolbar = 'add';
+        this.$store.dispatch('articleCardChange', article);
       },
       delArticle:function(articleId){
         this.$store.dispatch('delArticle', articleId);

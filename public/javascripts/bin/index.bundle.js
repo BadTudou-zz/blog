@@ -122,7 +122,7 @@
 
 	var _Manage2 = _interopRequireDefault(_Manage);
 
-	var _Footer = __webpack_require__(103);
+	var _Footer = __webpack_require__(111);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -8244,7 +8244,12 @@
 	    articleCurrentPage: 1,
 	    articleSearchCurrentPage: 1,
 	    articleSearchText: '',
-	    articleCurrent: '',
+	    articleCurrent: {
+	      id: '', featureID: '', title: '', subtitle: '', link: '',
+	      author: '', introduction: '', coverLink: '', content: '', countRead: 0,
+	      countShare: 0, countDiscuss: 0, labels: ''
+	    },
+	    isArticleEdit: false,
 	    featureCardList: '',
 	    featurePerPage: 6,
 	    featureCurrentPage: 1,
@@ -8266,7 +8271,13 @@
 	    manageParentNavItem: { text: '用户' },
 	    userList: '',
 	    userPerPage: 6,
-	    userCurrentPage: 1
+	    userCurrentPage: 1,
+	    userCurrent: {
+	      name: '',
+	      nickname: '',
+	      authority: ''
+	    },
+	    isUserEdit: false
 	  },
 	  actions: {
 	    parentNavItemChange: function parentNavItemChange(context, parentNavItem) {
@@ -8303,6 +8314,9 @@
 	      discuss.discussID = context.state.articleCurrent.id;
 	      context.commit('addArticleDiscuss', discuss);
 	      if (context.state.msgType == 'success') context.commit('showMessage', { type: 'success', text: '添加评论成功，正在审核' });else context.commit('showMessage', { type: 'err', text: '添加评论失败。' });
+	    },
+	    userCardChange: function userCardChange(context, userCard) {
+	      context.commit('userCardChange', userCard);
 	    },
 	    showMessage: function showMessage(context, message) {
 	      context.commit('showMessage', message);
@@ -8401,6 +8415,9 @@
 	    },
 	    featureCardChange: function featureCardChange(state, featureCard) {
 	      state.featureCurrent = featureCard;
+	    },
+	    userCardChange: function userCardChange(state, userCard) {
+	      state.userCurrent = userCard;
 	    },
 	    discussListChange: function discussListChange(state, articleId) {
 	      console.log(articleId);
@@ -13215,7 +13232,7 @@
 	__vue_exports__ = __webpack_require__(76)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(102)
+	var __vue_template__ = __webpack_require__(110)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -13268,11 +13285,11 @@
 
 	var _Userlist2 = _interopRequireDefault(_Userlist);
 
-	var _Articlelist = __webpack_require__(87);
+	var _Articlelist = __webpack_require__(92);
 
 	var _Articlelist2 = _interopRequireDefault(_Articlelist);
 
-	var _Featurelist = __webpack_require__(92);
+	var _Featurelist = __webpack_require__(100);
 
 	var _Featurelist2 = _interopRequireDefault(_Featurelist);
 
@@ -13495,7 +13512,7 @@
 	__vue_exports__ = __webpack_require__(85)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(86)
+	var __vue_template__ = __webpack_require__(91)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -13578,89 +13595,17 @@
 	  value: true
 	});
 
-	var _stringify = __webpack_require__(4);
-
-	var _stringify2 = _interopRequireDefault(_stringify);
-
 	var _vuex = __webpack_require__(2);
+
+	var _UserEdit = __webpack_require__(86);
+
+	var _UserEdit2 = _interopRequireDefault(_UserEdit);
 
 	var _Pagination = __webpack_require__(55);
 
 	var _Pagination2 = _interopRequireDefault(_Pagination);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
 
 	exports.default = {
 	  data: function data() {
@@ -13682,7 +13627,7 @@
 	    }
 	  }),
 	  components: {
-	    Pagination: _Pagination2.default
+	    Useredit: _UserEdit2.default, Pagination: _Pagination2.default
 	  },
 	  methods: {
 	    all: function all() {
@@ -13690,6 +13635,7 @@
 	    },
 	    add: function add() {
 	      this.currentToolbar = 'add';
+	      this.$store.dispatch('userCardChange', null);
 	    },
 	    del: function del() {
 	      this.currentToolbar = 'del';
@@ -13700,33 +13646,340 @@
 	    delUser: function delUser(name) {
 	      this.$store.dispatch('delUser', name);
 	    },
-	    updateUser: function updateUser() {
-	      this.$store.dispatch('updateUser', this.currentUser);
-	    },
-	    updateUserNickname: function updateUserNickname(name, e) {
-	      this.currentUser.name = name;
-	      this.currentUser.nickname = e.srcElement.value;
-	      console.log((0, _stringify2.default)(this.currentUser));
-	      this.updateUser();
-	    },
-	    updateUserAuthority: function updateUserAuthority(name, e) {
-	      this.currentUser.name = name;
-	      this.currentUser.authority = e.srcElement.value;
-	      console.log('更改权限' + e.srcElement.value);
-	      this.updateUser();
-	    },
-
-	    editUser: function editUser(name) {
-	      this.currentUser.name = name;
-	    },
-	    isEditable: function isEditable(name) {
-	      return this.currentUser.name == name;
+	    editUser: function editUser(user) {
+	      this.$store.state.isUserEdit = true;
+	      this.currentToolbar = 'add';
+	      this.$store.dispatch('userCardChange', user);
 	    }
 	  }
-	};
+	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 
 /***/ },
 /* 86 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_exports__, __vue_options__
+
+	/* styles */
+	__webpack_require__(87)
+
+	/* script */
+	__vue_exports__ = __webpack_require__(89)
+
+	/* template */
+	var __vue_template__ = __webpack_require__(90)
+	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+	if (
+	  typeof __vue_exports__.default === "object" ||
+	  typeof __vue_exports__.default === "function"
+	) {
+	if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+	__vue_options__ = __vue_exports__ = __vue_exports__.default
+	}
+	if (typeof __vue_options__ === "function") {
+	  __vue_options__ = __vue_options__.options
+	}
+	__vue_options__.__file = "/Users/badtudou/Docs/Sources/Git/blog/public/javascripts/src/components/UserEdit.vue"
+	__vue_options__.render = __vue_template__.render
+	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+
+	/* hot reload */
+	if (false) {(function () {
+	  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  module.hot.accept()
+	  if (!module.hot.data) {
+	    hotAPI.createRecord("data-v-3a1fae88", __vue_options__)
+	  } else {
+	    hotAPI.reload("data-v-3a1fae88", __vue_options__)
+	  }
+	})()}
+	if (__vue_options__.functional) {console.error("[vue-loader] UserEdit.vue: functional components are not supported and should be defined in plain js files using render functions.")}
+
+	module.exports = __vue_exports__
+
+
+/***/ },
+/* 87 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(88);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(12)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/.0.25.0@css-loader/index.js!./../../node_modules/.9.7.0@vue-loader/lib/style-rewriter.js?id=data-v-3a1fae88!./../../node_modules/.9.7.0@vue-loader/lib/selector.js?type=styles&index=0!./UserEdit.vue", function() {
+				var newContent = require("!!./../../node_modules/.0.25.0@css-loader/index.js!./../../node_modules/.9.7.0@vue-loader/lib/style-rewriter.js?id=data-v-3a1fae88!./../../node_modules/.9.7.0@vue-loader/lib/selector.js?type=styles&index=0!./UserEdit.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 88 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(11)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n#div-manage--edituser>form>input\n{\n  margin-top: 15px;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 89 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _stringify = __webpack_require__(4);
+
+	var _stringify2 = _interopRequireDefault(_stringify);
+
+	var _vuex = __webpack_require__(2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+	  computed: (0, _vuex.mapState)({
+	    newUser: function newUser(state) {
+	      return state.userCurrent;
+	    }
+	  }),
+	  methods: {
+	    isEdit: function isEdit() {
+	      return this.$store.state.isUserEdit;
+	    },
+	    editUser: function editUser() {
+	      if (this.isEdit()) {
+	        console.log('更新用户');
+	        this.$store.dispatch('updateUser', this.newUser);
+	      } else {
+	        this.$store.dispatch('addUser', this.newUser);
+	      }
+	      console.log((0, _stringify2.default)(this.newUser));
+	    }
+	  }
+	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+
+/***/ },
+/* 90 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports={render:function (){with(this) {
+	  return _h('div', {
+	    staticClass: "col-lg-12",
+	    attrs: {
+	      "id": "div-manage--edituser"
+	    }
+	  }, [_h('form', {
+	    staticClass: "col-lg-8"
+	  }, [_h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newUser.name),
+	      expression: "newUser.name"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "用户名"
+	    },
+	    domProps: {
+	      "value": _s(newUser.name)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        newUser.name = $event.target.value
+	      }
+	    }
+	  }), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newUser.nickname),
+	      expression: "newUser.nickname"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "昵称"
+	    },
+	    domProps: {
+	      "value": _s(newUser.nickname)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        newUser.nickname = $event.target.value
+	      }
+	    }
+	  }), " ", _m(0), " ", _h('select', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newUser.authority),
+	      expression: "newUser.authority"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "id": "select-usertype"
+	    },
+	    on: {
+	      "change": function($event) {
+	        newUser.authority = Array.prototype.filter.call($event.target.options, function(o) {
+	          return o.selected
+	        }).map(function(o) {
+	          return "_value" in o ? o._value : o.value
+	        })[0]
+	      }
+	    }
+	  }, [_m(1), " ", _m(2), " ", _m(3)]), " ", _h('fieldset', {
+	    staticClass: "form-group col-lg-offset-9"
+	  }, [_h('button', {
+	    staticClass: "btn btn-primary",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": function($event) {
+	        editUser()
+	      }
+	    }
+	  }, [_s(isEdit() ? '更新' : '添加') + "用户"])])])])
+	}},staticRenderFns: [function (){with(this) {
+	  return _h('label', {
+	    attrs: {
+	      "for": "select-usertype"
+	    }
+	  }, ["用户类型"])
+	}},function (){with(this) {
+	  return _h('option', {
+	    attrs: {
+	      "value": "website"
+	    }
+	  }, ["全站"])
+	}},function (){with(this) {
+	  return _h('option', {
+	    attrs: {
+	      "value": "feature"
+	    }
+	  }, ["专题"])
+	}},function (){with(this) {
+	  return _h('option', {
+	    attrs: {
+	      "value": "article"
+	    }
+	  }, ["文章"])
+	}}]}
+	if (false) {
+	  module.hot.accept()
+	  if (module.hot.data) {
+	     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-3a1fae88", module.exports)
+	  }
+	}
+
+/***/ },
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -13776,7 +14029,14 @@
 	    on: {
 	      "click": search
 	    }
-	  }, ["\n    搜索 ", _m(3)])]), " ", _h('ul', {
+	  }, ["\n    搜索 ", _m(3)])]), " ", _h('Useredit', {
+	    directives: [{
+	      name: "show",
+	      rawName: "v-show",
+	      value: (currentToolbar == 'add'),
+	      expression: "currentToolbar == 'add'"
+	    }]
+	  }), " ", _h('ul', {
 	    directives: [{
 	      name: "show",
 	      rawName: "v-show",
@@ -13793,63 +14053,32 @@
 	    }, [_h('div', {
 	      staticClass: "col-lg-4"
 	    }, [_s(userItem.name)]), " ", _h('div', {
-	      staticClass: "col-lg-4"
-	    }, [_h('div', {
-	      staticClass: "input-group"
-	    }, [_m(4, true), " ", _h('input', {
-	      attrs: {
-	        "size": "10",
-	        "readonly": !isEditable(userItem.name)
-	      },
-	      domProps: {
-	        "value": userItem.nickname
-	      },
-	      on: {
-	        "change": function($event) {
-	          updateUserNickname(userItem.name, $event)
-	        }
-	      }
-	    })])]), " ", _h('div', {
 	      staticClass: "col-lg-3"
-	    }, [_h('div', {
-	      staticClass: "input-group"
-	    }, [_m(5, true), " ", _h('select', {
-	      directives: [{
-	        name: "model",
-	        rawName: "v-model",
-	        value: (userItem.authority),
-	        expression: "userItem.authority"
-	      }],
-	      staticClass: "form-control",
+	    }, [_h('a', {
 	      attrs: {
-	        "id": "select-usertype"
-	      },
-	      on: {
-	        "change": [function($event) {
-	          userItem.authority = Array.prototype.filter.call($event.target.options, function(o) {
-	            return o.selected
-	          }).map(function(o) {
-	            return "_value" in o ? o._value : o.value
-	          })[0]
-	        }, function($event) {
-	          updateUserAuthority(userItem.name, $event)
-	        }]
+	        "href": "#"
 	      }
-	    }, [_m(6, true), " ", _m(7, true), " ", _m(8, true)])])]), " ", _h('div', {
-	      staticClass: "btn-group col-lg-1"
-	    }, [_m(9, true), " ", _h('div', {
+	    }, [_m(4, true), _s(userItem.nickname)])]), " ", _h('div', {
+	      staticClass: "col-lg-3"
+	    }, [_h('a', {
+	      attrs: {
+	        "href": "#"
+	      }
+	    }, [_m(5, true), _s(userItem.authority)])]), " ", _h('div', {
+	      staticClass: "btn-group"
+	    }, [_m(6, true), " ", _h('div', {
 	      staticClass: "dropdown-menu"
-	    }, [_m(10, true), " ", _h('a', {
+	    }, [_m(7, true), " ", _h('a', {
 	      staticClass: "dropdown-item",
 	      attrs: {
 	        "href": "#"
 	      },
 	      on: {
 	        "click": function($event) {
-	          editUser(userItem.name)
+	          editUser(userItem)
 	        }
 	      }
-	    }, [_m(11, true), "编辑\n                "]), " ", _h('a', {
+	    }, [_m(8, true), "编辑\n                "]), " ", _h('a', {
 	      staticClass: "dropdown-item",
 	      attrs: {
 	        "href": "#"
@@ -13859,7 +14088,7 @@
 	          delUser(userItem.name)
 	        }
 	      }
-	    }, [_m(12, true), "\n                \t删除\n                "])])])])
+	    }, [_m(9, true), "\n                \t删除\n                "])])])])
 	  })]), " ", _h('Pagination', {
 	    directives: [{
 	      name: "show",
@@ -13903,47 +14132,19 @@
 	    }
 	  })
 	}},function (){with(this) {
-	  return _h('span', {
-	    staticClass: "input-group-addon",
-	    attrs: {
-	      "id": "basic-addon1"
-	    }
-	  }, [_h('i', {
+	  return _h('i', {
 	    staticClass: "fa fa-1x fa-user",
 	    attrs: {
 	      "aria-hidden": "true"
 	    }
-	  })])
+	  })
 	}},function (){with(this) {
-	  return _h('span', {
-	    staticClass: "input-group-addon",
-	    attrs: {
-	      "id": "basic-addon1"
-	    }
-	  }, [_h('i', {
-	    staticClass: "fa fa-child",
+	  return _h('i', {
+	    staticClass: "fa fa-1x fa-child",
 	    attrs: {
 	      "aria-hidden": "true"
 	    }
-	  })])
-	}},function (){with(this) {
-	  return _h('option', {
-	    attrs: {
-	      "value": "website"
-	    }
-	  }, ["全站"])
-	}},function (){with(this) {
-	  return _h('option', {
-	    attrs: {
-	      "value": "feature"
-	    }
-	  }, ["专题"])
-	}},function (){with(this) {
-	  return _h('option', {
-	    attrs: {
-	      "value": "article"
-	    }
-	  }, ["文章"])
+	  })
 	}},function (){with(this) {
 	  return _h('button', {
 	    staticClass: "btn btn-secondary dropdown-toggle btn-sm",
@@ -13958,7 +14159,7 @@
 	    attrs: {
 	      "aria-hidden": "true"
 	    }
-	  })])
+	  }), "操作"])
 	}},function (){with(this) {
 	  return _h('a', {
 	    staticClass: "dropdown-item",
@@ -13994,19 +14195,19 @@
 	}
 
 /***/ },
-/* 87 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(88)
+	__webpack_require__(93)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(90)
+	__vue_exports__ = __webpack_require__(95)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(91)
+	var __vue_template__ = __webpack_require__(99)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -14040,13 +14241,13 @@
 
 
 /***/ },
-/* 88 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(89);
+	var content = __webpack_require__(94);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -14066,7 +14267,7 @@
 	}
 
 /***/ },
-/* 89 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -14080,7 +14281,7 @@
 
 
 /***/ },
-/* 90 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14091,71 +14292,15 @@
 
 	var _vuex = __webpack_require__(2);
 
+	var _ArticleEdit = __webpack_require__(96);
+
+	var _ArticleEdit2 = _interopRequireDefault(_ArticleEdit);
+
 	var _Pagination = __webpack_require__(55);
 
 	var _Pagination2 = _interopRequireDefault(_Pagination);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
 
 	exports.default = {
 	  data: function data() {
@@ -14173,7 +14318,7 @@
 	    }
 	  }),
 	  components: {
-	    Pagination: _Pagination2.default
+	    Articleedit: _ArticleEdit2.default, Pagination: _Pagination2.default
 	  },
 	  methods: {
 	    all: function all() {
@@ -14181,6 +14326,7 @@
 	    },
 	    add: function add() {
 	      this.currentToolbar = 'add';
+	      this.$store.dispatch('articleCardChange', null);
 	    },
 	    del: function del() {
 	      this.currentToolbar = 'del';
@@ -14188,14 +14334,540 @@
 	    search: function search() {
 	      this.currentToolbar = 'search';
 	    },
+	    editArticle: function editArticle(article) {
+	      this.$store.state.isArticleEdit = true;
+	      this.currentToolbar = 'add';
+	      this.$store.dispatch('articleCardChange', article);
+	    },
 	    delArticle: function delArticle(articleId) {
 	      this.$store.dispatch('delArticle', articleId);
 	    }
 	  }
-	};
+	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 
 /***/ },
-/* 91 */
+/* 96 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_exports__, __vue_options__
+
+	/* script */
+	__vue_exports__ = __webpack_require__(97)
+
+	/* template */
+	var __vue_template__ = __webpack_require__(98)
+	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+	if (
+	  typeof __vue_exports__.default === "object" ||
+	  typeof __vue_exports__.default === "function"
+	) {
+	if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+	__vue_options__ = __vue_exports__ = __vue_exports__.default
+	}
+	if (typeof __vue_options__ === "function") {
+	  __vue_options__ = __vue_options__.options
+	}
+	__vue_options__.__file = "/Users/badtudou/Docs/Sources/Git/blog/public/javascripts/src/components/ArticleEdit.vue"
+	__vue_options__.render = __vue_template__.render
+	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+
+	/* hot reload */
+	if (false) {(function () {
+	  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  module.hot.accept()
+	  if (!module.hot.data) {
+	    hotAPI.createRecord("data-v-ca2707ae", __vue_options__)
+	  } else {
+	    hotAPI.reload("data-v-ca2707ae", __vue_options__)
+	  }
+	})()}
+	if (__vue_options__.functional) {console.error("[vue-loader] ArticleEdit.vue: functional components are not supported and should be defined in plain js files using render functions.")}
+
+	module.exports = __vue_exports__
+
+
+/***/ },
+/* 97 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _stringify = __webpack_require__(4);
+
+	var _stringify2 = _interopRequireDefault(_stringify);
+
+	var _vuex = __webpack_require__(2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+	  computed: (0, _vuex.mapState)({
+	    newArticle: function newArticle(state) {
+	      return state.articleCurrent;
+	    },
+	    featureList: function featureList(state) {
+	      return state.featureList;
+	    }
+	  }),
+	  methods: {
+	    isEdit: function isEdit() {
+	      return this.$store.state.isArticleEdit;
+	    },
+	    editUser: function editUser() {
+	      if (this.isEdit()) {
+	        console.log('更新文章');
+	        this.$store.dispatch('updateArticle', this.newArticle);
+	      } else {
+	        this.$store.dispatch('addArticle', this.newArticle);
+	      }
+	      console.log((0, _stringify2.default)(this.newArticle));
+	    }
+	  }
+	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+
+/***/ },
+/* 98 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports={render:function (){with(this) {
+	  return _h('div', {
+	    staticClass: "col-lg-12",
+	    attrs: {
+	      "id": "div-articleedit"
+	    }
+	  }, [_h('form', [_h('fieldset', {
+	    staticClass: "form-group"
+	  }, [_h('div', {
+	    staticClass: "col-lg-4"
+	  }, [_m(0), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newArticle.title),
+	      expression: "newArticle.title"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "id": "input-title",
+	      "placeholder": "标题"
+	    },
+	    domProps: {
+	      "value": _s(newArticle.title)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        newArticle.title = $event.target.value
+	      }
+	    }
+	  })]), " ", _h('div', {
+	    staticClass: "col-lg-6"
+	  }, [_m(1), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newArticle.subtitle),
+	      expression: "newArticle.subtitle"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "id": "input-subtitle",
+	      "placeholder": "副标题",
+	      "style": "font-size: 80%"
+	    },
+	    domProps: {
+	      "value": _s(newArticle.subtitle)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        newArticle.subtitle = $event.target.value
+	      }
+	    }
+	  })])]), " ", _h('fieldset', {
+	    staticClass: "form-group"
+	  }, [_h('div', {
+	    staticClass: "col-lg-4"
+	  }, [_m(2), " ", _h('select', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newArticle.featureID),
+	      expression: "newArticle.featureID"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "id": "select-feature"
+	    },
+	    on: {
+	      "change": function($event) {
+	        newArticle.featureID = Array.prototype.filter.call($event.target.options, function(o) {
+	          return o.selected
+	        }).map(function(o) {
+	          return "_value" in o ? o._value : o.value
+	        })[0]
+	      }
+	    }
+	  }, [_l((featureList), function(featureItem) {
+	    return _h('option', {
+	      domProps: {
+	        "value": featureItem.id
+	      }
+	    }, [_s(featureItem.title)])
+	  })])]), " ", _h('div', {
+	    staticClass: "col-lg-8"
+	  }, [_m(3), " ", _h('div', {
+	    staticClass: "input-group"
+	  }, [_m(4), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newArticle.link),
+	      expression: "newArticle.link"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "id": "input-link",
+	      "placeholder": "链接"
+	    },
+	    domProps: {
+	      "value": _s(newArticle.link)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        newArticle.link = $event.target.value
+	      }
+	    }
+	  })])])]), " ", _h('fieldset', {
+	    staticClass: "form-group"
+	  }, [_h('div', {
+	    staticClass: "col-lg-12"
+	  }, [_m(5), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newArticle.coverLink),
+	      expression: "newArticle.coverLink"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "id": "input-coverLink",
+	      "placeholder": "封面图片链接"
+	    },
+	    domProps: {
+	      "value": _s(newArticle.coverLink)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        newArticle.coverLink = $event.target.value
+	      }
+	    }
+	  })])]), " ", _h('fieldset', {
+	    staticClass: "form-group"
+	  }, [_h('div', {
+	    staticClass: "col-lg-4"
+	  }, [_m(6), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newArticle.author),
+	      expression: "newArticle.author"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "id": "input-author",
+	      "placeholder": "作者"
+	    },
+	    domProps: {
+	      "value": _s(newArticle.author)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        newArticle.author = $event.target.value
+	      }
+	    }
+	  })])]), " ", _h('fieldset', {
+	    staticClass: "form-group"
+	  }, [_h('div', {
+	    staticClass: "col-lg-12"
+	  }, [_m(7), " ", _h('textarea', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newArticle.introduction),
+	      expression: "newArticle.introduction"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "id": "textarea-introduction",
+	      "rows": "3"
+	    },
+	    domProps: {
+	      "value": _s(newArticle.introduction)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        newArticle.introduction = $event.target.value
+	      }
+	    }
+	  })])]), " ", _h('fieldset', {
+	    staticClass: "form-group"
+	  }, [_h('div', {
+	    staticClass: "col-lg-12"
+	  }, [_m(8), " ", _h('textarea', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (newArticle.content),
+	      expression: "newArticle.content"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "id": "textarea-content",
+	      "rows": "10"
+	    },
+	    domProps: {
+	      "value": _s(newArticle.content)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        newArticle.content = $event.target.value
+	      }
+	    }
+	  })])]), " ", _h('div', {
+	    staticClass: "col-lg-3 col-lg-offset-9"
+	  }, [_h('button', {
+	    staticClass: "btn btn-primary",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": function($event) {
+	        done()
+	      }
+	    }
+	  }, [_s(isEdit ? '更新' : '发布') + "文章"])])])])
+	}},staticRenderFns: [function (){with(this) {
+	  return _h('label', {
+	    attrs: {
+	      "for": "input-title"
+	    }
+	  }, ["标题"])
+	}},function (){with(this) {
+	  return _h('label', {
+	    attrs: {
+	      "for": "input-subtitle"
+	    }
+	  }, ["副标题"])
+	}},function (){with(this) {
+	  return _h('label', {
+	    attrs: {
+	      "for": "select-feature"
+	    }
+	  }, ["所属专题"])
+	}},function (){with(this) {
+	  return _h('label', {
+	    attrs: {
+	      "for": "input-link"
+	    }
+	  }, ["链接"])
+	}},function (){with(this) {
+	  return _h('span', {
+	    staticClass: "input-group-addon"
+	  }, ["https://example.com/"])
+	}},function (){with(this) {
+	  return _h('label', {
+	    attrs: {
+	      "for": "input-coverLink"
+	    }
+	  }, ["封面图片链接"])
+	}},function (){with(this) {
+	  return _h('label', {
+	    attrs: {
+	      "for": "input-author"
+	    }
+	  }, ["作者"])
+	}},function (){with(this) {
+	  return _h('label', {
+	    attrs: {
+	      "for": "textarea-introduction"
+	    }
+	  }, ["简介"])
+	}},function (){with(this) {
+	  return _h('label', {
+	    attrs: {
+	      "for": "textarea-content"
+	    }
+	  }, ["内容"])
+	}}]}
+	if (false) {
+	  module.hot.accept()
+	  if (module.hot.data) {
+	     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-ca2707ae", module.exports)
+	  }
+	}
+
+/***/ },
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -14224,7 +14896,9 @@
 	  }, ["\n    全部 ", _m(0)]), " ", _h('button', {
 	    staticClass: "btn btn-primary",
 	    attrs: {
-	      "type": "submit"
+	      "type": "submit",
+	      "data-toggle": "modal",
+	      "data-target": "#div--manage--editarticle"
 	    },
 	    on: {
 	      "click": add
@@ -14245,7 +14919,31 @@
 	    on: {
 	      "click": search
 	    }
-	  }, ["\n    搜索 ", _m(3)])]), " ", _h('ul', {
+	  }, ["\n    搜索 ", _m(3)]), " "]), " ", _h('div', {
+	    directives: [{
+	      name: "show",
+	      rawName: "v-show",
+	      value: (currentToolbar == 'add'),
+	      expression: "currentToolbar == 'add'"
+	    }],
+	    staticClass: "modal fade",
+	    attrs: {
+	      "id": "div--manage--editarticle",
+	      "tabindex": "-1",
+	      "role": "dialog",
+	      "aria-labelledby": "myModalLabel",
+	      "aria-hidden": "true"
+	    }
+	  }, [_h('div', {
+	    staticClass: "modal-dialog modal-lg",
+	    attrs: {
+	      "role": "document"
+	    }
+	  }, [_h('div', {
+	    staticClass: "modal-content"
+	  }, [_m(4), " ", _h('div', {
+	    staticClass: "modal-body"
+	  }, [_h('Articleedit')]), " ", _m(5)])])]), " ", _h('ul', {
 	    directives: [{
 	      name: "show",
 	      rawName: "v-show",
@@ -14265,23 +14963,35 @@
 	      attrs: {
 	        "href": "#"
 	      }
-	    }, [_m(4, true), _s(articleItem.title + articleItem.subtitle)])]), " ", _h('div', {
+	    }, [_m(6, true), _s(articleItem.title + articleItem.subtitle)])]), " ", _h('div', {
 	      staticClass: "col-lg-4"
 	    }, [_h('a', {
 	      attrs: {
 	        "href": "#"
 	      }
-	    }, [_m(5, true), _s(articleItem.author)])]), " ", _h('span', {
+	    }, [_m(7, true), _s(articleItem.author)])]), " ", _h('span', {
 	      staticClass: "col-lg-2"
 	    }, [_h('a', {
 	      attrs: {
 	        "href": "#"
 	      }
-	    }, [_m(6, true), _s(articleItem.featureID)])]), " ", _h('div', {
+	    }, [_m(8, true), _s(articleItem.featureID)])]), " ", _h('div', {
 	      staticClass: "btn-group col-lg-1"
-	    }, [_m(7, true), " ", _h('div', {
+	    }, [_m(9, true), " ", _h('div', {
 	      staticClass: "dropdown-menu"
-	    }, [_m(8, true), " ", _m(9, true), " ", _h('a', {
+	    }, [_m(10, true), " ", _h('a', {
+	      staticClass: "dropdown-item",
+	      attrs: {
+	        "href": "#",
+	        "data-toggle": "modal",
+	        "data-target": "#div--manage--editarticle"
+	      },
+	      on: {
+	        "click": function($event) {
+	          editArticle(articleItem)
+	        }
+	      }
+	    }, [_m(11, true), "\n                编辑\n              "]), " ", _h('a', {
 	      staticClass: "dropdown-item",
 	      attrs: {
 	        "href": "#"
@@ -14291,7 +15001,7 @@
 	          delArticle(articleItem.id)
 	        }
 	      }
-	    }, [_m(10, true), "\n                删除\n              "])])])])
+	    }, [_m(12, true), "\n                删除\n              "])])])])
 	  })]), " ", _h('Pagination', {
 	    directives: [{
 	      name: "show",
@@ -14333,6 +15043,32 @@
 	    attrs: {
 	      "aria-hidden": "true"
 	    }
+	  })
+	}},function (){with(this) {
+	  return _h('div', {
+	    staticClass: "modal-header"
+	  }, [_h('button', {
+	    staticClass: "close",
+	    attrs: {
+	      "type": "button",
+	      "data-dismiss": "modal",
+	      "aria-label": "Close"
+	    }
+	  }, [_h('span', {
+	    attrs: {
+	      "aria-hidden": "true"
+	    }
+	  }, ["×"]), " ", _h('span', {
+	    staticClass: "sr-only"
+	  }, ["Close"])]), " ", _h('h4', {
+	    staticClass: "modal-title",
+	    attrs: {
+	      "id": "myModalLabel"
+	    }
+	  }, ["编辑文章"])])
+	}},function (){with(this) {
+	  return _h('div', {
+	    staticClass: "modal-footer"
 	  })
 	}},function (){with(this) {
 	  return _h('i', {
@@ -14383,17 +15119,12 @@
 	    }
 	  }), "\n                预览\n              "])
 	}},function (){with(this) {
-	  return _h('a', {
-	    staticClass: "dropdown-item",
-	    attrs: {
-	      "href": "#"
-	    }
-	  }, [_h('i', {
+	  return _h('i', {
 	    staticClass: "fa fa-1x fa-pencil-square-o",
 	    attrs: {
 	      "aria-hidden": "true"
 	    }
-	  }), "\n                编辑\n              "])
+	  })
 	}},function (){with(this) {
 	  return _h('i', {
 	    staticClass: "fa fa-1x fa-times",
@@ -14410,19 +15141,19 @@
 	}
 
 /***/ },
-/* 92 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(93)
+	__webpack_require__(101)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(95)
+	__vue_exports__ = __webpack_require__(103)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(101)
+	var __vue_template__ = __webpack_require__(109)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -14456,13 +15187,13 @@
 
 
 /***/ },
-/* 93 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(94);
+	var content = __webpack_require__(102);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -14482,7 +15213,7 @@
 	}
 
 /***/ },
-/* 94 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -14496,7 +15227,7 @@
 
 
 /***/ },
-/* 95 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14507,7 +15238,7 @@
 
 	var _vuex = __webpack_require__(2);
 
-	var _FeatureEdit = __webpack_require__(96);
+	var _FeatureEdit = __webpack_require__(104);
 
 	var _FeatureEdit2 = _interopRequireDefault(_FeatureEdit);
 
@@ -14541,6 +15272,7 @@
 	    },
 	    add: function add() {
 	      this.currentToolbar = 'add';
+	      this.$store.dispatch('featureCardChange', null);
 	    },
 	    del: function del() {
 	      this.currentToolbar = 'del';
@@ -14619,19 +15351,19 @@
 	//
 
 /***/ },
-/* 96 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(97)
+	__webpack_require__(105)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(99)
+	__vue_exports__ = __webpack_require__(107)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(100)
+	var __vue_template__ = __webpack_require__(108)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -14665,13 +15397,13 @@
 
 
 /***/ },
-/* 97 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(98);
+	var content = __webpack_require__(106);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -14691,7 +15423,7 @@
 	}
 
 /***/ },
-/* 98 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -14699,13 +15431,13 @@
 
 
 	// module
-	exports.push([module.id, "\n#div-manage--addfeature>form>input\n{\n  margin-top: 15px;\n}\n", ""]);
+	exports.push([module.id, "\n#div-manage--editfeature>form>input\n{\n  margin-top: 15px;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 99 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14764,14 +15496,14 @@
 	//
 
 /***/ },
-/* 100 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
 	  return _h('div', {
 	    staticClass: "col-lg-12",
 	    attrs: {
-	      "id": "div-manage--addfeature"
+	      "id": "div-manage--editfeature"
 	    }
 	  }, [_h('form', {
 	    staticClass: "col-lg-12"
@@ -14888,7 +15620,7 @@
 	}
 
 /***/ },
-/* 101 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -15115,7 +15847,7 @@
 	}
 
 /***/ },
-/* 102 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -15148,16 +15880,16 @@
 	}
 
 /***/ },
-/* 103 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(104)
+	__webpack_require__(112)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(106)
+	var __vue_template__ = __webpack_require__(114)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -15191,13 +15923,13 @@
 
 
 /***/ },
-/* 104 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(105);
+	var content = __webpack_require__(113);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -15217,7 +15949,7 @@
 	}
 
 /***/ },
-/* 105 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -15231,7 +15963,7 @@
 
 
 /***/ },
-/* 106 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
