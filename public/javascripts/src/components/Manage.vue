@@ -12,6 +12,9 @@
 	<div class="col-lg-9">
 		<Featurelist></Featurelist>
 	</div>
+	<div class="col-lg-9">
+		<Discusslist></Discusslist>
+	</div>
 </div>
 </template>
 <script>
@@ -20,6 +23,7 @@ import Sidebar from './SidebarMenu.vue';
 import Userlist from './Userlist.vue';
 import Articlelist from './Articlelist.vue';
 import Featurelist from './Featurelist.vue';
+import Discusslist from './Discusslist.vue';
 export default {
 	data () {
  		return {
@@ -30,7 +34,7 @@ export default {
     	isShow: state => (state.parentNavItem.text == '管理') && (state.loginState)
   	}),
   	components:{
-  		Sidebar, Userlist, Articlelist, Featurelist
+  		Sidebar, Userlist, Articlelist, Featurelist, Discusslist
   	}
 }
 </script>

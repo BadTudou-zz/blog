@@ -11,6 +11,14 @@
 </div>
 </template>
 <style type="text/css">
+#div-siderbadmenu>ul>li:hover
+{
+	background-color: #006DE0; 
+}
+#div-siderbadmenu>ul>li>a:hover
+{
+	color:#FFF;
+}
 </style>
 <script>
 export default {
@@ -21,7 +29,7 @@ export default {
  				{text:'用户', href:'', trigger:'userListPageChange', icon:'fa-child'},
  			 	{text:'文章', href:'', trigger:'articleCardListPageChange', icon:'fa-file'},
  			 	{text:'专题', href:'', trigger:'featureCardListPageChange', icon:'fa-briefcase'},
- 			 	{text:'评论', href:'', trigger:'', icon:'fa-commenting'},
+ 			 	{text:'评论', href:'', trigger:'discussCardListPageChange', icon:'fa-commenting'},
  				{text:'系统', href:'', trigger:'', icon:'fa-cog'}
  			],
  			activeMenuItem: {text:'仪表盘'}

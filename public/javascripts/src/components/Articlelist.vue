@@ -23,7 +23,7 @@
           <h4 class="modal-title" id="myModalLabel">编辑文章</h4>
         </div>
         <div class="modal-body">
-          <Articleedit ></Articleedit>
+          <Articleedit></Articleedit>
         </div>
         <div class="modal-footer">
         </div>
@@ -100,6 +100,7 @@ export default {
         this.currentToolbar = 'all';
       },
       add:function(){
+        this.$store.state.isArticleUpdate = false;
         this.currentToolbar = 'add';
         this.$store.dispatch('articleCardChange', null);
       },
@@ -110,7 +111,7 @@ export default {
         this.currentToolbar = 'search';
       },
       editArticle:function(article){
-        this.$store.state.isArticleEdit = true;
+        this.$store.state.isArticleUpdate = true;
         this.currentToolbar = 'add';
         this.$store.dispatch('articleCardChange', article);
       },

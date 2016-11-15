@@ -1,4 +1,5 @@
 <template>
+
 <div id="div-articleedit"  class="col-lg-12">
     <form>
       <fieldset class="form-group">
@@ -58,7 +59,7 @@
       </fieldset>
 
       <div class="col-lg-3 col-lg-offset-9">
-        <button type="button"  class="btn btn-primary" @click="done()">{{isEdit?'更新':'发布'}}文章</button>
+        <button type="button"  class="btn btn-primary" @click="done()">{{isUpdate()?'更新':'发布'}}文章</button>
         </div>
     </form>
 </div>
@@ -71,11 +72,11 @@ export default {
       featureList: state=> state.featureList
   }),
   methods:{
-    isEdit:function(){
-      return this.$store.state.isArticleEdit;
+    isUpdate:function(){
+      return this.$store.state.isArticleUpdate;
     },
     editUser:function(){
-      if (this.isEdit()){
+      if (this.isUpdate()){
         console.log('更新文章');
         this.$store.dispatch('updateArticle', this.newArticle);
       } 

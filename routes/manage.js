@@ -7,6 +7,7 @@ var path = require('path');
 var article = require('../servers/article.js');
 var user = require('../servers/user.js');
 var feature = require('../servers/feature.js');
+var discuss = require('../servers/discuss.js');
 var utility = require('../utility/utility.js');
 
 router.get('/', function(req, res, next) {
@@ -50,6 +51,18 @@ router.get('/', function(req, res) {
 			var range = {from: Number(params.from), count: Number(params.count)};
 			var fields = 'name, nickname, authority, timeCreate';
 			user.list(fields, range, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'error'}));
+			});
+			break;
+
+		case 'discuss-range':
+			var range = {from: Number(params.from), count: Number(params.count)};
+			var fields = '*';
+			var condition = `type  = 'disc'`;
+			discuss.search(fields, condition, range, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify({err:false, result:result}));
 				else
@@ -129,25 +142,10 @@ router.put('/', function(req, res) {
 					res.end(JSON.stringify({err:true, result:'delete feature error'}));
 			});
 			break;
-
-		case 'discuss-range':
-			var range = {from: Number(params.from), to: Number(params.to)};
-			var fields = '*';
-			var condition = {type:'disc'};
-			discuss.search(fields, range, condition, (err, result)=> {
-				if(!err)
-					res.end(JSON.stringify({err:false, result:result}));
-				else
-					res.end(JSON.stringify({err:true, result:'error'}));
-			});
-			break;
 			
-		case 'discuss-state':
-			var newDiscuss = {
-				id:req.body.id,
-				state:req.body.state
-			};
-
+		case 'discuss-edit':
+			var newDiscuss = req.body.discuss;
+			delete newDiscuss.timeCreate;
 			discuss.edit(newDiscuss, (err, result)=>{
 				if(!err)
 					res.end(JSON.stringify({err:false, result:result}));
@@ -157,10 +155,7 @@ router.put('/', function(req, res) {
 			break;
 
 		case 'user-add':
-			if(req.session.loginstate != 'true'){
-				return res.sendFile(path.dirname(__dirname)+'/public/html/login.html');
-			}
-			var newUser = req.body.newUser;
+			var newUser = req.body.user;
 			console.log(JSON.stringify(newUser));
 			user.add(newUser, (err, result)=> {
 				if(!err)

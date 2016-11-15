@@ -19,7 +19,7 @@ Vue.use(VueResource);
       author:'', introduction:'', coverLink:'', content:'', countRead:0,
       countShare:0, countDiscuss:0, labels:''
     },
-    isArticleEdit:false,
+    isArticleUpdate:false,
     featureCardList:'',
     featurePerPage:6,
     featureCurrentPage:1,
@@ -31,8 +31,16 @@ Vue.use(VueResource);
       introduction:'',
       countArticle:0
     },
-    isFeatureEdit:false,
+    isFeatureUpdate:false,
+    discussCardList:'',
     discussList:'',
+    discussPerPage:6,
+    disscussCurrent:{
+      id:0, author:'', contact:'', discussID:'', timeCreate:'', 
+      content:'', state:'', mask:'', type:'' ,state:'',
+      mask:'', type:''
+    },
+    discussCurrentPage:1,
     msgboxIsShow:false,
     msgType:'info',
     msgText:'',
@@ -43,11 +51,10 @@ Vue.use(VueResource);
     userPerPage:6,
     userCurrentPage:1,
     userCurrent:{
-      name:'',
-      nickname:'',
-      authority:''
+      name:'', nickname:'', authority:'', password:'', question:'',
+      anser:'', authority:''
     },
-    isUserEdit:false
+    isUserUpdate:false
   },
   actions:{
   	parentNavItemChange(context, parentNavItem)
@@ -93,9 +100,22 @@ Vue.use(VueResource);
         context.commit('showMessage',{type:'err', text:'添加评论失败。'});
 
     },
+    updateDiscuss(context, discuss){
+      context.commit('updateDiscuss', discuss);
+    },
     userCardChange(context, userCard)
     {
       context.commit('userCardChange',userCard);
+    },
+    discussCardListPageChange(context, page){
+      context.commit('discussCardListPageChange',page);
+    },
+    discussCardChange(context, discussCard)
+    {
+      context.commit('discussCardChange',discussCard);
+    },
+    updateDiscuss(context, discuss){
+      context.commit('updateDiscuss', discuss);
     },
     showMessage(context, message){
       context.commit('showMessage', message);
@@ -107,6 +127,9 @@ Vue.use(VueResource);
     },
     userListPageChange(context, page){
       context.commit('userListPageChange',page);
+    },
+    addUser(context, user){
+      context.commit('addUser', user);
     },
     delUser(context, name){
       context.commit('delUser', name);
@@ -209,6 +232,34 @@ Vue.use(VueResource);
     userCardChange(state, userCard){
       state.userCurrent = userCard;
     },
+    discussCardChange(state, discussCard){
+      state.discussCurrent = discussCard;
+    },
+    discussCardListPageChange (state, page){
+        console.log('store disscuss list page change'+page);
+        var from = (page-1)*state.discussCurrentPage;
+        var count = state.discussPerPage;
+        Vue.http.get(`/manage?action=discuss-range&from=${from}&count=${count}`).then((response) => 
+        {
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err && data.result.length){
+            state.discussCurrentPage = page;
+            state.discussCardList = data.result;
+          }else{
+            console.assert(state.DEBUG, '获取评论数据失败');
+          }
+        });
+    },
+    updateDiscuss (state, discuss){
+      console.log('store updateDiscuss'+JSON.stringify(discuss));
+      Vue.http.put(`manage?action=discuss-edit`,{discuss:discuss}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';        
+      });
+    },
     discussListChange (state, articleId) {
       console.log(articleId);
       Vue.http.get(`/article?action=article-discuss&id=${articleId}`).then((response) => 
@@ -254,6 +305,14 @@ Vue.use(VueResource);
             state.loginState = false;
             state.msgType = 'err';
           }
+      });
+    },
+    addUser (state, user){
+      Vue.http.put(`manage?action=user-add`,{user:user}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';
       });
     },
     userListPageChange (state, page){
@@ -318,6 +377,15 @@ Vue.use(VueResource);
     delFeature (state, featureId){
       console.log('store delFeature'+featureId);
       Vue.http.put(`manage?action=feature-del`,{id:featureId}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';
+      });
+    },
+    delDiscuss (state, discussId){
+      console.log('store delDiscuss'+discussId);
+      Vue.http.put(`manage?action=discuss-del`,{id:discussId}).then((response)=>{
         var data = JSON.parse(response.body);
         console.log(response.body);
         if(!data.err)

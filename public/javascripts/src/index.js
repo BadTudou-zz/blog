@@ -11,7 +11,7 @@ import Ad 			    from './components/AD.vue';
 import Articlelist 	from './components/ArticleCardList.vue';
 import Featurelist 	from './components/FeatureCardList.vue';
 import Artiiframe   from './components/ArticleIframe.vue';
-import Discusslist  from './components/DiscussList.vue';
+import Articlediscusslist  from './components/Articlediscusslist.vue';
 import Pagination 	from './components/Pagination.vue';
 import Personal 	  from './components/Personal.vue';
 import Contact 		  from './components/ContactMe.vue';
@@ -27,7 +27,7 @@ var vm = new Vue({
   components: { 
   	Logo, Searchbox, Navigation, Location, Articlelist, 
     Featurelist, Pagination, Personal, Contact, About,
-    Footerbar, Ad, Artiiframe, Discusslist, Messagebox,
+    Footerbar, Ad, Artiiframe, Articlediscusslist, Messagebox,
     Login, Manage
   },
   methods:{

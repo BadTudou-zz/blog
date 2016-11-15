@@ -7,7 +7,7 @@
         <label>专题简介</label>
         <textarea class="form-control" rows="3" placeholder="专题简介" v-model="newFeature.introduction"></textarea>
         <fieldset class="form-group col-lg-offset-9" style="margin-top:10px">
-            <button type="button" class="btn btn-primary" @click="editFeature">{{isEdit()?'更新':'添加'}}专题</button>
+            <button type="button" class="btn btn-primary" @click="editFeature">{{isUpdate()?'更新':'添加'}}专题</button>
         </fieldset>
     </form>
 </div>
@@ -25,11 +25,11 @@ export default {
       newFeature: state=> state.featureCurrent
   }),
   methods:{
-  	isEdit:function(){
-  		return this.$store.state.isFeatureEdit;
+  	isUpdate:function(){
+  		return this.$store.state.isFeatureUpdate;
   	},
   	editFeature:function(){
-  		if (this.isEdit()){
+  		if (this.isUpdate()){
   			console.log('更新专题');
   			this.$store.dispatch('updateFeature', this.newFeature);
   		}

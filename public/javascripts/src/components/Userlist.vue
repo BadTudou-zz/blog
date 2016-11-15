@@ -43,14 +43,6 @@
    </div>
 </template>
 <style type="text/css">
-input
-{
-  display: inline;;
-}
-select
-{
-  height:30px; line-height:30px;
-}
 #div-manage--userlist--toolbar
 {
   margin-bottom: 10px;
@@ -62,13 +54,7 @@ import Useredit     from './UserEdit.vue';
 import Pagination 	from './Pagination.vue';
 export default {
   data () {
-    return { currentUser:{
-                  name:'',
-                  nickname:'',
-                  authority:''
-            },
-            currentToolbar:'all'
-    }
+    return { currentToolbar:'all'}
   },
   computed: mapState({
       userList: state=> state.userList,
@@ -82,8 +68,14 @@ export default {
       this.currentToolbar = 'all';
     },
     add:function(){
+      console.log('添加用户');
+      this.$store.state.isUserUpdate = false;
       this.currentToolbar = 'add';
-      this.$store.dispatch('userCardChange', null);
+      this.$store.dispatch('userCardChange', {
+      id:0, author:'', contact:'', discussID:'', timeCreate:'', 
+      content:'', state:'', mask:'', type:'' ,state:'',
+      mask:'', type:''
+    });
     },
     del:function(){
       this.currentToolbar = 'del';
@@ -95,7 +87,7 @@ export default {
   		this.$store.dispatch('delUser', name);
   	},
     editUser:function(user){
-        this.$store.state.isUserEdit = true;
+        this.$store.state.isUserUpdate = true;
         this.currentToolbar = 'add';
         this.$store.dispatch('userCardChange', user);
     }
