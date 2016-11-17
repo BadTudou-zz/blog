@@ -10,28 +10,31 @@
     <button class="btn btn-primary" type="submit" @click="search">
     搜索&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
   </div>
-  <!-- <Discedit v-show="currentToolbar == 'add'"></Useredit> -->
   <ul class="list-group" v-show="currentToolbar != 'add'">
       <li class="list-group-item" v-for="discussItem in discussList" style="height: 50px;">
-          <div class="col-lg-3">{{discussItem.author}}</div>
-          <div class="col-lg-4">
+          <div class="col-lg-3">
+            <a href="#">{{discussItem.author}}</a></div>
+          <div class="col-lg-3">
             <a href="#"><i class="fa fa-1x fa-user" aria-hidden="true"></i>{{discussItem.contact}}</a>
+          </div>
+          <div class="col-lg-1">
+            <a href="#" :title="discussItem.content"><i class="fa fa-1x fa-commenting" aria-hidden="true"></i>&nbsp;
+            </a>
           </div>
           <div class="col-lg-3">
             <a href="#"><i class="fa fa-1x fa-hand-o-right" aria-hidden="true"></i>
             	<div class="btn-group">
-  					<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{discussItem.state}}</button>
-  					<div class="dropdown-menu">
-    					<a class="dropdown-item" href="#" @click="updateDiscuss(discussItem, 'verify')"><i class="fa fa-circle" aria-hidden="true"></i>待审核</a>
-    					<a class="dropdown-item" href="#" @click=" (discussItem, 'pass')"><i class="fa fa-check" aria-hidden="true"></i>通过</a>
-    					<a class="dropdown-item" href="#" @click="updateDiscuss(discussItem, 'unpass')"><i class="fa fa-close" aria-hidden="true"></i>屏蔽</a>
-    					<div class="dropdown-divider"></div>
-  					</div>
-				</div>
-			</a>
+  					     <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{discussItem.state}}</button>
+  					     <div class="dropdown-menu">
+    					     <a class="dropdown-item" href="#" @click="updateDiscuss(discussItem, 'verify')"><i class="fa fa-circle" aria-hidden="true"></i>待审核</a>
+    					     <a class="dropdown-item" href="#" @click=" (discussItem, 'pass')"><i class="fa fa-check" aria-hidden="true"></i>通过</a>
+    					     <a class="dropdown-item" href="#" @click="updateDiscuss(discussItem, 'unpass')"><i class="fa fa-close" aria-hidden="true"></i>屏蔽</a>
+  					     </div>
+				      </div>
+			     </a>
           </div>
           <div class="btn-group">
-              <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-1x fa-cog" aria-hidden="true"></i>操作</button>
+              <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-1x fa-cog" aria-hidden="true"></i></button>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">
                 	<i class="fa fa-1x fa-eye" aria-hidden="true"></i>
@@ -85,6 +88,7 @@ export default {
     },
   	delDiscuss:function(id){
   		this.$store.dispatch('delDiscuss', id);
+      this.$store.dispatch('discussCardListPageChange', this.$store.state.discussCurrentPage);
   	},
     updateDiscuss:function(discussItem, state){
         discussItem.state = state;

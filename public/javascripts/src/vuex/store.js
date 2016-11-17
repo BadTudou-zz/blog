@@ -54,7 +54,10 @@ Vue.use(VueResource);
       name:'', nickname:'', authority:'', password:'', question:'',
       anser:'', authority:''
     },
-    isUserUpdate:false
+    isUserUpdate:false,
+    visitorCardList:'',
+    visitorPerPage:6,
+    visitorCurrentPage:1
   },
   actions:{
   	parentNavItemChange(context, parentNavItem)
@@ -103,6 +106,9 @@ Vue.use(VueResource);
     updateDiscuss(context, discuss){
       context.commit('updateDiscuss', discuss);
     },
+    delDiscuss(context, discussId){
+      context.commit('delDiscuss', discussId);
+    },
     userCardChange(context, userCard)
     {
       context.commit('userCardChange',userCard);
@@ -116,6 +122,9 @@ Vue.use(VueResource);
     },
     updateDiscuss(context, discuss){
       context.commit('updateDiscuss', discuss);
+    },
+    visitorCardListPageChange(context, page){
+      context.commit('visitorCardListPageChange',page);
     },
     showMessage(context, message){
       context.commit('showMessage', message);
@@ -137,6 +146,9 @@ Vue.use(VueResource);
         context.commit('showMessage',{type:'success', text:'删除用户成功'});
       else
         context.commit('showMessage',{type:'err', text:'删除用户失败'});
+    },
+    delVisitor(context, visitorId){
+      context.commit('delVisitor', visitorId);
     },
     updateUser(context, user){
       context.commit('updateUser', user);
@@ -202,6 +214,23 @@ Vue.use(VueResource);
             state.featureCardList = data.result;
           }else{
             console.assert(state.DEBUG, '获取专题数据失败');
+          }
+        });
+    },
+    visitorCardListPageChange (state, page){
+        console.log('store article list page change'+page);
+        var from = (page-1)*state.featurePerPage;
+        var count = state.featurePerPage;
+        Vue.http.get(`/manage?action=visitor-range&from=${from}&count=${count}`).then((response) => 
+        {
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err && data.result.length){
+
+            state.visitorCurrentPage = page;
+            state.visitorCardList = data.result;
+          }else{
+            console.assert(state.DEBUG, '获取访客数据失败');
           }
         });
     },
@@ -334,6 +363,14 @@ Vue.use(VueResource);
     delUser (state, name){
       console.log('store delUser'+name);
       Vue.http.put(`manage?action=user-del`,{name:name}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';
+      });
+    },
+    delVisitor (state, visitorId){
+      Vue.http.put(`manage?action=visitor-del`,{id:visitorId}).then((response)=>{
         var data = JSON.parse(response.body);
         console.log(response.body);
         if(!data.err)

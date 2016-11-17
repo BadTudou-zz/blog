@@ -43,7 +43,7 @@
           <a href="#"><i class="fa fa-1x fa-archive" aria-hidden="true"></i>{{articleItem.featureID}}</a>
         </span>
         <div class="btn-group col-lg-1" >
-            <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-1x fa-cog" aria-hidden="true"></i>操作</button>
+            <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-1x fa-cog" aria-hidden="true"></i></button>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="#">
                 <i class="fa fa-1x fa-eye" aria-hidden="true"></i>
@@ -117,6 +117,7 @@ export default {
       },
       delArticle:function(articleId){
         this.$store.dispatch('delArticle', articleId);
+        this.$store.dispatch('articleCardListPageChange', this.$store.state.articleCurrentPage);
       }
   }
  }

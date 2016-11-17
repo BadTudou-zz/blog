@@ -7,8 +7,14 @@
     <div class="card-block">
       <h4 class="card-title">登陆</h4>
       <form id="div-form">
-        <input type="text" class="form-control" id="input-name" placeholder="用户名" v-model=" user.name">
-        <input type="password" class="form-control" id="input-password" placeholder="密码" v-model="user.password">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1"><i class="fa fa-1x fa-user" aria-hidden="true"></i></span>
+          <input type="text" class="form-control" id="input-name" placeholder="用户名" v-model=" user.name">
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1"><i class="fa fa-1x fa-lock" aria-hidden="true"></i></span>
+          <input type="password" class="form-control" id="input-password" placeholder="密码" v-model="user.password">
+        </div>
       </form>
     </div>
     <div class="card-block">
@@ -23,7 +29,7 @@
 {
   color: #0099F0; width: 90px; height: 90px; margin-top: 5px; padding-top: 10px;
 }
-#div-form, #div-form>input
+#div-form, .input-group
 {
   margin-top: 15px;
 }

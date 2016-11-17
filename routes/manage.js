@@ -8,7 +8,9 @@ var article = require('../servers/article.js');
 var user = require('../servers/user.js');
 var feature = require('../servers/feature.js');
 var discuss = require('../servers/discuss.js');
+var visitor = require('../servers/visitor.js');
 var utility = require('../utility/utility.js');
+
 
 router.get('/', function(req, res, next) {
 	if(req.session.loginstate == 'true')
@@ -46,6 +48,10 @@ router.get('/', function(req, res, next) {
 router.get('/', function(req, res) {
 	var params = req.query;
 	switch(params.action) {
+		case 'user-login':
+			res.end(JSON.stringify({err:false, result:result}));
+			break;
+
 		case 'user-range':		
 			console.log('执行get user-range');		
 			var range = {from: Number(params.from), count: Number(params.count)};
@@ -63,6 +69,17 @@ router.get('/', function(req, res) {
 			var fields = '*';
 			var condition = `type  = 'disc'`;
 			discuss.search(fields, condition, range, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'error'}));
+			});
+			break;
+
+		case 'visitor-range':
+			var range = {from: Number(params.from), count: Number(params.count)};
+			var fields = '*';
+			visitor.list(fields, range, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify({err:false, result:result}));
 				else
@@ -154,6 +171,16 @@ router.put('/', function(req, res) {
 			});
 			break;
 
+		case 'discuss-del':
+			var condition ='id = '+utility.escape(req.body.id);
+			discuss.del(condition, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'delete discuss error'}));
+			});
+			break;
+
 		case 'user-add':
 			var newUser = req.body.user;
 			console.log(JSON.stringify(newUser));
@@ -186,6 +213,17 @@ router.put('/', function(req, res) {
 					res.end(JSON.stringify({err:true, result:'delete user error'}));
 			});
 			break;
+
+		case 'visitor-del':
+			var condition = 'id = '+utility.escape(req.body.id);
+			visitor.del(condition, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'delete visitor error'}));
+			});
+			break;
+
 
 		default:
 			res.end(JSON.stringify({err:true, result:'undefined request action'}));

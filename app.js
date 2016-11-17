@@ -25,13 +25,15 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({secret: 'keyboard cat',
+app.use(session({
+  name:'token',
   domain: 'www.badtudou.com',
+  secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
   cookie:{
-    maxAge: 1000 * 60 * 60 * 24 * 30
-  }
+    maxAge: 1000 * 60 * 60 * 24 * 1,
+    secure: false },
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 

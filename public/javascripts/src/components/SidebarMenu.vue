@@ -30,6 +30,7 @@ export default {
  			 	{text:'文章', href:'', trigger:'articleCardListPageChange', icon:'fa-file'},
  			 	{text:'专题', href:'', trigger:'featureCardListPageChange', icon:'fa-briefcase'},
  			 	{text:'评论', href:'', trigger:'discussCardListPageChange', icon:'fa-commenting'},
+        {text:'访客', href:'', trigger:'visitorCardListPageChange', icon:'fa-handshake-o'},
  				{text:'系统', href:'', trigger:'', icon:'fa-cog'}
  			],
  			activeMenuItem: {text:'仪表盘'}

@@ -97,6 +97,14 @@ CREATE TABLE tb_user
 	state 'verify':审核, 'pass':通过,可以使用, 'unpass':未通过，被禁用
  */
 
+CREATE TABLE tb_visitor
+(
+	id INTEGER UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	token VARCHAR(128) NOT NULL,
+	timeVisited TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	ua  VARCHAR(256)
+)
+
 //系统:截止 2016/10/11 暂未创建
 CREATE TABLE tb_log
 (

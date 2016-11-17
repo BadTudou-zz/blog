@@ -13,7 +13,7 @@
   <Useredit v-show="currentToolbar == 'add'"></Useredit>
   <ul class="list-group" v-show="currentToolbar != 'add'">
       <li class="list-group-item" v-for="userItem in userList" style="height: 50px;">
-          <div class="col-lg-4">{{userItem.name}}</div>
+          <div class="col-lg-4"><a href="#">{{userItem.name}}</a></div>
           <div class="col-lg-3">
             <a href="#"><i class="fa fa-1x fa-user" aria-hidden="true"></i>{{userItem.nickname}}</a>
           </div>
@@ -21,7 +21,7 @@
             <a href="#"><i class="fa fa-1x fa-child" aria-hidden="true"></i>{{userItem.authority}}</a>
           </div>
           <div class="btn-group">
-              <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-1x fa-cog" aria-hidden="true"></i>操作</button>
+              <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-1x fa-cog" aria-hidden="true"></i></button>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">
                 	<i class="fa fa-1x fa-eye" aria-hidden="true"></i>
@@ -85,6 +85,8 @@ export default {
     },
   	delUser:function(name){
   		this.$store.dispatch('delUser', name);
+      this.$store.dispatch('userListPageChange', this.$store.state.userCurrentPage);
+
   	},
     editUser:function(user){
         this.$store.state.isUserUpdate = true;
