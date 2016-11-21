@@ -22,6 +22,17 @@ router.get('/', function(req, res) {
 			});
 			break;
 
+		case 'feature-list':
+			var range = null;
+			var fields = `*`;
+			feature.list(fields, range, (err, result)=> {
+				if(!err)
+					res.end(JSON.stringify({err:false, result:result}));
+				else
+					res.end(JSON.stringify({err:true, result:'get feature list error'}));
+			});
+			break;		
+
 		default:
 			res.end(JSON.stringify({err:true, result:'undefined request action'}));
 	}

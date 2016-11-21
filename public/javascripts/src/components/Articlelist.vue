@@ -101,8 +101,9 @@ export default {
       },
       add:function(){
         this.$store.state.isArticleUpdate = false;
+        this.$store.commit('getFeatureList');
         this.currentToolbar = 'add';
-        this.$store.dispatch('articleCardChange', null);
+        this.$store.dispatch('articleCardChange', { id:'', featureID:'', title:'', subtitle:'', link:'', author:'', introduction:'', coverLink:'', content:'', countRead:0,countShare:0, countDiscuss:0, labels:''});
       },
       del:function(){
         this.currentToolbar = 'del';

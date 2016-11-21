@@ -8251,11 +8251,12 @@
 	    articleSearchCurrentPage: 1,
 	    articleSearchText: '',
 	    articleCurrent: {
-	      id: '', featureID: '', title: '', subtitle: '', link: '',
-	      author: '', introduction: '', coverLink: '', content: '', countRead: 0,
+	      id: '', featureID: '', title: '', subtitle: '', link: "",
+	      author: '', introduction: '', coverLink: '', content: "", countRead: 0,
 	      countShare: 0, countDiscuss: 0, labels: ''
 	    },
 	    isArticleUpdate: false,
+	    featureList: '',
 	    featureCardList: '',
 	    featurePerPage: 6,
 	    featureCurrentPage: 1,
@@ -8324,6 +8325,9 @@
 	      console.log('页码' + page);
 	      context.commit('articleCardSearchPage', page);
 	    },
+	    addArticle: function addArticle(context, article) {
+	      context.commit('addArticle', article);
+	    },
 	    addArticleDiscuss: function addArticleDiscuss(context, discuss) {
 	      discuss.discussID = context.state.articleCurrent.id;
 	      context.commit('addArticleDiscuss', discuss);
@@ -8377,6 +8381,8 @@
 	  }), (0, _defineProperty3.default)(_actions, 'getBlogState', function getBlogState(context, days) {
 	    console.log('获取博客状态');
 	    context.commit('getBlogState', days);
+	  }), (0, _defineProperty3.default)(_actions, 'getFeatureList', function getFeatureList(context) {
+	    context.commit('getFeatureList');
 	  }), _actions),
 	  mutations: {
 	    parentNavItemChange: function parentNavItemChange(state, parentNavItem) {
@@ -8573,6 +8579,13 @@
 	        if (!data.err) state.msgType = 'success';
 	      });
 	    },
+	    addArticle: function addArticle(state, article) {
+	      _vue2.default.http.put('manage?action=article-add', { newArticle: article }).then(function (response) {
+	        var data = JSON.parse(response.body);
+	        console.log(response.body);
+	        if (!data.err) state.msgType = 'success';
+	      });
+	    },
 	    delArticle: function delArticle(state, articleId) {
 	      console.log('store delArticle' + articleId);
 	      _vue2.default.http.put('manage?action=article-del', { id: articleId }).then(function (response) {
@@ -8621,6 +8634,18 @@
 	          state.blogState[1].value = data.result.visitorCount;
 	          state.blogState[2].value = data.result.discussCount;
 	          console.log((0, _stringify2.default)(state.blogState));
+	        }
+	      });
+	    },
+	    getFeatureList: function getFeatureList(state) {
+	      _vue2.default.http.get('/feature?action=feature-list').then(function (response) {
+	        console.log('获取专题列表无限制');
+	        console.assert(state.DEBUG, response.body);
+	        var data = JSON.parse(response.body);
+	        if (!data.err && data.result.length) {
+	          state.featureList = data.result;
+	        } else {
+	          console.assert(state.DEBUG, '获取专题列表数据失败');
 	        }
 	      });
 	    }
@@ -14825,8 +14850,9 @@
 	    },
 	    add: function add() {
 	      this.$store.state.isArticleUpdate = false;
+	      this.$store.commit('getFeatureList');
 	      this.currentToolbar = 'add';
-	      this.$store.dispatch('articleCardChange', null);
+	      this.$store.dispatch('articleCardChange', { id: '', featureID: '', title: '', subtitle: '', link: '', author: '', introduction: '', coverLink: '', content: '', countRead: 0, countShare: 0, countDiscuss: 0, labels: '' });
 	    },
 	    del: function del() {
 	      this.currentToolbar = 'del';
@@ -14999,7 +15025,7 @@
 	    isUpdate: function isUpdate() {
 	      return this.$store.state.isArticleUpdate;
 	    },
-	    editUser: function editUser() {
+	    editArticle: function editArticle() {
 	      if (this.isUpdate()) {
 	        console.log('更新文章');
 	        this.$store.dispatch('updateArticle', this.newArticle);
@@ -15149,9 +15175,6 @@
 	      expression: "newArticle.featureID"
 	    }],
 	    staticClass: "form-control",
-	    attrs: {
-	      "id": "select-feature"
-	    },
 	    on: {
 	      "change": function($event) {
 	        newArticle.featureID = Array.prototype.filter.call($event.target.options, function(o) {
@@ -15304,7 +15327,7 @@
 	    },
 	    on: {
 	      "click": function($event) {
-	        done()
+	        editArticle()
 	      }
 	    }
 	  }, [_s(isUpdate() ? '更新' : '发布') + "文章"])])])])

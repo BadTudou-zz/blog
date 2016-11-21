@@ -118,11 +118,20 @@ router.get('/', function(req, res) {
 
 // 管理员提交信息
 router.put('/', function(req, res) {
+	if(req.session.loginstate != 'true')
+		return res.end(JSON.stringify({err:true, result:'non-privileged put action'}));
+
 	var params = req.query;
 	console.log('管理员请求提交信息'+params.action);
 	switch(params.action) {
 		case 'article-add':
 			var newArticle = req.body.newArticle;
+			var currentDate = new Date();
+			newArticle.license = '';
+			newArticle.timeRelease = currentDate.getFullYear()+'-'
+			+(currentDate.getMonth()+1)+'-'+currentDate.getDate()
+			+' '+currentDate.getHours()+':'+currentDate.getMinutes()
+			+':'+currentDate.getSeconds();
 			article.add(newArticle, (err, result)=> {
 				if(!err)
 					res.end(JSON.stringify({err:false, result:result.insertId}));

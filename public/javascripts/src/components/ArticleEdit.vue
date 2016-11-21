@@ -16,7 +16,7 @@
       <fieldset class="form-group">
         <div class="col-lg-4">
           <label for="select-feature">所属专题</label>
-          <select class="form-control" id="select-feature" v-model="newArticle.featureID">
+          <select class="form-control" v-model="newArticle.featureID">
             <option :value="featureItem.id" v-for="featureItem in featureList">{{featureItem.title}}</option>
           </select>
         </div>
@@ -59,7 +59,7 @@
       </fieldset>
 
       <div class="col-lg-3 col-lg-offset-9">
-        <button type="button"  class="btn btn-primary" @click="done()">{{isUpdate()?'更新':'发布'}}文章</button>
+        <button type="button"  class="btn btn-primary" @click="editArticle()">{{isUpdate()?'更新':'发布'}}文章</button>
         </div>
     </form>
 </div>
@@ -75,7 +75,7 @@ export default {
     isUpdate:function(){
       return this.$store.state.isArticleUpdate;
     },
-    editUser:function(){
+    editArticle:function(){
       if (this.isUpdate()){
         console.log('更新文章');
         this.$store.dispatch('updateArticle', this.newArticle);

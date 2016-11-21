@@ -20,6 +20,7 @@ Vue.use(VueResource);
       countShare:0, countDiscuss:0, labels:''
     },
     isArticleUpdate:false,
+    featureList:'',
     featureCardList:'',
     featurePerPage:6,
     featureCurrentPage:1,
@@ -99,6 +100,9 @@ Vue.use(VueResource);
   		console.log('页码'+page);
   		context.commit('articleCardSearchPage', page);
   	},
+    addArticle(context, article){
+      context.commit('addArticle', article);
+    },
     addArticleDiscuss(context, discuss){
       discuss.discussID = context.state.articleCurrent.id;
       context.commit('addArticleDiscuss', discuss);
@@ -178,6 +182,9 @@ Vue.use(VueResource);
     getBlogState(context, days){
       console.log('获取博客状态');
       context.commit('getBlogState', days);
+    },
+    getFeatureList(context){
+      context.commit('getFeatureList');
     }
   },
   mutations: {
@@ -396,6 +403,14 @@ Vue.use(VueResource);
           state.msgType = 'success';        
       });
     },
+    addArticle (state, article){
+      Vue.http.put(`manage?action=article-add`,{newArticle:article}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';
+      });
+    },
     delArticle (state, articleId){
       console.log('store delArticle'+articleId);
       Vue.http.put(`manage?action=article-del`,{id:articleId}).then((response)=>{
@@ -450,6 +465,19 @@ Vue.use(VueResource);
             state.blogState[1].value = data.result.visitorCount;
             state.blogState[2].value = data.result.discussCount;
             console.log(JSON.stringify(state.blogState));
+          }
+        });
+    },
+    getFeatureList(state){
+      Vue.http.get(`/feature?action=feature-list`).then((response) => 
+        {
+          console.log('获取专题列表无限制');
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err && data.result.length){
+            state.featureList = data.result;
+          }else{
+            console.assert(state.DEBUG, '获取专题列表数据失败');
           }
         });
     }
