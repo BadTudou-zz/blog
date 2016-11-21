@@ -25,7 +25,7 @@ export default {
 	data () {
  		return {
  			menu:[
- 				{text:'仪表盘', href:'', trigger:'', icon:'fa-tachometer'},
+ 				{text:'仪表盘', href:'', trigger:'getBlogState', icon:'fa-tachometer'},
  				{text:'用户', href:'', trigger:'userListPageChange', icon:'fa-child'},
  			 	{text:'文章', href:'', trigger:'articleCardListPageChange', icon:'fa-file'},
  			 	{text:'专题', href:'', trigger:'featureCardListPageChange', icon:'fa-briefcase'},

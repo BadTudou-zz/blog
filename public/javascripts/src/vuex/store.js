@@ -46,7 +46,7 @@ Vue.use(VueResource);
     msgText:'',
     user:'',
     loginState:false,
-    manageParentNavItem:{text:'用户'},
+    manageParentNavItem:{text:'仪表盘'},
     userList:'',
     userPerPage:6,
     userCurrentPage:1,
@@ -57,7 +57,12 @@ Vue.use(VueResource);
     isUserUpdate:false,
     visitorCardList:'',
     visitorPerPage:6,
-    visitorCurrentPage:1
+    visitorCurrentPage:1,
+    blogState:[
+        {icon:'fa-rss',title:'新订阅',value:'0', style:{color:'#006DE0'}},
+        {icon:'fa-users',title:'新访客',value:'0', style:{color:'#429AFE'}},
+        {icon:'fa-commenting',title:'新评论',value:'0', style:{color:'#03D1FF'}}
+    ]
   },
   actions:{
   	parentNavItemChange(context, parentNavItem)
@@ -131,6 +136,7 @@ Vue.use(VueResource);
     },
     login(context, user){
       context.commit('login', user);
+      context.commit('getBlogState', 1);
       if (!context.state.loginState)
         context.commit('showMessage',{type:'err', text:'登陆失败。'});
     },
@@ -168,6 +174,10 @@ Vue.use(VueResource);
     },
     delFeature(context, featureId){
       context.commit('delFeature', featureId);
+    },
+    getBlogState(context, days){
+      console.log('获取博客状态');
+      context.commit('getBlogState', days);
     }
   },
   mutations: {
@@ -428,6 +438,20 @@ Vue.use(VueResource);
         if(!data.err)
           state.msgType = 'success';
       });
+    },
+    getBlogState (state, days){
+      console.log('store getBlogState'+days);
+      Vue.http.get(`/manage?action=blog-state&days=${days}`).then((response) => 
+        {
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err){
+            console.log(data.result.visitorCount);
+            state.blogState[1].value = data.result.visitorCount;
+            state.blogState[2].value = data.result.discussCount;
+            console.log(JSON.stringify(state.blogState));
+          }
+        });
     }
   }
 });

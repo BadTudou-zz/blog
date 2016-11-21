@@ -4,6 +4,9 @@
 		<Sidebar></Sidebar>
 	</div>
 	<div class="col-lg-9">
+		<Dashboard></Dashboard>
+	</div>
+	<div class="col-lg-9">
 		<Userlist></Userlist>
 	</div>
 	<div class="col-lg-9">
@@ -23,6 +26,7 @@
 <script>
 import { mapState } from 'vuex';
 import Sidebar from './SidebarMenu.vue';
+import Dashboard from './Dashboard.vue';
 import Userlist from './Userlist.vue';
 import Articlelist from './Articlelist.vue';
 import Featurelist from './Featurelist.vue';
@@ -38,7 +42,7 @@ export default {
     	isShow: state => (state.parentNavItem.text == '管理') && (state.loginState)
   	}),
   	components:{
-  		Sidebar, Userlist, Articlelist, Featurelist, Discusslist,
+  		Sidebar, Dashboard, Userlist, Articlelist, Featurelist, Discusslist,
   		Visitorlist
   	}
 }

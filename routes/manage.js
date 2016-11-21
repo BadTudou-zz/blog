@@ -40,7 +40,8 @@ router.get('/', function(req, res, next) {
 			break;
 
 		default:
-			return res.sendFile(path.dirname(__dirname)+'/public/html/manage.html');
+			res.end(JSON.stringify({err:true, result:'undefined request action'}));
+			break;
 	}
 
 });
@@ -49,7 +50,7 @@ router.get('/', function(req, res) {
 	var params = req.query;
 	switch(params.action) {
 		case 'user-login':
-			res.end(JSON.stringify({err:false, result:result}));
+			res.end(JSON.stringify({err:false, result:true}));
 			break;
 
 		case 'user-range':		
@@ -87,8 +88,31 @@ router.get('/', function(req, res) {
 			});
 			break;
 
+		case 'blog-state':
+			var days = Number(params.days);
+			var timestamp = Date.parse(new Date()) - days * 24 * 60 * 60;
+			var dateBegin = new Date(timestamp);
+			var formatDate = ''+dateBegin.getFullYear()+'-'+(dateBegin.getMonth()+1)+'-'+dateBegin.getDate();
+			var range = null;
+			timestamp = timestamp / 1000;
+			visitor.search('id', `timeVisited >= '${formatDate}'`, range, (err, resultVisitor)=>{
+				if(!err)
+				{
+					discuss.search('id', `timeCreate >= '${formatDate}'`, range, (err, resultDiscuss)=>{
+						if(!err){
+							var result = {visitorCount:resultVisitor.length, discussCount:resultDiscuss.length};
+							res.end(JSON.stringify({err:false, result:result}));
+						}
+					});
+				}
+				else
+					res.end(JSON.stringify({err:true, result:'error'}));
+			});
+			break;
+
 		default:
-			return res.sendFile(path.dirname(__dirname)+'/public/html/manage.html');
+			res.end(JSON.stringify({err:true, result:'undefined request action'}));
+			break;
 	}
 });
 
@@ -226,7 +250,7 @@ router.put('/', function(req, res) {
 
 
 		default:
-			res.end(JSON.stringify({err:true, result:'undefined request action'}));
+			res.end(JSON.stringify({err:true, result:'undefined put action'}));
 			break;
 	}
 

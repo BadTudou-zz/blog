@@ -7,7 +7,7 @@
       </h4>
    		<h6 class="card-subtitle text-muted" :value="articleCardItem.subtitle"></h6>
   	</div>
-  	<a :href="'article?action=article-show&id='+articleCardItem.id">
+  	<a href="#">
         <img  alt="Card image" class="img-responsive" :title="articleCardItem.title + articleCardItem.subtitle" :src="articleCardItem.coverLink" style="height: 150px;">
     </a>
   	<div class="card-block">

@@ -3,8 +3,6 @@
   <div id="div-manage--discusslist--toolbar">
     <button class="btn btn-primary" type="submit" @click="all">
     全部&nbsp;<i class="fa fa-list" aria-hidden="true"></i></button>
-    <button class="btn btn-primary" type="submit" @click="add">
-    添加&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="btn btn-primary" type="submit" @click="del">
     删除&nbsp;<i class="fa fa-times" aria-hidden="true"></i></button>
     <button class="btn btn-primary" type="submit" @click="search">
@@ -75,10 +73,6 @@ export default {
   methods:{
     all:function(){
       this.currentToolbar = 'all';
-    },
-    add:function(){
-      this.currentToolbar = 'add';
-      this.$store.dispatch('discussCardChange', null);
     },
     del:function(){
       this.currentToolbar = 'del';
