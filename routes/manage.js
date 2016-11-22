@@ -4,6 +4,7 @@ var express = require('express');
 var session = require('express-session');
 var router = express.Router();
 var path = require('path');
+var md5 = require('md5');
 var article = require('../servers/article.js');
 var user = require('../servers/user.js');
 var feature = require('../servers/feature.js');
@@ -23,7 +24,7 @@ router.get('/', function(req, res, next) {
 			var fields = 'name';
 			var condition = {
 				name: params.name,
-				password: params.password
+				password: md5(params.password)
 			};
 			var conditionString = utility.obj2array(condition).join(' AND ');
 			var range = {from:0, count:1};
@@ -90,7 +91,7 @@ router.get('/', function(req, res) {
 
 		case 'blog-state':
 			var days = Number(params.days);
-			var timestamp = Date.parse(new Date()) - days * 24 * 60 * 60;
+			var timestamp = Date.parse(new Date()) - days * 24 * 60 * 60 * 60;
 			var dateBegin = new Date(timestamp);
 			var formatDate = ''+dateBegin.getFullYear()+'-'+(dateBegin.getMonth()+1)+'-'+dateBegin.getDate();
 			var range = null;
@@ -216,6 +217,7 @@ router.put('/', function(req, res) {
 
 		case 'user-add':
 			var newUser = req.body.user;
+			newUser.password = md5(newUser.password);
 			console.log(JSON.stringify(newUser));
 			user.add(newUser, (err, result)=> {
 				if(!err)

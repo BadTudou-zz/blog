@@ -122,7 +122,7 @@
 
 	var _Manage2 = _interopRequireDefault(_Manage);
 
-	var _Footer = __webpack_require__(162);
+	var _Footer = __webpack_require__(165);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -8251,8 +8251,8 @@
 	    articleSearchCurrentPage: 1,
 	    articleSearchText: '',
 	    articleCurrent: {
-	      id: '', featureID: '', title: '', subtitle: '', link: "",
-	      author: '', introduction: '', coverLink: '', content: "", countRead: 0,
+	      id: '', featureID: '', title: '', subtitle: '', link: '',
+	      author: '', introduction: '', coverLink: '', content: '', countRead: 0,
 	      countShare: 0, countDiscuss: 0, labels: ''
 	    },
 	    isArticleUpdate: false,
@@ -13459,7 +13459,7 @@
 	__vue_exports__ = __webpack_require__(80)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(161)
+	var __vue_template__ = __webpack_require__(164)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -13532,39 +13532,13 @@
 
 	var _Visitorlist2 = _interopRequireDefault(_Visitorlist);
 
+	var _System = __webpack_require__(161);
+
+	var _System2 = _interopRequireDefault(_System);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-
 	exports.default = {
-	  data: function data() {
-	    return {};
-	  },
-
 	  computed: (0, _vuex.mapState)({
 	    isShow: function isShow(state) {
 	      return state.parentNavItem.text == '管理' && state.loginState;
@@ -13572,9 +13546,36 @@
 	  }),
 	  components: {
 	    Sidebar: _SidebarMenu2.default, Dashboard: _Dashboard2.default, Userlist: _Userlist2.default, Articlelist: _Articlelist2.default, Featurelist: _Featurelist2.default, Discusslist: _Discusslist2.default,
-	    Visitorlist: _Visitorlist2.default
+	    Visitorlist: _Visitorlist2.default, System: _System2.default
 	  }
-	};
+	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 
 /***/ },
 /* 81 */
@@ -13808,21 +13809,33 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _vuex = __webpack_require__(2);
 
 	exports.default = {
-	    computed: (0, _vuex.mapState)({
-	        blogState: function blogState(state) {
-	            return state.blogState;
-	        },
-	        isShow: function isShow(state) {
-	            return state.parentNavItem.text == '管理' && state.manageParentNavItem.text == '仪表盘';
-	        }
-	    })
+	  computed: (0, _vuex.mapState)({
+	    blogState: function blogState(state) {
+	      return state.blogState;
+	    },
+	    isShow: function isShow(state) {
+	      return state.parentNavItem.text == '管理' && state.manageParentNavItem.text == '仪表盘';
+	    }
+	  }),
+	  methods: {
+	    nearestDays: function nearestDays(days) {
+	      this.$store.dispatch('getBlogState', days);
+	    }
+	  }
 	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 	//
 	//
 	//
@@ -13895,7 +13908,46 @@
 	        "style": "margin-bottom: 10px; color:#AFBDCD; font-size:%150;"
 	      }
 	    }, ["\n  \t\t\t\t\t\t" + _s(stateItem.title) + "\n  \t\t\t\t\t"])])])])
-	  })])])
+	  })]), " ", _h('div', {
+	    staticClass: "col-lg-offset-6 col-lg-6"
+	  }, [_h('div', {
+	    staticClass: "btn-group",
+	    attrs: {
+	      "role": "group btn-group-sm",
+	      "aria-label": "Basic example",
+	      "style": "font-size:%80"
+	    }
+	  }, [_h('button', {
+	    staticClass: "btn btn-secondary",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": function($event) {
+	        nearestDays(7)
+	      }
+	    }
+	  }, ["近1周"]), " ", _h('button', {
+	    staticClass: "btn btn-secondary",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": function($event) {
+	        nearestDays(30)
+	      }
+	    }
+	  }, ["近1月"]), " ", _h('button', {
+	    staticClass: "btn btn-secondary",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": function($event) {
+	        nearestDays(365)
+	      }
+	    }
+	  }, ["近1年"])])])])
 	}},staticRenderFns: []}
 	if (false) {
 	  module.hot.accept()
@@ -17948,6 +18000,517 @@
 /* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __vue_exports__, __vue_options__
+
+	/* script */
+	__vue_exports__ = __webpack_require__(162)
+
+	/* template */
+	var __vue_template__ = __webpack_require__(163)
+	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+	if (
+	  typeof __vue_exports__.default === "object" ||
+	  typeof __vue_exports__.default === "function"
+	) {
+	if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+	__vue_options__ = __vue_exports__ = __vue_exports__.default
+	}
+	if (typeof __vue_options__ === "function") {
+	  __vue_options__ = __vue_options__.options
+	}
+	__vue_options__.__file = "/Users/badtudou/Docs/Sources/Git/blog/public/javascripts/src/components/System.vue"
+	__vue_options__.render = __vue_template__.render
+	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+
+	/* hot reload */
+	if (false) {(function () {
+	  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  module.hot.accept()
+	  if (!module.hot.data) {
+	    hotAPI.createRecord("data-v-326c7d36", __vue_options__)
+	  } else {
+	    hotAPI.reload("data-v-326c7d36", __vue_options__)
+	  }
+	})()}
+	if (__vue_options__.functional) {console.error("[vue-loader] System.vue: functional components are not supported and should be defined in plain js files using render functions.")}
+
+	module.exports = __vue_exports__
+
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _vuex = __webpack_require__(2);
+
+	exports.default = {
+	    data: function data() {
+	        return { system: '' };
+	    },
+
+	    computed: (0, _vuex.mapState)({
+	        isShow: function isShow(state) {
+	            return state.parentNavItem.text == '管理' && state.manageParentNavItem.text == '系统';
+	        }
+	    })
+	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports={render:function (){with(this) {
+	  return _h('div', {
+	    directives: [{
+	      name: "show",
+	      rawName: "v-show",
+	      value: (isShow),
+	      expression: "isShow"
+	    }],
+	    attrs: {
+	      "id": "div-manage--system"
+	    }
+	  }, [_m(0), " ", " ", _h('div', {
+	    staticClass: "tab-content"
+	  }, [_h('div', {
+	    staticClass: "tab-pane active",
+	    attrs: {
+	      "role": "tabpanel",
+	      "id": "home"
+	    }
+	  }, [_h('form', {
+	    staticClass: "col-lg-12"
+	  }, [_h('fieldset', {
+	    staticClass: "form-group col-lg-8"
+	  }, [_m(1), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (system.name),
+	      expression: "system.name"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "网站标题"
+	    },
+	    domProps: {
+	      "value": _s(system.name)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        system.name = $event.target.value
+	      }
+	    }
+	  }), " ", _m(2), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (system.domain),
+	      expression: "system.domain"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "域名"
+	    },
+	    domProps: {
+	      "value": _s(system.domain)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        system.domain = $event.target.value
+	      }
+	    }
+	  }), " ", _m(3), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (system.icp),
+	      expression: "system.icp"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "ICP备案号"
+	    },
+	    domProps: {
+	      "value": _s(system.icp)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        system.icp = $event.target.value
+	      }
+	    }
+	  })])]), " ", _m(4)]), " ", _h('div', {
+	    staticClass: "tab-pane",
+	    attrs: {
+	      "role": "tabpanel",
+	      "id": "profile"
+	    }
+	  }, [_h('form', {
+	    staticClass: "col-lg-12"
+	  }, [_h('fieldset', {
+	    staticClass: "form-group col-lg-8"
+	  }, [_m(5), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (system.icp),
+	      expression: "system.icp"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "保存位置"
+	    },
+	    domProps: {
+	      "value": _s(system.icp)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        system.icp = $event.target.value
+	      }
+	    }
+	  }), " ", _m(6), " ", _h('select', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (system.css),
+	      expression: "system.css"
+	    }],
+	    staticClass: "form-control",
+	    on: {
+	      "change": function($event) {
+	        system.css = Array.prototype.filter.call($event.target.options, function(o) {
+	          return o.selected
+	        }).map(function(o) {
+	          return "_value" in o ? o._value : o.value
+	        })[0]
+	      }
+	    }
+	  }, [_m(7), " ", _m(8), " ", _m(9)])])]), " ", _m(10)]), " ", _h('div', {
+	    staticClass: "tab-pane",
+	    attrs: {
+	      "role": "tabpanel",
+	      "id": "messages"
+	    }
+	  }, [_h('form', {
+	    staticClass: "col-lg-12"
+	  }, [_h('fieldset', {
+	    staticClass: "form-group col-lg-8"
+	  }, [_m(11), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (system.nickname),
+	      expression: "system.nickname"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "昵称"
+	    },
+	    domProps: {
+	      "value": _s(system.nickname)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        system.nickname = $event.target.value
+	      }
+	    }
+	  }), " ", _m(12), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (system.j),
+	      expression: "system.j"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "简介"
+	    },
+	    domProps: {
+	      "value": _s(system.j)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        system.j = $event.target.value
+	      }
+	    }
+	  }), " ", _m(13), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (system.j),
+	      expression: "system.j"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "个人说明"
+	    },
+	    domProps: {
+	      "value": _s(system.j)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        system.j = $event.target.value
+	      }
+	    }
+	  })])]), " ", _m(14)]), " ", _m(15)])])
+	}},staticRenderFns: [function (){with(this) {
+	  return _h('ul', {
+	    staticClass: "nav nav-tabs",
+	    attrs: {
+	      "role": "tablist"
+	    }
+	  }, [_h('li', {
+	    staticClass: "nav-item"
+	  }, [_h('a', {
+	    staticClass: "nav-link active",
+	    attrs: {
+	      "href": "#home",
+	      "role": "tab",
+	      "data-toggle": "tab"
+	    }
+	  }, [_h('i', {
+	    staticClass: "fa fa-sitemap",
+	    attrs: {
+	      "aria-hidden": "true"
+	    }
+	  }), "网站"])]), " ", _h('li', {
+	    staticClass: "nav-item"
+	  }, [_h('a', {
+	    staticClass: "nav-link",
+	    attrs: {
+	      "href": "#profile",
+	      "role": "tab",
+	      "data-toggle": "tab"
+	    }
+	  }, [_h('i', {
+	    staticClass: "fa fa-file",
+	    attrs: {
+	      "aria-hidden": "true"
+	    }
+	  }), "文章"])]), " ", _h('li', {
+	    staticClass: "nav-item"
+	  }, [_h('a', {
+	    staticClass: "nav-link",
+	    attrs: {
+	      "href": "#messages",
+	      "role": "tab",
+	      "data-toggle": "tab"
+	    }
+	  }, [_h('i', {
+	    staticClass: "fa fa-user",
+	    attrs: {
+	      "aria-hidden": "true"
+	    }
+	  }), "个人"])]), " ", _h('li', {
+	    staticClass: "nav-item"
+	  }, [_h('a', {
+	    staticClass: "nav-link",
+	    attrs: {
+	      "href": "#settings",
+	      "role": "tab",
+	      "data-toggle": "tab"
+	    }
+	  }, [_h('i', {
+	    staticClass: "fa fa-database",
+	    attrs: {
+	      "aria-hidden": "true"
+	    }
+	  }), "数据库"])])])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["网站标题"])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["域名"])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["ICP备案号"])
+	}},function (){with(this) {
+	  return _h('div', {
+	    staticClass: "col-lg-offset-6"
+	  }, [_h('button', {
+	    staticClass: "btn btn-primary",
+	    attrs: {
+	      "type": "button"
+	    }
+	  }, ["保存"])])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["保存位置"])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["CSS文件"])
+	}},function (){with(this) {
+	  return _h('option', {
+	    attrs: {
+	      "value": "website"
+	    }
+	  }, ["简洁风"])
+	}},function (){with(this) {
+	  return _h('option', {
+	    attrs: {
+	      "value": "feature"
+	    }
+	  }, ["艳丽"])
+	}},function (){with(this) {
+	  return _h('option', {
+	    attrs: {
+	      "value": "article"
+	    }
+	  }, ["黑白"])
+	}},function (){with(this) {
+	  return _h('div', {
+	    staticClass: "col-lg-offset-6"
+	  }, [_h('button', {
+	    staticClass: "btn btn-primary",
+	    attrs: {
+	      "type": "button"
+	    }
+	  }, ["保存"])])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["昵称"])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["简介"])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["个人说明"])
+	}},function (){with(this) {
+	  return _h('div', {
+	    staticClass: "col-lg-offset-6"
+	  }, [_h('button', {
+	    staticClass: "btn btn-primary",
+	    attrs: {
+	      "type": "button"
+	    }
+	  }, ["保存"])])
+	}},function (){with(this) {
+	  return _h('div', {
+	    staticClass: "tab-pane",
+	    attrs: {
+	      "role": "tabpanel",
+	      "id": "settings"
+	    }
+	  }, [_h('button', {
+	    staticClass: "btn btn-primary",
+	    attrs: {
+	      "type": "button"
+	    }
+	  }, ["Primary"])])
+	}}]}
+	if (false) {
+	  module.hot.accept()
+	  if (module.hot.data) {
+	     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-326c7d36", module.exports)
+	  }
+	}
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
 	module.exports={render:function (){with(this) {
 	  return _h('div', {
 	    directives: [{
@@ -17974,7 +18537,9 @@
 	    staticClass: "col-lg-9"
 	  }, [_h('Discusslist')]), " ", _h('div', {
 	    staticClass: "col-lg-9"
-	  }, [_h('Visitorlist')])])
+	  }, [_h('Visitorlist')]), " ", _h('div', {
+	    staticClass: "col-lg-9"
+	  }, [_h('System')])])
 	}},staticRenderFns: []}
 	if (false) {
 	  module.hot.accept()
@@ -17984,16 +18549,16 @@
 	}
 
 /***/ },
-/* 162 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(163)
+	__webpack_require__(166)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(165)
+	var __vue_template__ = __webpack_require__(168)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -18027,13 +18592,13 @@
 
 
 /***/ },
-/* 163 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(164);
+	var content = __webpack_require__(167);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(16)(content, {});
@@ -18053,7 +18618,7 @@
 	}
 
 /***/ },
-/* 164 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(15)();
@@ -18067,7 +18632,7 @@
 
 
 /***/ },
-/* 165 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {

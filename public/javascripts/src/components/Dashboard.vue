@@ -17,6 +17,13 @@
   			</div>
   		</div>
 	</div>
+  <div class="col-lg-offset-6 col-lg-6">
+    <div class="btn-group" role="group btn-group-sm" aria-label="Basic example" style="font-size:%80">
+      <button type="button" class="btn btn-secondary" @click="nearestDays(7)">近1周</button>
+      <button type="button" class="btn btn-secondary" @click="nearestDays(30)">近1月</button>
+      <button type="button" class="btn btn-secondary" @click="nearestDays(365)">近1年</button>
+    </div>
+  </div>
 </div>
 </template>
 <script>
@@ -25,6 +32,11 @@ export default {
   computed: mapState({
       blogState: state => state.blogState,
       isShow: state=> (state.parentNavItem.text == '管理') && (state.manageParentNavItem.text == '仪表盘'),
-  })
+  }),
+  methods:{
+    nearestDays:function(days){
+      this.$store.dispatch('getBlogState', days);
+    }
+  }
 }
 </script>

@@ -21,6 +21,9 @@
 	<div class="col-lg-9">
 		<Visitorlist></Visitorlist>
 	</div>
+	<div class="col-lg-9">
+		<System></System>
+	</div>
 </div>
 </template>
 <script>
@@ -32,18 +35,14 @@ import Articlelist from './Articlelist.vue';
 import Featurelist from './Featurelist.vue';
 import Discusslist from './Discusslist.vue';
 import Visitorlist from './Visitorlist.vue';
+import System 	   from './System.vue';
 export default {
-	data () {
- 		return {
- 			
- 		}
- 	},
  	computed: mapState({
     	isShow: state => (state.parentNavItem.text == '管理') && (state.loginState)
   	}),
   	components:{
   		Sidebar, Dashboard, Userlist, Articlelist, Featurelist, Discusslist,
-  		Visitorlist
+  		Visitorlist, System
   	}
 }
 </script>
