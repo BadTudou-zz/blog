@@ -63,7 +63,23 @@ Vue.use(VueResource);
         {icon:'fa-rss',title:'新订阅',value:'0', style:{color:'#006DE0'}},
         {icon:'fa-users',title:'新访客',value:'0', style:{color:'#429AFE'}},
         {icon:'fa-commenting',title:'新评论',value:'0', style:{color:'#03D1FF'}}
-    ]
+    ],
+    conf:{
+      website:{
+        domain:'BadTudou',
+        title:'杜小豆的编程小道',
+        ICP:''
+      },
+      master:{
+        nickname:"杜小豆",
+        summary:"你猜啊",
+        instructionPartOne:"介绍",
+        instructionPartTwo:"",
+        weibo:"http://weibo.com/badtudou",
+        github:"https://github.com/BadTudou",
+        zhihu:"https://zhuanlan.zhihu.com/DuXiaoDou"
+      }
+    }
   },
   actions:{
   	parentNavItemChange(context, parentNavItem)
@@ -185,6 +201,18 @@ Vue.use(VueResource);
     },
     getFeatureList(context){
       context.commit('getFeatureList');
+    },
+    getWetsiteConf(context){
+      context.commit('getWetsiteConf');
+    },
+    setWebsiteConf(context, conf){
+      context.commit('setWebsiteConf', conf);
+    },
+    setMasterConf(context, conf){
+      context.commit('setMasterConf', conf);
+    },
+    getMasterConf(context){
+      context.commit('getMasterConf');
     }
   },
   mutations: {
@@ -480,6 +508,52 @@ Vue.use(VueResource);
             console.assert(state.DEBUG, '获取专题列表数据失败');
           }
         });
+    },
+    getWetsiteConf(state){
+      Vue.http.get(`/manage?action=conf-website`).then((response) => 
+        {
+          console.log('获取网站配置数据');
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err){
+            state.conf.website = data.result;
+            console.log(state.conf.website);
+          }else{
+            console.assert(state.DEBUG, '获取网站配置数据失败');
+          }
+        });
+    },
+    getMasterConf(state){
+      Vue.http.get(`/manage?action=conf-master`).then((response) => 
+        {
+          console.log('获取博主数据');
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err){
+            state.conf.master = data.result;
+            console.log(state.conf.master);
+          }else{
+            console.assert(state.DEBUG, '获取博主配置数据失败');
+          }
+        });
+    },
+    setWebsiteConf(state, conf){
+      Vue.http.put(`manage?action=conf-website`,{conf:conf}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.conf.website = conf;
+          state.msgType = 'success';
+      });
+    },
+    setMasterConf(state, conf){
+      Vue.http.put(`manage?action=conf-master`,{conf:conf}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.conf.master = conf;
+          state.msgType = 'success';
+      });
     }
   }
 });

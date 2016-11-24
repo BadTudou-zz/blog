@@ -15,10 +15,10 @@
 }
 </style>
 <script>
+import { mapState } from 'vuex';
 export default {
  	data () {
  		return {
- 			title: '杜小豆的编程小道',
  			menu: [
  				{link:'#article',	text:'文章'},
  				{link:'#feature',	text:'专题'},
@@ -31,6 +31,9 @@ export default {
  			}
  		}			
  	},
+  	computed: mapState({
+      title: state=> state.conf.website.title,
+   	}),
  	methods:
  	{
  		changeItem: function(e){

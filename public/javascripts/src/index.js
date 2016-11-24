@@ -36,6 +36,8 @@ var vm = new Vue({
   	}
   },
   created: function(){
-	this.$store.dispatch('articleCardListPageChange', this.$store.state.articleCurrentPage);
+   this.$store.dispatch('getWetsiteConf');
+   this.$store.dispatch('getMasterConf');
+	 this.$store.dispatch('articleCardListPageChange', this.$store.state.articleCurrentPage);
   }
 });

@@ -2,6 +2,7 @@
 
 var express = require('express');
 var session = require('express-session');
+var conf = require('../conf/conf.js');
 var router = express.Router();
 var path = require('path');
 var md5 = require('md5');
@@ -38,6 +39,14 @@ router.get('/', function(req, res, next) {
 				}
 
 			});
+			break;
+
+		case 'conf-website':
+			res.end(JSON.stringify({err:false, result:conf.website}));
+			break;
+
+		case 'conf-master':
+			res.end(JSON.stringify({err:false, result:conf.master}));
 			break;
 
 		default:
@@ -109,6 +118,14 @@ router.get('/', function(req, res) {
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
 			});
+			break;
+
+		case 'conf-website':
+			res.end(JSON.stringify({err:false, result:conf.website}));
+			break;
+
+		case 'conf-master':
+			res.end(JSON.stringify({err:false, result:conf.master}));
 			break;
 
 		default:
@@ -257,6 +274,17 @@ router.put('/', function(req, res) {
 				else
 					res.end(JSON.stringify({err:true, result:'delete visitor error'}));
 			});
+			break;
+
+		case 'conf-website':
+			conf.website = req.body.conf;
+			res.end(JSON.stringify({err:false, result:'success'}));
+			break;
+
+		case 'conf-master':
+			console.log('博主'+JSON.stringify(req.body.conf));
+			conf.master = req.body.conf;
+			res.end(JSON.stringify({err:false, result:'success'}));
 			break;
 
 

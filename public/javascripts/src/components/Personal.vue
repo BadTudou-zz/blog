@@ -6,31 +6,31 @@
        	</div>
       	<img id="img-headProtrait" src="images/system/head-protrait.jpg" alt="Card image"  class="img-circle img-thumbnail img-responsive center-block" >
         <div class="card-block" style="padding: 5px">
-            <h4 class="card-title text-center">杜小豆</h4>
-            <h6 class="card-subtitle text-muted text-center">IT男,程序猿,技术型工作者.</h6>
+            <h4 class="card-title text-center">{{master.nickname}}</h4>
+            <h6 class="card-subtitle text-muted text-center">{{master.summary}}</h6>
         </div>
      
         <div id="div-intro--text1" class="card-block">
             <p class="card-text">
-               一个农民的后代,不了解乡土,也不懂得城市.
+               {{master.instructionPartOne}}
             </p>
         </div>
 
         <div id="div-intro--text2" class="card-block">
            <p class="card-text">
-             我有一个脑袋,装载思想、未来与梦想.
+             {{master.instructionPartTwo}}
            </p>
         </div>
 
         <div id="div-intro--contact" class="card-block">
            <div class="col-lg-4">
-                <a href="http://weibo.com/badtudou" title="WeiBo"><i class="fa fa-2x fa-weibo"aria-hidden="true"></i></a><br>微博
+                <a :href="master.weibo" title="WeiBo"><i class="fa fa-2x fa-weibo"aria-hidden="true"></i></a><br>微博
            </div>
            <div class="col-lg-4">
-             	<a href="https://github.com/BadTudou" title="GitHub"><i class="fa fa-2x fa-github" aria-hidden="true"></i></a><br>Git
+             	<a :href="master.github" title="GitHub"><i class="fa fa-2x fa-github" aria-hidden="true"></i></a><br>Git
            </div>
            <div class="col-lg-4">
-             	<a href="https://zhuanlan.zhihu.com/DuXiaoDou" title="知乎@杜小豆"><i class="fa fa-2x fa-rocket" aria-hidden="true"></i></a><br>知乎
+             	<a :href="master.zhihu" title="知乎"><i class="fa fa-2x fa-rocket" aria-hidden="true"></i></a><br>知乎
            	</div>
         </div>
     </div>  
@@ -54,3 +54,11 @@
 	padding: 5px; font-size: 80%;	
 }
 </style>
+<script>
+import { mapState } from 'vuex';
+export default {
+  computed: mapState({
+      master: state=> state.conf.master
+   })
+}
+</script>
