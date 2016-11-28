@@ -1,7 +1,7 @@
 var conf = require('../conf/conf.js');
 var utility = require('../utility/utility.js');
 var database = require('../servers/database.js');
-var fs = require('fs');
+const fs = require('fs');
 var path = require('path');
 var markdown = require('markdown').markdown;
 var discuss = require('../servers/discuss.js');
@@ -105,7 +105,7 @@ var getDiscuss = function getDiscuss(articleID, callback){
 var rendertoHTML = function renderMD(article, callback){
 	var rootPath = path.dirname(__dirname);
 	var articleConf = conf.article;
-	var htmlpath = rootPath+articleConf.storePath+article.link+'.html';
+	var htmlpath = rootPath+articleConf.storePath+'/'+article.link+'.html';
 	var mdhtml = markdown.toHTML(article.content);
 	var titlehtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+article.title+article.subtitle;
 	var linkhtml = '</title><link rel="stylesheet" type="text/css" href="stylesheets/'+articleConf.cssFile+'"></head><body>';

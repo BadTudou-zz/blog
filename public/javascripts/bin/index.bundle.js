@@ -8295,6 +8295,7 @@
 	    visitorPerPage: 6,
 	    visitorCurrentPage: 1,
 	    blogState: [{ icon: 'fa-rss', title: '新订阅', value: '0', style: { color: '#006DE0' } }, { icon: 'fa-users', title: '新访客', value: '0', style: { color: '#429AFE' } }, { icon: 'fa-commenting', title: '新评论', value: '0', style: { color: '#03D1FF' } }],
+	    backupDatabaseList: '',
 	    conf: {
 	      website: {
 	        domain: 'BadTudou',
@@ -8317,6 +8318,7 @@
 	      },
 	      database: {
 	        storePath: '',
+	        autoBackup: false,
 	        interval: ''
 	      },
 	      articleCssList: ''
@@ -8429,8 +8431,12 @@
 	    context.commit('setDatabaseConf', conf);
 	  }), (0, _defineProperty3.default)(_actions, 'getArticleCssList', function getArticleCssList(context) {
 	    context.commit('getArticleCssList');
-	  }), (0, _defineProperty3.default)(_actions, 'backupDatabase', function backupDatabase(context) {
-	    context.commit('backupDatabase');
+	  }), (0, _defineProperty3.default)(_actions, 'addBackup', function addBackup(context) {
+	    context.commit('addBackup');
+	  }), (0, _defineProperty3.default)(_actions, 'getBackupDatabaseList', function getBackupDatabaseList(context) {
+	    context.commit('getBackupDatabaseList');
+	  }), (0, _defineProperty3.default)(_actions, 'delBackup', function delBackup(context, databaseFile) {
+	    context.commit('delBackup', databaseFile);
 	  }), _actions),
 	  mutations: {
 	    parentNavItemChange: function parentNavItemChange(state, parentNavItem) {
@@ -8794,12 +8800,32 @@
 	        state.msgType = 'success';
 	      });
 	    },
-	    backupDatabase: function backupDatabase(state) {
-	      _vue2.default.http.put('manage?action=backup-database').then(function (response) {
+	    addBackup: function addBackup(state) {
+	      _vue2.default.http.put('manage?action=backup-add').then(function (response) {
 	        var data = JSON.parse(response.body);
 	        console.log(response.body);
 	        if (!data.err) console.log('备份成功');
 	        state.msgType = 'success';
+	      });
+	    },
+	    getBackupDatabaseList: function getBackupDatabaseList(state) {
+	      _vue2.default.http.get('/manage?action=backup-list').then(function (response) {
+	        console.log('获取备份数据库列表');
+	        console.assert(state.DEBUG, response.body);
+	        var data = JSON.parse(response.body);
+	        if (!data.err) {
+	          state.backupDatabaseList = data.result;
+	        } else {
+	          //state.backupDatabaseList = ['2016-11-28 21:30:20.zip', '2016-10-28 21:30:20.zip'];
+	          console.assert(state.DEBUG, '获取备份数据库列表数据失败');
+	        }
+	      });
+	    },
+	    delBackup: function delBackup(state, databaseFile) {
+	      _vue2.default.http.put('manage?action=backup-del', { database: databaseFile }).then(function (response) {
+	        var data = JSON.parse(response.body);
+	        console.log(response.body);
+	        if (!data.err) state.msgType = 'success';
 	      });
 	    }
 	  }
@@ -18299,7 +18325,13 @@
 	  value: true
 	});
 
+	var _stringify = __webpack_require__(4);
+
+	var _stringify2 = _interopRequireDefault(_stringify);
+
 	var _vuex = __webpack_require__(2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
 	  computed: (0, _vuex.mapState)({
@@ -18320,6 +18352,9 @@
 	    },
 	    articleCssList: function articleCssList(state) {
 	      return state.conf.articleCssList;
+	    },
+	    backupDatabaseList: function backupDatabaseList(state) {
+	      return state.backupDatabaseList;
 	    }
 	  }),
 	  methods: {
@@ -18330,9 +18365,11 @@
 	    },
 	    getDatabaseConf: function getDatabaseConf() {
 	      this.$store.dispatch('getDatabaseConf');
+	      this.$store.dispatch('getBackupDatabaseList');
 	    },
-	    backupDatabase: function backupDatabase() {
-	      this.$store.dispatch('backupDatabase');
+	    addBackup: function addBackup() {
+	      this.$store.dispatch('addBackup');
+	      this.$store.dispatch('getBackupDatabaseList');
 	    },
 	    setWebsiteConf: function setWebsiteConf() {
 	      this.$store.dispatch('setWebsiteConf', this.website);
@@ -18342,9 +18379,49 @@
 	    },
 	    setArticleConf: function setArticleConf() {
 	      this.$store.dispatch('setArticleConf', this.article);
+	    },
+	    setDatabaseConf: function setDatabaseConf() {
+	      console.log((0, _stringify2.default)(this.database));
+	    },
+	    delBackup: function delBackup(file) {
+	      this.$store.dispatch('delBackup', file);
+	      this.$store.dispatch('getBackupDatabaseList');
 	    }
 	  }
 	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 	//
 	//
 	//
@@ -18833,7 +18910,54 @@
 	        database.storePath = $event.target.value
 	      }
 	    }
-	  }), " ", _m(17), " ", _h('input', {
+	  }), " ", _m(17), " ", _h('div', [_h('label', {
+	    staticClass: "switch-light switch-ios ",
+	    attrs: {
+	      "style": "width: 100px"
+	    }
+	  }, [_h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (database.autoBackup),
+	      expression: "database.autoBackup"
+	    }],
+	    attrs: {
+	      "id": "ck-autoSave",
+	      "type": "checkbox"
+	    },
+	    domProps: {
+	      "checked": Array.isArray(database.autoBackup) ? _i(database.autoBackup, null) > -1 : _q(database.autoBackup, true)
+	    },
+	    on: {
+	      "change": function($event) {
+	        var $$a = database.autoBackup,
+	          $$el = $event.target,
+	          $$c = $$el.checked ? (true) : (false);
+	        if (Array.isArray($$a)) {
+	          var $$v = null,
+	            $$i = _i($$a, $$v);
+	          if ($$c) {
+	            $$i < 0 && (database.autoBackup = $$a.concat($$v))
+	          } else {
+	            $$i > -1 && (database.autoBackup = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+	          }
+	        } else {
+	          database.autoBackup = $$c
+	        }
+	      }
+	    }
+	  }), " ", _m(18)])])]), " ", _h('fieldset', {
+	    staticClass: "form-group col-lg-6",
+	    attrs: {
+	      "style": "margin-top:-15px;"
+	    }
+	  }, [_m(19), " ", _h('div', {
+	    staticClass: "input-group",
+	    attrs: {
+	      "style": "margin-top:0px;"
+	    }
+	  }, [_h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18843,7 +18967,8 @@
 	    staticClass: "form-control",
 	    attrs: {
 	      "type": "text",
-	      "placeholder": "备份间隔"
+	      "disabled": !database.autoBackup,
+	      "placeholder": "备份频率"
 	    },
 	    domProps: {
 	      "value": _s(database.interval)
@@ -18854,17 +18979,68 @@
 	        database.interval = $event.target.value
 	      }
 	    }
-	  })])]), " ", _h('div', {
-	    staticClass: "col-lg-offset-6"
+	  }), " ", _m(20)])]), " ", _h('fieldset', {
+	    staticClass: "col-lg-6"
+	  }, [_h('div', {
+	    attrs: {
+	      "style": "margin-top:10px;"
+	    }
 	  }, [_h('button', {
 	    staticClass: "btn btn-primary",
 	    attrs: {
 	      "type": "button"
 	    },
 	    on: {
-	      "click": backupDatabase
+	      "click": addBackup
 	    }
-	  }, ["立即备份"])])])])])
+	  }, ["立即备份"])])])]), " ", _h('div', {
+	    staticClass: "col-lg-9"
+	  }, [_h('ul', {
+	    staticClass: "list-group"
+	  }, [_l((backupDatabaseList), function(backupDatabaseItem) {
+	    return _h('li', {
+	      staticClass: "list-group-item",
+	      attrs: {
+	        "style": "height: 40px;"
+	      }
+	    }, [_h('div', {
+	      staticClass: "col-lg-7"
+	    }, [_s(backupDatabaseItem)]), " ", _h('div', {
+	      staticClass: "col-lg-2 col-lg-offset-1"
+	    }, [_h('button', {
+	      staticClass: "btn btn-primary btn-sm",
+	      attrs: {
+	        "type": "button"
+	      },
+	      on: {
+	        "click": backupDatabase
+	      }
+	    }, ["下载"])]), " ", _h('div', {
+	      staticClass: "col-lg-2"
+	    }, [_h('button', {
+	      staticClass: "btn btn-primary btn-sm",
+	      attrs: {
+	        "type": "button"
+	      },
+	      on: {
+	        "click": function($event) {
+	          delBackup(backupDatabaseItem)
+	        }
+	      }
+	    }, ["删除"])])])
+	  })])]), " ", _h('div', {
+	    staticClass: "col-lg-6"
+	  }, ["\n           共" + _s(backupDatabaseList.length) + "个备份\n        "]), " ", _h('div', {
+	    staticClass: "col-lg-6 col-lg-offset-6"
+	  }, [_h('button', {
+	    staticClass: "btn btn-primary",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": setDatabaseConf
+	    }
+	  }, ["保存"])])])])])
 	}},staticRenderFns: [function (){with(this) {
 	  return _h('li', {
 	    staticClass: "nav-item"
@@ -18981,7 +19157,17 @@
 	}},function (){with(this) {
 	  return _h('small', {
 	    staticClass: "text-muted"
-	  }, ["备份间隔"])
+	  }, ["自动备份"])
+	}},function (){with(this) {
+	  return _h('span', [_h('span', ["关闭"]), " ", _h('span', ["开启"]), " ", _h('a', [" "])])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["备份频率"])
+	}},function (){with(this) {
+	  return _h('span', {
+	    staticClass: "input-group-addon"
+	  }, ["分钟"])
 	}}]}
 	if (false) {
 	  module.hot.accept()

@@ -79,12 +79,45 @@
           <fieldset class="form-group col-lg-8">
             <small class="text-muted">备份位置</small>
             <input type="text" class="form-control" placeholder="备份位置" v-model="database.storePath">
-            <small class="text-muted">备份间隔</small>
-            <input type="text" class="form-control" placeholder="备份间隔" v-model="database.interval">
+            <small class="text-muted">自动备份</small>
+            <div>
+              <label class="switch-light switch-ios " style="width: 100px">
+              <input id="ck-autoSave" type="checkbox"  v-model="database.autoBackup">
+              <span>
+                <span>关闭</span>
+                <span>开启</span>
+                <a>&nbsp;</a>
+              </span>
+              </label>
+            </div>
+          </fieldset>
+          <fieldset class="form-group col-lg-6" style="margin-top:-15px;">
+            <small class="text-muted">备份频率</small>
+            <div class="input-group" style="margin-top:0px;">
+              <input type="text" class="form-control" :disabled="!database.autoBackup" placeholder="备份频率" v-model="database.interval">
+              <span class="input-group-addon">分钟</span>
+            </div>
+          </fieldset>
+          <fieldset class="col-lg-6">
+            <div style="margin-top:10px;">
+              <button type="button" class="btn btn-primary" @click="addBackup">立即备份</button>
+            </div>
           </fieldset>
         </form>
-        <div class="col-lg-offset-6">
-            <button type="button" class="btn btn-primary" @click="backupDatabase">立即备份</button>
+        <div class="col-lg-9">
+          <ul class="list-group">
+            <li class="list-group-item" style="height: 40px;" v-for="backupDatabaseItem in backupDatabaseList">
+              <div class="col-lg-7">{{backupDatabaseItem}}</div>
+              <div class="col-lg-2 col-lg-offset-1"><button type="button" class="btn btn-primary btn-sm" @click="backupDatabase">下载</button></div>
+              <div class="col-lg-2"><button type="button" class="btn btn-primary btn-sm" @click="delBackup(backupDatabaseItem)">删除</button></div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-6">
+           共{{backupDatabaseList.length}}个备份
+        </div>
+        <div class="col-lg-6 col-lg-offset-6">
+            <button type="button" class="btn btn-primary"  @click="setDatabaseConf">保存</button>
         </div>
   		</div>
 	</div>
@@ -99,7 +132,8 @@ export default {
       article: state=>state.conf.article,
       master: state=>state.conf.master,
       database: state=>state.conf.database,
-      articleCssList: state=>state.conf.articleCssList
+      articleCssList: state=>state.conf.articleCssList,
+      backupDatabaseList: state=>state.backupDatabaseList
     }),
   methods:{
     getArticleConf:function(){
@@ -109,9 +143,11 @@ export default {
     },
     getDatabaseConf:function(){
       this.$store.dispatch('getDatabaseConf');
+      this.$store.dispatch('getBackupDatabaseList');
     },
-    backupDatabase:function(){
-      this.$store.dispatch('backupDatabase');
+    addBackup:function(){
+      this.$store.dispatch('addBackup');
+      this.$store.dispatch('getBackupDatabaseList');
     },
     setWebsiteConf:function(){
       this.$store.dispatch('setWebsiteConf', this.website);
@@ -121,6 +157,13 @@ export default {
     },
     setArticleConf:function(){
       this.$store.dispatch('setArticleConf', this.article);
+    },
+    setDatabaseConf:function(){
+      console.log(JSON.stringify(this.database));
+    },
+    delBackup:function(file){
+      this.$store.dispatch('delBackup', file);
+      this.$store.dispatch('getBackupDatabaseList');
     }
   }
 }

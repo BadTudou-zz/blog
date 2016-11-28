@@ -14,7 +14,7 @@ var conf = {
 			}
 	},
 	article:{
-		storePath: '/public/html/article/',
+		storePath: '/public/html/article',
 		templatePath: '/public/template/article.pug',
 		css: '2.css'
 	},
@@ -33,8 +33,9 @@ var conf = {
 		zhihu:"https://zhuanlan.zhihu.com/DuXiaoDou"
 	},
 	database:{
-		storePath: '/usr/share/nginx/blog/backup/',
-		interval: ''
+		storePath: '/usr/share/nginx/blog/backup',
+		autoBackup:true,
+		interval: 60
 	},
 	articleCssList:[
 		{name:'简约',file:'1.css'},

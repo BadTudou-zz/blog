@@ -1,5 +1,7 @@
 'use static';
 
+const fs = require('fs');
+var archiver = require('archiver');
 var express = require('express');
 var session = require('express-session');
 var conf = require('../conf/conf.js');
@@ -139,6 +141,14 @@ router.get('/', function(req, res) {
 
 		case 'conf-article-csslist':
 			res.end(JSON.stringify({err:false, result:conf.articleCssList}));
+			break;
+
+		case 'backup-list':
+			fs.readdir(conf.database.storePath, 'utf8', (err, files)=>{
+				console.log(err);
+				console.log(files);
+				res.end(JSON.stringify({err:err, result:files}));
+			});
 			break;
 
 		default:
@@ -289,6 +299,40 @@ router.put('/', function(req, res) {
 			});
 			break;
 
+		case 'backup-add':
+			var databaseConf = conf.database;
+			var mysqlTables = conf.mysql.tables;
+			var currentDate = new Date();
+			var backupFileName = currentDate.getFullYear()+'-'
+			+(currentDate.getMonth()+1)+'-'+currentDate.getDate()
+			+' '+currentDate.getHours()+':'+currentDate.getMinutes()
+			+':'+currentDate.getSeconds();
+			backupFileName = databaseConf.storePath+'/'+backupFileName;
+			for(table in conf.mysql.tables){
+				database.backup(mysqlTables.TABLE_ARTICLE,backupFileName+' '+table+'.sql',(err)=>{
+					console.log('备份状态'+err);
+					if(err){
+						res.end(JSON.stringify({err:err, result:err}));
+					}
+				});
+			}
+			var output = fs.createWriteStream(backupFileName + '.zip');
+			var archive = archiver('zip', {
+    			store: true // Sets the compression method to STORE.
+			});
+			archive.pipe(output);
+			archive.glob(backupFileName+'*.sql');
+			archive.finalize();
+			res.end(JSON.stringify({err:false, result:'success'}));
+			break;
+
+		case 'backup-del':
+			var filename = req.body.database;
+			fs.unlink(conf.database.storePath+'/'+filename, (err)=>{
+				res.end(JSON.stringify({err:err, result:null}));
+			});
+			break;
+
 		case 'conf-website':
 			conf.website = req.body.conf;
 			res.end(JSON.stringify({err:false, result:'success'}));
@@ -307,21 +351,6 @@ router.put('/', function(req, res) {
 		case 'conf-database':
 			conf.database = req.body.conf;
 			res.end(JSON.stringify({err:false, result:'success'}));
-			break;
-
-		case 'backup-database':
-			var databaseConf = conf.database;
-			var mysqlTables = conf.mysql.tables;
-			var currentDate = new Date();
-			var backupFileName = currentDate.getFullYear()+'-'
-			+(currentDate.getMonth()+1)+'-'+currentDate.getDate()
-			+' '+currentDate.getHours()+':'+currentDate.getMinutes()
-			+':'+currentDate.getSeconds();
-
-			database.backup(mysqlTables.TABLE_ARTICLE,databaseConf.storePath+backupFileName+' '+mysqlTables.TABLE_ARTICLE+'.sql',(err)=>{
-				console.log('备份状态'+err);
-				res.end(JSON.stringify({err:err, result:'success'}));
-			});
 			break;
 
 		default:

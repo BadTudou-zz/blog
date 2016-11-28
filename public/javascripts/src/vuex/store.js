@@ -64,6 +64,7 @@ Vue.use(VueResource);
         {icon:'fa-users',title:'新访客',value:'0', style:{color:'#429AFE'}},
         {icon:'fa-commenting',title:'新评论',value:'0', style:{color:'#03D1FF'}}
     ],
+    backupDatabaseList:'',
     conf:{
       website:{
         domain:'BadTudou',
@@ -86,6 +87,7 @@ Vue.use(VueResource);
       },
       database:{
         storePath:'',
+        autoBackup:false,
         interval:''
       },
       articleCssList:''
@@ -239,8 +241,14 @@ Vue.use(VueResource);
     getArticleCssList(context){
       context.commit('getArticleCssList');
     },
-    backupDatabase(context){
-      context.commit('backupDatabase');
+    addBackup(context){
+      context.commit('addBackup');
+    },
+    getBackupDatabaseList(context){
+      context.commit('getBackupDatabaseList');
+    },
+    delBackup(context, databaseFile){
+      context.commit('delBackup', databaseFile);
     }
   },
   mutations: {
@@ -643,12 +651,34 @@ Vue.use(VueResource);
           state.msgType = 'success';
       });
     },
-    backupDatabase(state){
-      Vue.http.put(`manage?action=backup-database`).then((response)=>{
+    addBackup(state){
+      Vue.http.put(`manage?action=backup-add`).then((response)=>{
         var data = JSON.parse(response.body);
         console.log(response.body);
         if(!data.err)
           console.log('备份成功');
+          state.msgType = 'success';
+      });
+    },
+    getBackupDatabaseList(state){
+      Vue.http.get(`/manage?action=backup-list`).then((response) => 
+        {
+          console.log('获取备份数据库列表');
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err){
+            state.backupDatabaseList = data.result;
+          }else{
+            //state.backupDatabaseList = ['2016-11-28 21:30:20.zip', '2016-10-28 21:30:20.zip'];
+            console.assert(state.DEBUG, '获取备份数据库列表数据失败');
+          }
+        });
+    },
+    delBackup(state, databaseFile){
+      Vue.http.put(`manage?action=backup-del`,{database:databaseFile}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
           state.msgType = 'success';
       });
     }
