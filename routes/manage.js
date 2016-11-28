@@ -6,6 +6,7 @@ var conf = require('../conf/conf.js');
 var router = express.Router();
 var path = require('path');
 var md5 = require('md5');
+var database = require('../servers/database.js');
 var article = require('../servers/article.js');
 var user = require('../servers/user.js');
 var feature = require('../servers/feature.js');
@@ -126,6 +127,18 @@ router.get('/', function(req, res) {
 
 		case 'conf-master':
 			res.end(JSON.stringify({err:false, result:conf.master}));
+			break;
+
+		case 'conf-article':
+			res.end(JSON.stringify({err:false, result:conf.article}));
+			break;
+
+		case 'conf-database':
+			res.end(JSON.stringify({err:false, result:conf.database}));
+			break;
+
+		case 'conf-article-csslist':
+			res.end(JSON.stringify({err:false, result:conf.articleCssList}));
 			break;
 
 		default:
@@ -282,11 +295,34 @@ router.put('/', function(req, res) {
 			break;
 
 		case 'conf-master':
-			console.log('博主'+JSON.stringify(req.body.conf));
 			conf.master = req.body.conf;
 			res.end(JSON.stringify({err:false, result:'success'}));
 			break;
 
+		case 'conf-article':
+			conf.article = req.body.conf;
+			res.end(JSON.stringify({err:false, result:'success'}));
+			break;
+
+		case 'conf-database':
+			conf.database = req.body.conf;
+			res.end(JSON.stringify({err:false, result:'success'}));
+			break;
+
+		case 'backup-database':
+			var databaseConf = conf.database;
+			var mysqlTables = conf.mysql.tables;
+			var currentDate = new Date();
+			var backupFileName = currentDate.getFullYear()+'-'
+			+(currentDate.getMonth()+1)+'-'+currentDate.getDate()
+			+' '+currentDate.getHours()+':'+currentDate.getMinutes()
+			+':'+currentDate.getSeconds();
+
+			database.backup(mysqlTables.TABLE_ARTICLE,databaseConf.storePath+backupFileName+' '+mysqlTables.TABLE_ARTICLE+'.sql',(err)=>{
+				console.log('备份状态'+err);
+				res.end(JSON.stringify({err:err, result:'success'}));
+			});
+			break;
 
 		default:
 			res.end(JSON.stringify({err:true, result:'undefined put action'}));

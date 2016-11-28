@@ -19,6 +19,7 @@ var add = function add(article, callback)
 	//文章字段：id, featureID, title, subtitle, link, license, timeCreated, 
 	//		timeRelease, timeModify, author, introduction, coverLink, 
 	//		content, countRead, countShare, countDiscuss, labels
+	console.log(JSON.stringify(article));
 	var values = utility.objescape(article);
 	var sqlString = `INSERT INTO ${TABLE_ARTICLE}
 		(
@@ -103,11 +104,11 @@ var getDiscuss = function getDiscuss(articleID, callback){
  */
 var rendertoHTML = function renderMD(article, callback){
 	var rootPath = path.dirname(__dirname);
-	var sysconf = conf.system;
-	var htmlpath = rootPath+sysconf.articleStorePath+article.link+'.html';
+	var articleConf = conf.article;
+	var htmlpath = rootPath+articleConf.storePath+article.link+'.html';
 	var mdhtml = markdown.toHTML(article.content);
 	var titlehtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+article.title+article.subtitle;
-	var linkhtml = '</title><link rel="stylesheet" type="text/css" href="stylesheets/'+sysconf.articleCssName+'"></head><body>';
+	var linkhtml = '</title><link rel="stylesheet" type="text/css" href="stylesheets/'+articleConf.cssFile+'"></head><body>';
 	var pughtml = titlehtml+linkhtml+mdhtml+'</body></html>';
 	fs.writeFile(htmlpath, pughtml, (err) => {
           callback(err);

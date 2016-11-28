@@ -2,22 +2,22 @@
 <div id="div-manage--system" v-show="isShow">
 	<ul class="nav nav-tabs" role="tablist">
   		<li class="nav-item">
-    		<a class="nav-link active" href="#home" role="tab" data-toggle="tab"><i class="fa fa-sitemap" aria-hidden="true"></i>网站</a>
+    		<a class="nav-link active" href="#website" role="tab" data-toggle="tab"><i class="fa fa-sitemap" aria-hidden="true"></i>网站</a>
   		</li>
   		<li class="nav-item">
-    		<a class="nav-link" href="#profile" role="tab" data-toggle="tab"><i class="fa fa-file" aria-hidden="true"></i>文章</a>
+    		<a class="nav-link" href="#article" role="tab" data-toggle="tab" @click="getArticleConf"><i class="fa fa-file" aria-hidden="true"></i>文章</a>
   		</li>
   		<li class="nav-item">
-    		<a class="nav-link" href="#messages" role="tab" data-toggle="tab"><i class="fa fa-user" aria-hidden="true"></i>个人</a>
+    		<a class="nav-link" href="#master" role="tab" data-toggle="tab"><i class="fa fa-user" aria-hidden="true"></i>个人</a>
   		</li>
   		<li class="nav-item">
-    		<a class="nav-link" href="#settings" role="tab" data-toggle="tab"><i class="fa fa-database" aria-hidden="true"></i>数据库</a>
+    		<a class="nav-link" href="#database" role="tab" data-toggle="tab" @click="getDatabaseConf"><i class="fa fa-database" aria-hidden="true"></i>数据库</a>
   		</li>
 	</ul>
 
 	<!-- Tab panes -->
 	<div class="tab-content">
-  		<div role="tabpanel" class="tab-pane active" id="home">
+  		<div role="tabpanel" class="tab-pane active" id="website">
 			<form class="col-lg-12">
       			<fieldset class="form-group col-lg-8">
         			<small class="text-muted">网站标题</small>
@@ -32,24 +32,22 @@
       			<button type="button" class="btn btn-primary" @click="setWebsiteConf">保存</button>
       		</div>
     	</div>
-  		<div role="tabpanel" class="tab-pane" id="profile">
+  		<div role="tabpanel" class="tab-pane" id="article">
 			<form class="col-lg-12">
       			<fieldset class="form-group col-lg-8">
       				<small class="text-muted">保存位置</small>
-        			<input type="text" class="form-control" placeholder="保存位置" >
+        			<input type="text" class="form-control" placeholder="保存位置" v-model="article.storePath">
         			<small class="text-muted">CSS文件</small>
-        			<select class="form-control">
-        				<option value="website">简洁风</option>
-        				<option value="feature">艳丽</option>
-        				<option value="article">黑白</option>
+        			<select class="form-control" v-model="article.css">
+        				<option v-for="articleCssItem in articleCssList" :value="articleCssItem.file">{{articleCssItem.name}}</option>
         			</select>
       			</fieldset>
     		</form>
     		<div class="col-lg-offset-6">
-      			<button type="button" class="btn btn-primary">保存</button>
+      			<button type="button" class="btn btn-primary" @click="setArticleConf">保存</button>
       		</div>
   		</div>
-  		<div role="tabpanel" class="tab-pane" id="messages">
+  		<div role="tabpanel" class="tab-pane" id="master">
     		<form class="col-lg-12">
       			<fieldset class="form-group col-lg-8">
         			<small class="text-muted">昵称</small>
@@ -76,8 +74,18 @@
       			<button type="button" class="btn btn-primary" @click="setMasterConf">保存</button>
       		</div>
   		</div>
-  		<div role="tabpanel" class="tab-pane" id="settings">
-    		<button type="button" class="btn btn-primary">Primary</button>
+  		<div role="tabpanel" class="tab-pane" id="database">
+        <form class="col-lg-12">
+          <fieldset class="form-group col-lg-8">
+            <small class="text-muted">备份位置</small>
+            <input type="text" class="form-control" placeholder="备份位置" v-model="database.storePath">
+            <small class="text-muted">备份间隔</small>
+            <input type="text" class="form-control" placeholder="备份间隔" v-model="database.interval">
+          </fieldset>
+        </form>
+        <div class="col-lg-offset-6">
+            <button type="button" class="btn btn-primary" @click="backupDatabase">立即备份</button>
+        </div>
   		</div>
 	</div>
 </div>
@@ -89,14 +97,30 @@ export default {
       isShow: state=> (state.parentNavItem.text == '管理') && (state.manageParentNavItem.text == '系统'),
       website: state=>state.conf.website,
       article: state=>state.conf.article,
-      master: state=>state.conf.master
+      master: state=>state.conf.master,
+      database: state=>state.conf.database,
+      articleCssList: state=>state.conf.articleCssList
     }),
   methods:{
+    getArticleConf:function(){
+      console.log('获取文章配置信息');
+      this.$store.dispatch('getArticleCssList');
+      this.$store.dispatch('getArticleConf');
+    },
+    getDatabaseConf:function(){
+      this.$store.dispatch('getDatabaseConf');
+    },
+    backupDatabase:function(){
+      this.$store.dispatch('backupDatabase');
+    },
     setWebsiteConf:function(){
       this.$store.dispatch('setWebsiteConf', this.website);
     },
     setMasterConf:function(){
       this.$store.dispatch('setMasterConf', this.master);
+    },
+    setArticleConf:function(){
+      this.$store.dispatch('setArticleConf', this.article);
     }
   }
 }

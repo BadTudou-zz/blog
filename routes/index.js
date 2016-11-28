@@ -9,12 +9,17 @@ var router = express.Router();
 router.get('/', function(req, res) {
 
 	if(!req.session.uid){
+		console.log('之前没访问过');
 		var ua = req.headers['user-agent'];
 		var token = md5(ua.toString());
 		req.session.uid = token;
 		visitor.add({token:token, ua:ua}, (err, result)=>{
 			//TODO:错误处理
 		});
+	}
+	else
+	{
+		console.log('之前访问过');
 	}
 	
 	res.sendFile(path.dirname(__dirname)+'/public/html/index.html');

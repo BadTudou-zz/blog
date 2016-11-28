@@ -8309,7 +8309,17 @@
 	        weibo: "http://weibo.com/badtudou",
 	        github: "https://github.com/BadTudou",
 	        zhihu: "https://zhuanlan.zhihu.com/DuXiaoDou"
-	      }
+	      },
+	      article: {
+	        storePath: '',
+	        templatePath: '',
+	        cssName: ''
+	      },
+	      database: {
+	        storePath: '',
+	        interval: ''
+	      },
+	      articleCssList: ''
 	    }
 	  },
 	  actions: (_actions = {
@@ -8409,6 +8419,18 @@
 	    context.commit('setMasterConf', conf);
 	  }), (0, _defineProperty3.default)(_actions, 'getMasterConf', function getMasterConf(context) {
 	    context.commit('getMasterConf');
+	  }), (0, _defineProperty3.default)(_actions, 'getArticleConf', function getArticleConf(context) {
+	    context.commit('getArticleConf');
+	  }), (0, _defineProperty3.default)(_actions, 'setArticleConf', function setArticleConf(context, conf) {
+	    context.commit('setArticleConf', conf);
+	  }), (0, _defineProperty3.default)(_actions, 'getDatabaseConf', function getDatabaseConf(context) {
+	    context.commit('getDatabaseConf');
+	  }), (0, _defineProperty3.default)(_actions, 'setDatabaseConf', function setDatabaseConf(context, conf) {
+	    context.commit('setDatabaseConf', conf);
+	  }), (0, _defineProperty3.default)(_actions, 'getArticleCssList', function getArticleCssList(context) {
+	    context.commit('getArticleCssList');
+	  }), (0, _defineProperty3.default)(_actions, 'backupDatabase', function backupDatabase(context) {
+	    context.commit('backupDatabase');
 	  }), _actions),
 	  mutations: {
 	    parentNavItemChange: function parentNavItemChange(state, parentNavItem) {
@@ -8701,6 +8723,45 @@
 	        }
 	      });
 	    },
+	    getArticleConf: function getArticleConf(state) {
+	      _vue2.default.http.get('/manage?action=conf-article').then(function (response) {
+	        console.log('获取文章数据');
+	        console.assert(state.DEBUG, response.body);
+	        var data = JSON.parse(response.body);
+	        if (!data.err) {
+	          state.conf.article = data.result;
+	          console.log(state.conf.master);
+	        } else {
+	          console.assert(state.DEBUG, '获取文章配置数据失败');
+	        }
+	      });
+	    },
+	    getDatabaseConf: function getDatabaseConf(state) {
+	      _vue2.default.http.get('/manage?action=conf-database').then(function (response) {
+	        console.log('获取文章数据');
+	        console.assert(state.DEBUG, response.body);
+	        var data = JSON.parse(response.body);
+	        if (!data.err) {
+	          state.conf.database = data.result;
+	          console.log(state.conf.master);
+	        } else {
+	          console.assert(state.DEBUG, '获取数据库配置数据失败');
+	        }
+	      });
+	    },
+	    getArticleCssList: function getArticleCssList(state) {
+	      _vue2.default.http.get('/manage?action=conf-article-csslist').then(function (response) {
+	        console.log('获取文章CSS列表');
+	        console.assert(state.DEBUG, response.body);
+	        var data = JSON.parse(response.body);
+	        if (!data.err) {
+	          state.conf.articleCssList = data.result;
+	          console.log(state.conf.master);
+	        } else {
+	          console.assert(state.DEBUG, '获取文章CSS列表数据失败');
+	        }
+	      });
+	    },
 	    setWebsiteConf: function setWebsiteConf(state, conf) {
 	      _vue2.default.http.put('manage?action=conf-website', { conf: conf }).then(function (response) {
 	        var data = JSON.parse(response.body);
@@ -8714,6 +8775,30 @@
 	        var data = JSON.parse(response.body);
 	        console.log(response.body);
 	        if (!data.err) state.conf.master = conf;
+	        state.msgType = 'success';
+	      });
+	    },
+	    setArticleConf: function setArticleConf(state, conf) {
+	      _vue2.default.http.put('manage?action=conf-article', { conf: conf }).then(function (response) {
+	        var data = JSON.parse(response.body);
+	        console.log(response.body);
+	        if (!data.err) state.conf.article = conf;
+	        state.msgType = 'success';
+	      });
+	    },
+	    setDatabaseConf: function setDatabaseConf(state, conf) {
+	      _vue2.default.http.put('manage?action=conf-database', { conf: conf }).then(function (response) {
+	        var data = JSON.parse(response.body);
+	        console.log(response.body);
+	        if (!data.err) state.conf.database = conf;
+	        state.msgType = 'success';
+	      });
+	    },
+	    backupDatabase: function backupDatabase(state) {
+	      _vue2.default.http.put('manage?action=backup-database').then(function (response) {
+	        var data = JSON.parse(response.body);
+	        console.log(response.body);
+	        if (!data.err) console.log('备份成功');
 	        state.msgType = 'success';
 	      });
 	    }
@@ -18229,17 +18314,45 @@
 	    },
 	    master: function master(state) {
 	      return state.conf.master;
+	    },
+	    database: function database(state) {
+	      return state.conf.database;
+	    },
+	    articleCssList: function articleCssList(state) {
+	      return state.conf.articleCssList;
 	    }
 	  }),
 	  methods: {
+	    getArticleConf: function getArticleConf() {
+	      console.log('获取文章配置信息');
+	      this.$store.dispatch('getArticleCssList');
+	      this.$store.dispatch('getArticleConf');
+	    },
+	    getDatabaseConf: function getDatabaseConf() {
+	      this.$store.dispatch('getDatabaseConf');
+	    },
+	    backupDatabase: function backupDatabase() {
+	      this.$store.dispatch('backupDatabase');
+	    },
 	    setWebsiteConf: function setWebsiteConf() {
 	      this.$store.dispatch('setWebsiteConf', this.website);
 	    },
 	    setMasterConf: function setMasterConf() {
 	      this.$store.dispatch('setMasterConf', this.master);
+	    },
+	    setArticleConf: function setArticleConf() {
+	      this.$store.dispatch('setArticleConf', this.article);
 	    }
 	  }
 	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 	//
 	//
 	//
@@ -18339,19 +18452,48 @@
 	    attrs: {
 	      "id": "div-manage--system"
 	    }
-	  }, [_m(0), " ", " ", _h('div', {
+	  }, [_h('ul', {
+	    staticClass: "nav nav-tabs",
+	    attrs: {
+	      "role": "tablist"
+	    }
+	  }, [_m(0), " ", _h('li', {
+	    staticClass: "nav-item"
+	  }, [_h('a', {
+	    staticClass: "nav-link",
+	    attrs: {
+	      "href": "#article",
+	      "role": "tab",
+	      "data-toggle": "tab"
+	    },
+	    on: {
+	      "click": getArticleConf
+	    }
+	  }, [_m(1), "文章"])]), " ", _m(2), " ", _h('li', {
+	    staticClass: "nav-item"
+	  }, [_h('a', {
+	    staticClass: "nav-link",
+	    attrs: {
+	      "href": "#database",
+	      "role": "tab",
+	      "data-toggle": "tab"
+	    },
+	    on: {
+	      "click": getDatabaseConf
+	    }
+	  }, [_m(3), "数据库"])])]), " ", " ", _h('div', {
 	    staticClass: "tab-content"
 	  }, [_h('div', {
 	    staticClass: "tab-pane active",
 	    attrs: {
 	      "role": "tabpanel",
-	      "id": "home"
+	      "id": "website"
 	    }
 	  }, [_h('form', {
 	    staticClass: "col-lg-12"
 	  }, [_h('fieldset', {
 	    staticClass: "form-group col-lg-8"
-	  }, [_m(1), " ", _h('input', {
+	  }, [_m(4), " ", _h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18372,7 +18514,7 @@
 	        website.title = $event.target.value
 	      }
 	    }
-	  }), " ", _m(2), " ", _h('input', {
+	  }), " ", _m(5), " ", _h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18393,7 +18535,7 @@
 	        website.domain = $event.target.value
 	      }
 	    }
-	  }), " ", _m(3), " ", _h('input', {
+	  }), " ", _m(6), " ", _h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18424,17 +18566,81 @@
 	    on: {
 	      "click": setWebsiteConf
 	    }
-	  }, ["保存"])])]), " ", _m(4), " ", _h('div', {
+	  }, ["保存"])])]), " ", _h('div', {
 	    staticClass: "tab-pane",
 	    attrs: {
 	      "role": "tabpanel",
-	      "id": "messages"
+	      "id": "article"
 	    }
 	  }, [_h('form', {
 	    staticClass: "col-lg-12"
 	  }, [_h('fieldset', {
 	    staticClass: "form-group col-lg-8"
-	  }, [_m(5), " ", _h('input', {
+	  }, [_m(7), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (article.storePath),
+	      expression: "article.storePath"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "保存位置"
+	    },
+	    domProps: {
+	      "value": _s(article.storePath)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        article.storePath = $event.target.value
+	      }
+	    }
+	  }), " ", _m(8), " ", _h('select', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (article.css),
+	      expression: "article.css"
+	    }],
+	    staticClass: "form-control",
+	    on: {
+	      "change": function($event) {
+	        article.css = Array.prototype.filter.call($event.target.options, function(o) {
+	          return o.selected
+	        }).map(function(o) {
+	          return "_value" in o ? o._value : o.value
+	        })[0]
+	      }
+	    }
+	  }, [_l((articleCssList), function(articleCssItem) {
+	    return _h('option', {
+	      domProps: {
+	        "value": articleCssItem.file
+	      }
+	    }, [_s(articleCssItem.name)])
+	  })])])]), " ", _h('div', {
+	    staticClass: "col-lg-offset-6"
+	  }, [_h('button', {
+	    staticClass: "btn btn-primary",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": setArticleConf
+	    }
+	  }, ["保存"])])]), " ", _h('div', {
+	    staticClass: "tab-pane",
+	    attrs: {
+	      "role": "tabpanel",
+	      "id": "master"
+	    }
+	  }, [_h('form', {
+	    staticClass: "col-lg-12"
+	  }, [_h('fieldset', {
+	    staticClass: "form-group col-lg-8"
+	  }, [_m(9), " ", _h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18455,7 +18661,7 @@
 	        master.nickname = $event.target.value
 	      }
 	    }
-	  }), " ", _m(6), " ", _h('input', {
+	  }), " ", _m(10), " ", _h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18476,7 +18682,7 @@
 	        master.summary = $event.target.value
 	      }
 	    }
-	  }), " ", _m(7), " ", _h('input', {
+	  }), " ", _m(11), " ", _h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18518,12 +18724,12 @@
 	        master.instructionPartTwo = $event.target.value
 	      }
 	    }
-	  }), " ", _m(8), " ", _h('div', {
+	  }), " ", _m(12), " ", _h('div', {
 	    staticClass: "input-group",
 	    attrs: {
 	      "style": "margin-top: 0px"
 	    }
-	  }, [_m(9), " ", _h('input', {
+	  }, [_m(13), " ", _h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18544,7 +18750,7 @@
 	        master.weibo = $event.target.value
 	      }
 	    }
-	  }), " ", _m(10), " ", _h('input', {
+	  }), " ", _m(14), " ", _h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18565,7 +18771,7 @@
 	        master.github = $event.target.value
 	      }
 	    }
-	  }), " ", _m(11), " ", _h('input', {
+	  }), " ", _m(15), " ", _h('input', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
@@ -18596,19 +18802,76 @@
 	    on: {
 	      "click": setMasterConf
 	    }
-	  }, ["保存"])])]), " ", _m(12)])])
-	}},staticRenderFns: [function (){with(this) {
-	  return _h('ul', {
-	    staticClass: "nav nav-tabs",
+	  }, ["保存"])])]), " ", _h('div', {
+	    staticClass: "tab-pane",
 	    attrs: {
-	      "role": "tablist"
+	      "role": "tabpanel",
+	      "id": "database"
 	    }
-	  }, [_h('li', {
+	  }, [_h('form', {
+	    staticClass: "col-lg-12"
+	  }, [_h('fieldset', {
+	    staticClass: "form-group col-lg-8"
+	  }, [_m(16), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (database.storePath),
+	      expression: "database.storePath"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "备份位置"
+	    },
+	    domProps: {
+	      "value": _s(database.storePath)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        database.storePath = $event.target.value
+	      }
+	    }
+	  }), " ", _m(17), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (database.interval),
+	      expression: "database.interval"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "备份间隔"
+	    },
+	    domProps: {
+	      "value": _s(database.interval)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) return;
+	        database.interval = $event.target.value
+	      }
+	    }
+	  })])]), " ", _h('div', {
+	    staticClass: "col-lg-offset-6"
+	  }, [_h('button', {
+	    staticClass: "btn btn-primary",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": backupDatabase
+	    }
+	  }, ["立即备份"])])])])])
+	}},staticRenderFns: [function (){with(this) {
+	  return _h('li', {
 	    staticClass: "nav-item"
 	  }, [_h('a', {
 	    staticClass: "nav-link active",
 	    attrs: {
-	      "href": "#home",
+	      "href": "#website",
 	      "role": "tab",
 	      "data-toggle": "tab"
 	    }
@@ -18617,26 +18880,21 @@
 	    attrs: {
 	      "aria-hidden": "true"
 	    }
-	  }), "网站"])]), " ", _h('li', {
-	    staticClass: "nav-item"
-	  }, [_h('a', {
-	    staticClass: "nav-link",
-	    attrs: {
-	      "href": "#profile",
-	      "role": "tab",
-	      "data-toggle": "tab"
-	    }
-	  }, [_h('i', {
+	  }), "网站"])])
+	}},function (){with(this) {
+	  return _h('i', {
 	    staticClass: "fa fa-file",
 	    attrs: {
 	      "aria-hidden": "true"
 	    }
-	  }), "文章"])]), " ", _h('li', {
+	  })
+	}},function (){with(this) {
+	  return _h('li', {
 	    staticClass: "nav-item"
 	  }, [_h('a', {
 	    staticClass: "nav-link",
 	    attrs: {
-	      "href": "#messages",
+	      "href": "#master",
 	      "role": "tab",
 	      "data-toggle": "tab"
 	    }
@@ -18645,21 +18903,14 @@
 	    attrs: {
 	      "aria-hidden": "true"
 	    }
-	  }), "个人"])]), " ", _h('li', {
-	    staticClass: "nav-item"
-	  }, [_h('a', {
-	    staticClass: "nav-link",
-	    attrs: {
-	      "href": "#settings",
-	      "role": "tab",
-	      "data-toggle": "tab"
-	    }
-	  }, [_h('i', {
+	  }), "个人"])])
+	}},function (){with(this) {
+	  return _h('i', {
 	    staticClass: "fa fa-database",
 	    attrs: {
 	      "aria-hidden": "true"
 	    }
-	  }), "数据库"])])])
+	  })
 	}},function (){with(this) {
 	  return _h('small', {
 	    staticClass: "text-muted"
@@ -18673,48 +18924,13 @@
 	    staticClass: "text-muted"
 	  }, ["ICP备案号"])
 	}},function (){with(this) {
-	  return _h('div', {
-	    staticClass: "tab-pane",
-	    attrs: {
-	      "role": "tabpanel",
-	      "id": "profile"
-	    }
-	  }, [_h('form', {
-	    staticClass: "col-lg-12"
-	  }, [_h('fieldset', {
-	    staticClass: "form-group col-lg-8"
-	  }, [_h('small', {
+	  return _h('small', {
 	    staticClass: "text-muted"
-	  }, ["保存位置"]), " ", _h('input', {
-	    staticClass: "form-control",
-	    attrs: {
-	      "type": "text",
-	      "placeholder": "保存位置"
-	    }
-	  }), " ", _h('small', {
+	  }, ["保存位置"])
+	}},function (){with(this) {
+	  return _h('small', {
 	    staticClass: "text-muted"
-	  }, ["CSS文件"]), " ", _h('select', {
-	    staticClass: "form-control"
-	  }, [_h('option', {
-	    attrs: {
-	      "value": "website"
-	    }
-	  }, ["简洁风"]), " ", _h('option', {
-	    attrs: {
-	      "value": "feature"
-	    }
-	  }, ["艳丽"]), " ", _h('option', {
-	    attrs: {
-	      "value": "article"
-	    }
-	  }, ["黑白"])])])]), " ", _h('div', {
-	    staticClass: "col-lg-offset-6"
-	  }, [_h('button', {
-	    staticClass: "btn btn-primary",
-	    attrs: {
-	      "type": "button"
-	    }
-	  }, ["保存"])])])
+	  }, ["CSS文件"])
 	}},function (){with(this) {
 	  return _h('small', {
 	    staticClass: "text-muted"
@@ -18759,18 +18975,13 @@
 	    }
 	  })])
 	}},function (){with(this) {
-	  return _h('div', {
-	    staticClass: "tab-pane",
-	    attrs: {
-	      "role": "tabpanel",
-	      "id": "settings"
-	    }
-	  }, [_h('button', {
-	    staticClass: "btn btn-primary",
-	    attrs: {
-	      "type": "button"
-	    }
-	  }, ["Primary"])])
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["备份位置"])
+	}},function (){with(this) {
+	  return _h('small', {
+	    staticClass: "text-muted"
+	  }, ["备份间隔"])
 	}}]}
 	if (false) {
 	  module.hot.accept()

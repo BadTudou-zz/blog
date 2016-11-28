@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/article', article);
-app.use('/article', express.static(path.join(__dirname, conf.system.articleStorePath)));
+app.use('/article', express.static(path.join(__dirname, conf.article.storePath)));
 app.use('/feature', feature);
 app.use('/manage', manage);
 

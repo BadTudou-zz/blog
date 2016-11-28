@@ -1,7 +1,7 @@
 var conf = {
 	mysql:{
 			host	: 'host',
- 			//port	:  3389,
+ 			// 	port	:  3389,
 			user	: 'user',
 			password: 'password',
 			database: 'database',
@@ -13,10 +13,10 @@ var conf = {
 				TABLE_VISITOR:'tb_visitor'
 			}
 	},
-	system:{
-		articleStorePath: '/public/html/article/',
-		articleTemplatePath: '/public/template/article.pug',
-		articleCssName: 'article.css'
+	article:{
+		storePath: '/public/html/article/',
+		templatePath: '/public/template/article.pug',
+		css: '2.css'
 	},
 	website:{
 		title:"杜小豆的编程大道",
@@ -31,7 +31,16 @@ var conf = {
 		weibo:"http://weibo.com/badtudou",
 		github:"https://github.com/BadTudou",
 		zhihu:"https://zhuanlan.zhihu.com/DuXiaoDou"
-	}
+	},
+	database:{
+		storePath: '/usr/share/nginx/blog/backup/',
+		interval: ''
+	},
+	articleCssList:[
+		{name:'简约',file:'1.css'},
+		{name:'艳丽',file:'2.css'},
+		{name:'默认',file:'3.css'}
+	]
 };
 
 module.exports = conf;

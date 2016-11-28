@@ -78,7 +78,17 @@ Vue.use(VueResource);
         weibo:"http://weibo.com/badtudou",
         github:"https://github.com/BadTudou",
         zhihu:"https://zhuanlan.zhihu.com/DuXiaoDou"
-      }
+      },
+      article:{
+        storePath:'',
+        templatePath:'',
+        cssName:''
+      },
+      database:{
+        storePath:'',
+        interval:''
+      },
+      articleCssList:''
     }
   },
   actions:{
@@ -213,6 +223,24 @@ Vue.use(VueResource);
     },
     getMasterConf(context){
       context.commit('getMasterConf');
+    },
+    getArticleConf(context){
+      context.commit('getArticleConf');
+    },
+    setArticleConf(context, conf){
+      context.commit('setArticleConf', conf);
+    },
+    getDatabaseConf(context){
+      context.commit('getDatabaseConf');
+    },
+    setDatabaseConf(context, conf){
+      context.commit('setDatabaseConf', conf);
+    },
+    getArticleCssList(context){
+      context.commit('getArticleCssList');
+    },
+    backupDatabase(context){
+      context.commit('backupDatabase');
     }
   },
   mutations: {
@@ -537,6 +565,48 @@ Vue.use(VueResource);
           }
         });
     },
+    getArticleConf(state){
+      Vue.http.get(`/manage?action=conf-article`).then((response) => 
+        {
+          console.log('获取文章数据');
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err){
+            state.conf.article = data.result;
+            console.log(state.conf.master);
+          }else{
+            console.assert(state.DEBUG, '获取文章配置数据失败');
+          }
+        });
+    },
+    getDatabaseConf(state){
+      Vue.http.get(`/manage?action=conf-database`).then((response) => 
+        {
+          console.log('获取文章数据');
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err){
+            state.conf.database = data.result;
+            console.log(state.conf.master);
+          }else{
+            console.assert(state.DEBUG, '获取数据库配置数据失败');
+          }
+        });
+    },
+    getArticleCssList(state){
+      Vue.http.get(`/manage?action=conf-article-csslist`).then((response) => 
+        {
+          console.log('获取文章CSS列表');
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err){
+            state.conf.articleCssList = data.result;
+            console.log(state.conf.master);
+          }else{
+            console.assert(state.DEBUG, '获取文章CSS列表数据失败');
+          }
+        });
+    },
     setWebsiteConf(state, conf){
       Vue.http.put(`manage?action=conf-website`,{conf:conf}).then((response)=>{
         var data = JSON.parse(response.body);
@@ -552,6 +622,33 @@ Vue.use(VueResource);
         console.log(response.body);
         if(!data.err)
           state.conf.master = conf;
+          state.msgType = 'success';
+      });
+    },
+    setArticleConf(state, conf){
+      Vue.http.put(`manage?action=conf-article`,{conf:conf}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.conf.article = conf;
+          state.msgType = 'success';
+      });
+    },
+    setDatabaseConf(state, conf){
+      Vue.http.put(`manage?action=conf-database`,{conf:conf}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.conf.database = conf;
+          state.msgType = 'success';
+      });
+    },
+    backupDatabase(state){
+      Vue.http.put(`manage?action=backup-database`).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          console.log('备份成功');
           state.msgType = 'success';
       });
     }
