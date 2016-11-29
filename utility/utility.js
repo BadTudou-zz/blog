@@ -1,4 +1,7 @@
 var mysql = require('mysql');
+var fs = require('fs');
+var archiver = require('archiver');
+
 
 /**
  * [获取对象的所有值]
@@ -66,7 +69,19 @@ var escape = function escape(value)
 	return mysql.escape(value);
 };
 
+var compress = function compress(glob, outFile)
+{
+	var output = fs.createWriteStream(outFile);
+	var archive = archiver('zip', {
+    	store: true // Sets the compression method to STORE.
+	});
+	archive.pipe(output);
+	archive.glob(glob);
+	archive.finalize();
+};
+
 exports.objectValues = objectValues;
 exports.obj2array = obj2array;
 exports.objescape = objescape;
 exports.escape = escape;
+exports.compress = compress;

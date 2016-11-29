@@ -1,7 +1,6 @@
 'use static';
 
 const fs = require('fs');
-var archiver = require('archiver');
 var express = require('express');
 var session = require('express-session');
 var conf = require('../conf/conf.js');
@@ -120,6 +119,13 @@ router.get('/', function(req, res) {
 				}
 				else
 					res.end(JSON.stringify({err:true, result:'error'}));
+			});
+			break;
+
+		case 'backup-download':
+			var filename = params.database;
+			res.download(conf.database.storePath+'/'+filename, filename, (err)=>{
+				res.end(JSON.stringify({err:err, result:null}));
 			});
 			break;
 
@@ -308,21 +314,25 @@ router.put('/', function(req, res) {
 			+' '+currentDate.getHours()+':'+currentDate.getMinutes()
 			+':'+currentDate.getSeconds();
 			backupFileName = databaseConf.storePath+'/'+backupFileName;
+			var backupStep = 0;
+			console.log('测试');
+			var keys = Object.keys(conf.mysql.tables);
+			var tableCount = keys.length;
+			console.log('表个数'+keys.length);
 			for(table in conf.mysql.tables){
-				database.backup(mysqlTables.TABLE_ARTICLE,backupFileName+' '+table+'.sql',(err)=>{
-					console.log('备份状态'+err);
+				database.backup(conf.mysql.tables[table],backupFileName+' '+table+'.sql',(err)=>{
 					if(err){
 						res.end(JSON.stringify({err:err, result:err}));
 					}
+					else{
+						backupStep++;
+						if (backupStep == tableCount){
+							utility.compress(backupFileName+'*.sql', backupFileName + '.zip');
+						}
+					}
+					console.log('导出'+conf.mysql.tables[table]);
 				});
 			}
-			var output = fs.createWriteStream(backupFileName + '.zip');
-			var archive = archiver('zip', {
-    			store: true // Sets the compression method to STORE.
-			});
-			archive.pipe(output);
-			archive.glob(backupFileName+'*.sql');
-			archive.finalize();
 			res.end(JSON.stringify({err:false, result:'success'}));
 			break;
 

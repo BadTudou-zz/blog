@@ -249,6 +249,9 @@ Vue.use(VueResource);
     },
     delBackup(context, databaseFile){
       context.commit('delBackup', databaseFile);
+    },
+    getBackup(context, databaseFile){
+      context.commit('getBackup', databaseFile);
     }
   },
   mutations: {
@@ -681,6 +684,21 @@ Vue.use(VueResource);
         if(!data.err)
           state.msgType = 'success';
       });
+    },
+    getBackup(state, databaseFile){
+      Vue.http.get(`/manage?action=backup-download&database=${databaseFile}`).then((response) => 
+        {
+          console.log('获取备份数据库');
+          console.assert(state.DEBUG, response.body);
+          var data = JSON.parse(response.body);
+          if(!data.err){
+            console.log('下载完成');
+            //state.backupDatabaseList = data.result;
+          }else{
+            //state.backupDatabaseList = ['2016-11-28 21:30:20.zip', '2016-10-28 21:30:20.zip'];
+            console.assert(state.DEBUG, '获取备份数据库列表');
+          }
+        });
     }
   }
 });

@@ -122,7 +122,7 @@
 
 	var _Manage2 = _interopRequireDefault(_Manage);
 
-	var _Footer = __webpack_require__(166);
+	var _Footer = __webpack_require__(168);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -8437,6 +8437,8 @@
 	    context.commit('getBackupDatabaseList');
 	  }), (0, _defineProperty3.default)(_actions, 'delBackup', function delBackup(context, databaseFile) {
 	    context.commit('delBackup', databaseFile);
+	  }), (0, _defineProperty3.default)(_actions, 'getBackup', function getBackup(context, databaseFile) {
+	    context.commit('getBackup', databaseFile);
 	  }), _actions),
 	  mutations: {
 	    parentNavItemChange: function parentNavItemChange(state, parentNavItem) {
@@ -8826,6 +8828,20 @@
 	        var data = JSON.parse(response.body);
 	        console.log(response.body);
 	        if (!data.err) state.msgType = 'success';
+	      });
+	    },
+	    getBackup: function getBackup(state, databaseFile) {
+	      _vue2.default.http.get('/manage?action=backup-download&database=' + databaseFile).then(function (response) {
+	        console.log('获取备份数据库');
+	        console.assert(state.DEBUG, response.body);
+	        var data = JSON.parse(response.body);
+	        if (!data.err) {
+	          console.log('下载完成');
+	          //state.backupDatabaseList = data.result;
+	        } else {
+	          //state.backupDatabaseList = ['2016-11-28 21:30:20.zip', '2016-10-28 21:30:20.zip'];
+	          console.assert(state.DEBUG, '获取备份数据库列表');
+	        }
 	      });
 	    }
 	  }
@@ -13735,7 +13751,7 @@
 	__vue_exports__ = __webpack_require__(81)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(165)
+	var __vue_template__ = __webpack_require__(167)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -18278,11 +18294,14 @@
 
 	var __vue_exports__, __vue_options__
 
+	/* styles */
+	__webpack_require__(163)
+
 	/* script */
-	__vue_exports__ = __webpack_require__(163)
+	__vue_exports__ = __webpack_require__(165)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(164)
+	var __vue_template__ = __webpack_require__(166)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -18317,6 +18336,46 @@
 
 /***/ },
 /* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(164);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(16)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/.0.25.0@css-loader/index.js!./../../node_modules/.9.7.0@vue-loader/lib/style-rewriter.js?id=data-v-326c7d36!./../../node_modules/.9.7.0@vue-loader/lib/selector.js?type=styles&index=0!./System.vue", function() {
+				var newContent = require("!!./../../node_modules/.0.25.0@css-loader/index.js!./../../node_modules/.9.7.0@vue-loader/lib/style-rewriter.js?id=data-v-326c7d36!./../../node_modules/.9.7.0@vue-loader/lib/selector.js?type=styles&index=0!./System.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(15)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n#ul-backuplist\n{\n  list-style:none;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18369,7 +18428,7 @@
 	    },
 	    addBackup: function addBackup() {
 	      this.$store.dispatch('addBackup');
-	      this.$store.dispatch('getBackupDatabaseList');
+	      this.getDatabaseConf();
 	    },
 	    setWebsiteConf: function setWebsiteConf() {
 	      this.$store.dispatch('setWebsiteConf', this.website);
@@ -18381,6 +18440,7 @@
 	      this.$store.dispatch('setArticleConf', this.article);
 	    },
 	    setDatabaseConf: function setDatabaseConf() {
+	      this.$store.dispatch('setDatabaseConf', this.database);
 	      console.log((0, _stringify2.default)(this.database));
 	    },
 	    delBackup: function delBackup(file) {
@@ -18513,9 +18573,16 @@
 	//
 	//
 	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 
 /***/ },
-/* 164 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -18994,40 +19061,34 @@
 	      "click": addBackup
 	    }
 	  }, ["立即备份"])])])]), " ", _h('div', {
-	    staticClass: "col-lg-9"
+	    staticClass: "col-lg-10"
 	  }, [_h('ul', {
-	    staticClass: "list-group"
+	    staticClass: "list-group",
+	    attrs: {
+	      "id": "ul-backuplist"
+	    }
 	  }, [_l((backupDatabaseList), function(backupDatabaseItem) {
 	    return _h('li', {
 	      staticClass: "list-group-item",
 	      attrs: {
 	        "style": "height: 40px;"
 	      }
-	    }, [_h('div', {
-	      staticClass: "col-lg-7"
-	    }, [_s(backupDatabaseItem)]), " ", _h('div', {
-	      staticClass: "col-lg-2 col-lg-offset-1"
-	    }, [_h('button', {
-	      staticClass: "btn btn-primary btn-sm",
+	    }, [_h('span', {
+	      staticClass: "col-lg-10"
+	    }, [_s(backupDatabaseItem)]), " ", _h('a', {
 	      attrs: {
-	        "type": "button"
-	      },
-	      on: {
-	        "click": backupDatabase
+	        "href": '/manage?action=backup-download&database=' + backupDatabaseItem
 	      }
-	    }, ["下载"])]), " ", _h('div', {
-	      staticClass: "col-lg-2"
-	    }, [_h('button', {
-	      staticClass: "btn btn-primary btn-sm",
+	    }, [_m(21, true)]), "\n                \n              ", _h('a', {
 	      attrs: {
-	        "type": "button"
+	        "href": "#"
 	      },
 	      on: {
 	        "click": function($event) {
 	          delBackup(backupDatabaseItem)
 	        }
 	      }
-	    }, ["删除"])])])
+	    }, [_m(22, true)])])
 	  })])]), " ", _h('div', {
 	    staticClass: "col-lg-6"
 	  }, ["\n           共" + _s(backupDatabaseList.length) + "个备份\n        "]), " ", _h('div', {
@@ -19168,6 +19229,20 @@
 	  return _h('span', {
 	    staticClass: "input-group-addon"
 	  }, ["分钟"])
+	}},function (){with(this) {
+	  return _h('i', {
+	    staticClass: "fa fa-download",
+	    attrs: {
+	      "aria-hidden": "true"
+	    }
+	  })
+	}},function (){with(this) {
+	  return _h('i', {
+	    staticClass: "fa fa-trash",
+	    attrs: {
+	      "aria-hidden": "true"
+	    }
+	  })
 	}}]}
 	if (false) {
 	  module.hot.accept()
@@ -19177,7 +19252,7 @@
 	}
 
 /***/ },
-/* 165 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {
@@ -19218,19 +19293,19 @@
 	}
 
 /***/ },
-/* 166 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_exports__, __vue_options__
 
 	/* styles */
-	__webpack_require__(167)
+	__webpack_require__(169)
 
 	/* script */
-	__vue_exports__ = __webpack_require__(169)
+	__vue_exports__ = __webpack_require__(171)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(170)
+	var __vue_template__ = __webpack_require__(172)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -19264,13 +19339,13 @@
 
 
 /***/ },
-/* 167 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(168);
+	var content = __webpack_require__(170);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(16)(content, {});
@@ -19290,7 +19365,7 @@
 	}
 
 /***/ },
-/* 168 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(15)();
@@ -19304,7 +19379,7 @@
 
 
 /***/ },
-/* 169 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19347,7 +19422,7 @@
 	//
 
 /***/ },
-/* 170 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){with(this) {

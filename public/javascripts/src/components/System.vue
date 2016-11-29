@@ -104,12 +104,13 @@
             </div>
           </fieldset>
         </form>
-        <div class="col-lg-9">
-          <ul class="list-group">
+        <div class="col-lg-10">
+          <ul class="list-group" id="ul-backuplist">
             <li class="list-group-item" style="height: 40px;" v-for="backupDatabaseItem in backupDatabaseList">
-              <div class="col-lg-7">{{backupDatabaseItem}}</div>
-              <div class="col-lg-2 col-lg-offset-1"><button type="button" class="btn btn-primary btn-sm" @click="backupDatabase">下载</button></div>
-              <div class="col-lg-2"><button type="button" class="btn btn-primary btn-sm" @click="delBackup(backupDatabaseItem)">删除</button></div>
+              <span class="col-lg-10">{{backupDatabaseItem}}</span>
+              <a :href="'/manage?action=backup-download&database='+backupDatabaseItem"><i class="fa fa-download" aria-hidden="true"></i></a>
+              &nbsp;&nbsp;
+              <a href="#" @click="delBackup(backupDatabaseItem)"><i class="fa fa-trash" aria-hidden="true"></i></a>
             </li>
           </ul>
         </div>
@@ -123,6 +124,12 @@
 	</div>
 </div>
 </template>
+<style type="text/css">
+#ul-backuplist
+{
+  list-style:none;
+}
+</style>
 <script>
 import { mapState } from 'vuex';
 export default {
@@ -147,7 +154,7 @@ export default {
     },
     addBackup:function(){
       this.$store.dispatch('addBackup');
-      this.$store.dispatch('getBackupDatabaseList');
+      this.getDatabaseConf();
     },
     setWebsiteConf:function(){
       this.$store.dispatch('setWebsiteConf', this.website);
@@ -159,6 +166,7 @@ export default {
       this.$store.dispatch('setArticleConf', this.article);
     },
     setDatabaseConf:function(){
+      this.$store.dispatch('setDatabaseConf', this.database);
       console.log(JSON.stringify(this.database));
     },
     delBackup:function(file){
