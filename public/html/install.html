@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>杜小豆的编程小道--安装</title>
+	<meta charset="utf-8">
+	<link rel="bookmark"  type="image/x-icon"  href="images/favicon.ico"/>
+  
+  <link rel="shortcut icon" href="images/favicon.ico">
+
+  <!-- bootstrap css -->
+	<link href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
+  <!-- toggle switch css -->
+  <link rel="stylesheet" type="text/css" href="stylesheets/toggle-switch.css" />
+  <!-- font-awesome css -->
+  <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+  <!-- this page css -->
+  <!-- <link rel="stylesheet" type="text/css" href="stylesheets/index.css"> -->
+	
+	<!-- jquery js -->
+	<script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+	<!-- bootstrap js -->
+	<script src="http://cdn.bootcss.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+</head>
+<style type="text/css">
+#div-install-title
+{
+  width: 10%; margin: auto; font-size: 200%;
+}
+</style>
+<body>
+  <div id="app" class="container">
+    <Logo></Logo>
+    <div id="div-install-title">
+      <i class="fa fa-cloud-upload" aria-hidden="true"></i>安装
+    </div>
+    <progress class="progress  progress-striped" :value="progress" max="100">{{progress}}%</progress>
+    <div id="div-install-control" class="col-lg-2 col-lg-offset-1" role="tablist" aria-multiselectable="true" style="height: 500px;">
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h3 class="panel-title">
+            <ul style="list-style: none">
+              <li style="margin-bottom: 10px;">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#div-install-database" aria-expanded="false" aria-controls="div-install-database"><i class="fa fa-database" aria-hidden="true"></i>数据库</a><br/></button>
+              </li>
+              <li style="margin-bottom: 10px;">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#div-install-table" aria-expanded="false" aria-controls="div-install-table"><i class="fa fa-table" aria-hidden="true"></i>数据表</a><br/></button>
+              </li>
+              <li>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#div-install-master" aria-expanded="false" aria-controls="div-install-master"><i class="fa fa-user" aria-hidden="true"></i>管理员</a><br/></button>
+              </li>
+            </ul>
+          </h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 panel-collapse collapse in " id="div-install-database" role="tabpanel" aria-labelledby="div-install-control">
+      <div class="col-lg-offset-2">
+        <i class="fa fa-database" aria-hidden="true"></i>MySQL数据库</a><br/>
+      </div>
+      <div class="col-lg-6 col-lg-offset-2">
+        <form>
+            <small class="text-muted">数据库主机</small>
+            <input type="text" class="form-control" placeholder="域名或IP地址" v-model="mysql.host">
+            <small class="text-muted">用户名</small>
+            <input type="text" class="form-control" placeholder="用户名" v-model="mysql.user">
+            <small class="text-muted">密码</small>
+            <input type="text" class="form-control" placeholder="密码" v-model="mysql.password">
+            <small class="text-muted">数据库</small>
+            <input type="text" class="form-control" placeholder="数据库" v-model="mysql.database">
+        </form>
+        <div class="col-lg-offset-12">
+            <button type="button" class="btn btn-primary" :class="{'btn-danger':progress == 0 && mysqlTestResult == 'error'}" @click="testDatabaseConf">{{mysqlTestResult == 'wait'?'测试连接':(mysqlTestResult == 'success'?'测试成功':'测试失败')}}</button>
+          </div>
+      </div>
+    </div>
+    <div class="col-lg-8 panel-collapse collapse" id="div-install-table" role="tabpanel" aria-labelledby="div-install-control">
+      <div class="col-lg-offset-2">
+        <i class="fa fa-table" aria-hidden="true"></i>数据表</a><br/>
+      </div>
+      <div class="col-lg-6 col-lg-offset-2">
+        <form>
+            <small class="text-muted">用户表</small>
+            <input type="text" class="form-control" placeholder="用户表" v-model="mysql.tables.TABLE_USER">
+            <small class="text-muted">访客表</small>
+            <input type="text" class="form-control" placeholder="访客表" v-model="mysql.tables.TABLE_VISITOR">
+            <small class="text-muted">专题表</small>
+            <input type="text" class="form-control" placeholder="专题表" v-model="mysql.tables.TABLE_FEATURE">
+            <small class="text-muted">文章表</small>
+            <input type="text" class="form-control" placeholder="文章表" v-model="mysql.tables.TABLE_ARTICLE">
+            <small class="text-muted">评论表</small>
+            <input type="text" class="form-control" placeholder="评论表" v-model="mysql.tables.TABLE_DISCUSS">
+        </form>
+        <div class="col-lg-offset-12">
+            <button type="button" class="btn btn-primary" :class="{'btn-danger':progress == 0 && mysqlTestResult == 'error'}" @click="createDatabseTable">{{tablelCreatedResult == 'wait'?'立即创建':(tablelCreatedResult == 'success'?'创建成功':'创建失败')}}</button>
+          </div>
+      </div>
+    </div>
+    <div class="col-lg-8 panel-collapse collapse" id="div-install-master" role="tabpanel" aria-labelledby="div-install-control">
+      <div class="col-lg-offset-2">
+        <i class="fa fa-user" aria-hidden="true"></i>管理员</a><br/>
+      </div>
+      <div class="col-lg-offset-1 col-lg-9" >
+        <Useredit v-show="true" style="padding-left: 30px;"></Useredit>
+      </div>
+    </div>
+    <Footerbar></Footerbar>
+    <script src="../javascripts/bin/install.bundle.js"></script>
+  </div>
+</body>
+</html>

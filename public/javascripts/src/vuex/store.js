@@ -25,12 +25,7 @@ Vue.use(VueResource);
     featurePerPage:6,
     featureCurrentPage:1,
     featureCurrent:{
-      id:'', 
-      title:'', 
-      timeCreate:'', 
-      author:'', 
-      introduction:'',
-      countArticle:0
+      id:'', title:'', timeCreate:'', author:'', introduction:'', countArticle:0
     },
     isFeatureUpdate:false,
     discussCardList:'',

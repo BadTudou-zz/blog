@@ -56,7 +56,6 @@ export default {
       {
         this.$store.dispatch('addUser', this.newUser);
       }
-      console.log(JSON.stringify(this.newUser));
     }
   }
 }

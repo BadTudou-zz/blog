@@ -10,6 +10,7 @@ var routes = require('./routes/index');
 var article = require('./routes/article');
 var feature = require('./routes/feature');
 var manage = require('./routes/manage');
+var install = require('./routes/install.js');
 var conf = require('./conf/conf');
 
 var app = express();
@@ -42,6 +43,7 @@ app.use('/article', article);
 app.use('/article', express.static(path.join(__dirname, conf.article.storePath)));
 app.use('/feature', feature);
 app.use('/manage', manage);
+app.use('/install', install);
 
 
 // catch 404 and forward to error handler

@@ -30,11 +30,6 @@ var vm = new Vue({
     Footerbar, Ad, Artiiframe, Articlediscusslist, Messagebox,
     Login, Manage
   },
-  methods:{
-  	isArticleShow:function(){
-  		return state.parentNavItem.text == '文章';
-  	}
-  },
   created: function(){
    this.$store.dispatch('getWetsiteConf');
    this.$store.dispatch('getMasterConf');
