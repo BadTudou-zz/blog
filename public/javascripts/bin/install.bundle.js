@@ -99,6 +99,9 @@
 	    },
 	    createDatabseTable: function createDatabseTable() {
 	      this.$store.dispatch('createDatabseTable');
+	    },
+	    endInstall: function endInstall() {
+	      this.$store.dispatch('endInstall');
 	    }
 	  },
 	  components: {
@@ -8234,6 +8237,9 @@
 	    },
 	    createDatabseTable: function createDatabseTable(context) {
 	      context.commit('createDatabseTable');
+	    },
+	    endInstall: function endInstall(context) {
+	      context.commit('endInstall');
 	    }
 	  },
 	  mutations: {
@@ -8271,6 +8277,18 @@
 	        if (!data.err) {
 	          state.progress = 50;
 	          state.tablelCreatedResult = 'success';
+	        } else {
+	          state.tablelCreatedResult = 'error';
+	        }
+	      });
+	    },
+	    endInstall: function endInstall(state) {
+	      _vue2.default.http.put('install?action=install-end').then(function (response) {
+	        var data = JSON.parse(response.body);
+	        console.log(response.body);
+	        if (!data.err) {
+	          state.progress += 25;
+	          location.href = "/";
 	        } else {
 	          state.tablelCreatedResult = 'error';
 	        }

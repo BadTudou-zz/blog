@@ -23,6 +23,9 @@ var vm = new Vue({
     },
     createDatabseTable:function(){
       this.$store.dispatch('createDatabseTable');
+    },
+    endInstall:function(){
+      this.$store.dispatch('endInstall');
     }
   },
   components: { 

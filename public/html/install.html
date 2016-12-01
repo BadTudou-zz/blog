@@ -34,19 +34,22 @@
       <i class="fa fa-cloud-upload" aria-hidden="true"></i>安装
     </div>
     <progress class="progress  progress-striped" :value="progress" max="100">{{progress}}%</progress>
-    <div id="div-install-control" class="col-lg-2 col-lg-offset-1" role="tablist" aria-multiselectable="true" style="height: 500px;">
+    <div id="div-install-control" class="col-lg-2 col-lg-offset-1" role="tablist" aria-multiselectable="true" style="height: 1500px;">
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingOne">
           <h3 class="panel-title">
-            <ul style="list-style: none">
+            <ul style="list-style: none; ">
               <li style="margin-bottom: 10px;">
                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#div-install-database" aria-expanded="false" aria-controls="div-install-database"><i class="fa fa-database" aria-hidden="true"></i>数据库</a><br/></button>
               </li>
               <li style="margin-bottom: 10px;">
                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#div-install-table" aria-expanded="false" aria-controls="div-install-table"><i class="fa fa-table" aria-hidden="true"></i>数据表</a><br/></button>
               </li>
-              <li>
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#div-install-master" aria-expanded="false" aria-controls="div-install-master"><i class="fa fa-user" aria-hidden="true"></i>管理员</a><br/></button>
+              <li style="margin-bottom: 10px;">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#div-install-master" aria-expanded="false" aria-controls="div-install-master"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;管理员</a><br/></button>
+              </li>
+              <li style="margin-bottom: 10px;">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#div-install-over" aria-expanded="false" aria-controls="div-install-over"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;&nbsp;完成</a><br/></button>
               </li>
             </ul>
           </h3>
@@ -103,6 +106,21 @@
       <div class="col-lg-offset-1 col-lg-9" >
         <Useredit v-show="true" style="padding-left: 30px;"></Useredit>
       </div>
+    </div>
+    <div class="col-lg-8 panel-collapse collapse" id="div-install-over" role="tabpanel" aria-labelledby="div-install-control">
+      <div class="col-lg-6 col-lg-offset-2">
+        <i class="fa fa-handshake-o" aria-hidden="true"></i>完成</a><br/>
+        <h5><span class="label label-danger">危险操作</span></h5>安装结束后，将会创建安装日志文件：<strong>conf/install.log</strong><br/>
+        此为完成安装的唯一标示，<strong>请勿删除！</strong><br/>
+        <h5><span class="label label-success">安全建议</span></h5>建议手动将<strong>routes</strong>下的<strong>install.js</strong>
+        改名为<strong>install.js.bak</strong>
+        并将<strong>endinstall.js</strong>
+        改名为<strong>install.js</strong>，并手动重启此程序
+        <div class="col-lg-offset-12">
+          <button type="button" class="btn btn-primary" @click="endInstall">完成安装</button>
+        </div>
+      </div>
+      
     </div>
     <Footerbar></Footerbar>
     <script src="../javascripts/bin/install.bundle.js"></script>

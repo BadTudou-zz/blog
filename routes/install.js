@@ -3,15 +3,31 @@ var path = require('path');
 var router = express.Router();
 var mysql = require('mysql');
 var conf = require('../conf/conf.js');
+var fs = require('fs');
 var user = require('../servers/user.js');
 var md5 = require('md5');
 var models = require('../models/models.js');
 /* GET home page. */
 router.get('/', function(req, res) {
-	res.sendFile(path.dirname(__dirname)+'/public/html/install.html');
+	fs.exists(path.dirname(__dirname)+'/conf/install.log', (exists)=>{
+		if (exists){
+			res.render('error', {
+    			message: '404 dot found',
+    			error: {}
+  			});
+		}
+		else
+			res.sendFile(path.dirname(__dirname)+'/public/html/install.html');
+	});
 });
 
 router.put('/', function(req, res) {
+	fs.exists(path.dirname(__dirname)+'/conf/install.log', (exists)=>{
+		if (exists){
+			res.end(JSON.stringify({err:true, result:'prohibited put action'}))
+			return ;
+		}
+	});
 	var params = req.query;
 	switch(params.action) {
 		case 'database-test':
@@ -39,13 +55,18 @@ router.put('/', function(req, res) {
 								console.log('创建'+sqlString+'成功');
 							}
 							else{
+								res.end(JSON.stringify({err:true}));
 								console.log('创建'+sqlString+'失败'+JSON.stringify(err));
 							}
 						});
 					}
+				res.end(JSON.stringify({err:false}));
+				}
+				else{
+					res.end(JSON.stringify({err:true}));
 				}
 			});
-			res.end(JSON.stringify({err:false}));
+			
 			break;
 
 		case 'master-add':
@@ -60,6 +81,13 @@ router.put('/', function(req, res) {
 
 				});
 			break;
+
+		case 'install-end':
+			var installInfo = {time:new Date()}
+			fs.writeFile(path.dirname(__dirname)+'/conf/install.log', JSON.stringify(installInfo), (err) => {
+  				res.end(JSON.stringify({err:err}));
+			});
+
 	}
 });
 

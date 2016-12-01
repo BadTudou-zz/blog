@@ -44,6 +44,9 @@ export default new Vuex.Store({
     },
     createDatabseTable(context){
       context.commit('createDatabseTable');
+    },
+    endInstall(context){
+      context.commit('endInstall');
     }
  },
  mutations:{
@@ -88,6 +91,19 @@ export default new Vuex.Store({
         		state.tablelCreatedResult = 'error';
         	}
       	});
+    },
+    endInstall(state){
+      Vue.http.put(`install?action=install-end`).then((response)=>{
+          var data = JSON.parse(response.body);
+          console.log(response.body);
+          if(!data.err){
+            state.progress +=  25; 
+            location.href="/";
+          }
+          else{
+            state.tablelCreatedResult = 'error';
+          }
+        });
     }
  }
 });
