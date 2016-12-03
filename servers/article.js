@@ -37,6 +37,10 @@ var add = function add(article, callback)
 		);`;
 		database.query(sqlString, function(err, result) {
 	 		if(!err) {
+	 			article.link = article.link.slice(1, -1);
+				article.title = article.title.slice(1,-1);
+				article.subtitle = article.subtitle.slice(1,-1);
+				article.content = article.content.slice(1,-1);
 	 			rendertoHTML(article, (err)=>{
 	 				callback(err || !result.affectedRows, result);
 	 				return false;
@@ -51,9 +55,20 @@ var add = function add(article, callback)
 };
 
 
-var edit = function edit(values, callback) {
-	var condition = `id = `+utility.escape(values.id);
-	database.update(TABLE_ARTICLE, values, condition, callback);
+var edit = function edit(article, callback) {
+	//var values = utility.objescape(article);
+	var condition = `id = `+(article.id);
+	database.update(TABLE_ARTICLE, article, condition, (err, result)=>
+	{
+		if(!err) {
+			rendertoHTML(article, (err)=>{
+	 			callback(err);
+	 		});
+	 	}
+	 	else{
+	 		callback(err || !result.affectedRows, result);
+	 	}
+	});
 };
 
 var list = function list(fields, range, callback) {
@@ -108,11 +123,13 @@ var rendertoHTML = function renderMD(article, callback){
 	var htmlpath = rootPath+articleConf.storePath+'/'+article.link+'.html';
 	var mdhtml = markdown.toHTML(article.content);
 	var titlehtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+article.title+article.subtitle;
-	var linkhtml = '</title><link rel="stylesheet" type="text/css" href="stylesheets/'+articleConf.cssFile+'"></head><body>';
+	var linkhtml = '</title><link rel="stylesheet" type="text/css" href="stylesheets/'+articleConf.css+'"></head><body>';
 	var pughtml = titlehtml+linkhtml+mdhtml+'</body></html>';
+	console.log('解析的MD'+article.content);
+	console.log('解析后的'+mdhtml);
 	fs.writeFile(htmlpath, pughtml, (err) => {
+			console.log('创建HTML'+htmlpath+(!err));
           callback(err);
-          return err;
       });
 };
 

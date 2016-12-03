@@ -172,7 +172,7 @@ router.put('/', function(req, res) {
 	console.log('管理员请求提交信息'+params.action);
 	switch(params.action) {
 		case 'article-add':
-			var newArticle = req.body.newArticle;
+			var newArticle = req.body.article;
 			var currentDate = new Date();
 			newArticle.license = '';
 			newArticle.timeRelease = currentDate.getFullYear()+'-'
@@ -188,7 +188,8 @@ router.put('/', function(req, res) {
 			break;
 
 		case 'article-edit':
-			var newArticle = req.body.newArticle;
+			var newArticle = req.body.article;
+			delete newArticle.timeCreated;
 			article.edit(newArticle, (err, result)=>{
 				if(!err)
 					res.end(JSON.stringify({err:false, result:true}));

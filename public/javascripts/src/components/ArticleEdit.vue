@@ -5,11 +5,11 @@
       <fieldset class="form-group">
         <div class="col-lg-4">
           <label for="input-title">标题</label>
-          <input type="text" class="form-control" id="input-title" placeholder="标题" v-model="newArticle.title">
+          <input type="text" class="form-control" placeholder="标题" v-model="newArticle.title">
         </div>
         <div class="col-lg-6">
           <label for="input-subtitle">副标题</label>
-          <input type="text" class="form-control" id="input-subtitle" placeholder="副标题" v-model="newArticle.subtitle" style="font-size: 80%">
+          <input type="text" class="form-control" placeholder="副标题" v-model="newArticle.subtitle" style="font-size: 80%">
         </div>
       </fieldset>
 

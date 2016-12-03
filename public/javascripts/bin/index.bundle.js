@@ -8390,6 +8390,8 @@
 	  }), (0, _defineProperty3.default)(_actions, 'updateUser', function updateUser(context, user) {
 	    context.commit('updateUser', user);
 	    if (context.state.msgType == 'success') context.commit('showMessage', { type: 'success', text: '修改用户成功' });else context.commit('showMessage', { type: 'err', text: '修改用户失败' });
+	  }), (0, _defineProperty3.default)(_actions, 'updateArticle', function updateArticle(context, article) {
+	    context.commit('updateArticle', article);
 	  }), (0, _defineProperty3.default)(_actions, 'delArticle', function delArticle(context, articleId) {
 	    context.commit('delArticle', articleId);
 	  }), (0, _defineProperty3.default)(_actions, 'addFeature', function addFeature(context, feature) {
@@ -8626,7 +8628,14 @@
 	      });
 	    },
 	    addArticle: function addArticle(state, article) {
-	      _vue2.default.http.put('manage?action=article-add', { newArticle: article }).then(function (response) {
+	      _vue2.default.http.put('manage?action=article-add', { article: article }).then(function (response) {
+	        var data = JSON.parse(response.body);
+	        console.log(response.body);
+	        if (!data.err) state.msgType = 'success';
+	      });
+	    },
+	    updateArticle: function updateArticle(state, article) {
+	      _vue2.default.http.put('manage?action=article-edit', { article: article }).then(function (response) {
 	        var data = JSON.parse(response.body);
 	        console.log(response.body);
 	        if (!data.err) state.msgType = 'success';
@@ -15190,6 +15199,7 @@
 	    editArticle: function editArticle(article) {
 	      this.$store.state.isArticleUpdate = true;
 	      this.currentToolbar = 'add';
+	      this.$store.commit('getFeatureList');
 	      this.$store.dispatch('articleCardChange', article);
 	    },
 	    delArticle: function delArticle(articleId) {
@@ -15453,7 +15463,6 @@
 	    staticClass: "form-control",
 	    attrs: {
 	      "type": "text",
-	      "id": "input-title",
 	      "placeholder": "标题"
 	    },
 	    domProps: {
@@ -15477,7 +15486,6 @@
 	    staticClass: "form-control",
 	    attrs: {
 	      "type": "text",
-	      "id": "input-subtitle",
 	      "placeholder": "副标题",
 	      "style": "font-size: 80%"
 	    },

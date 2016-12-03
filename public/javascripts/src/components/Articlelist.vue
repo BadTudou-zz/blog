@@ -114,6 +114,7 @@ export default {
       editArticle:function(article){
         this.$store.state.isArticleUpdate = true;
         this.currentToolbar = 'add';
+        this.$store.commit('getFeatureList');
         this.$store.dispatch('articleCardChange', article);
       },
       delArticle:function(articleId){

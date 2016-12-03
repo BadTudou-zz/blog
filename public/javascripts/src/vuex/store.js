@@ -190,6 +190,9 @@ Vue.use(VueResource);
       else
         context.commit('showMessage',{type:'err', text:'修改用户失败'});
     },
+    updateArticle(context, article){
+      context.commit('updateArticle', article);
+    },
     delArticle(context, articleId){
       context.commit('delArticle', articleId);
     },
@@ -466,7 +469,15 @@ Vue.use(VueResource);
       });
     },
     addArticle (state, article){
-      Vue.http.put(`manage?action=article-add`,{newArticle:article}).then((response)=>{
+      Vue.http.put(`manage?action=article-add`,{article:article}).then((response)=>{
+        var data = JSON.parse(response.body);
+        console.log(response.body);
+        if(!data.err)
+          state.msgType = 'success';
+      });
+    },
+    updateArticle (state, article){
+      Vue.http.put(`manage?action=article-edit`,{article:article}).then((response)=>{
         var data = JSON.parse(response.body);
         console.log(response.body);
         if(!data.err)
