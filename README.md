@@ -1,6 +1,12 @@
 #Blog#
-
+主页
 ![演示图片][img-demo]
+
+管理
+![管理员演示图片][img-master-demo]
+
+安装
+![安装演示图片][img-install-demo]
 
 这是一个基于**Node.js**——**Express**框架的个人博客。支持解析**MarkDown**并生成静态HTML。
 
@@ -33,6 +39,18 @@ npm start bin/www
 ```
 或者你也可以使用**Forver**、**PM2**等模块。
 
+##安装##
+1.	将数据库等信息写入**配置**文件
+2.	创建数据库
+3.	配置并运行博客后，在浏览器中访问
+```
+yourdomain/install
+```
+
+之后按照提示设置进行数据库连接测试、创建数据表、创建管理员等操作即可。
+
 [img-demo]: ./docs/images/demo.png "演示图片"
+[img-master-demo]: ./docs/images/master-demo.png "管理员演示图片"
+[img-install-demo]: ./docs/images/install-demo.png "安装演示图片"
 [img-systemstructure]:./docs/images/system-structure.png "系统架构"
 
