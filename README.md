@@ -49,6 +49,9 @@ yourdomain/install
 
 之后按照提示设置进行数据库连接测试、创建数据表、创建管理员等操作即可。
 
+##版权##
+本软件遵循**GPL (GNU GENERAL PUBLIC LICENSE，*GNU通用公共许可证*)**。
+
 [img-demo]: ./docs/images/demo.png "演示图片"
 [img-master-demo]: ./docs/images/master-demo.png "管理员演示图片"
 [img-install-demo]: ./docs/images/install-demo.png "安装演示图片"
