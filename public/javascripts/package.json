@@ -18,8 +18,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "css-loader": "^0.26.1",
     "vue": "^2.0.3",
+    "vue-cli": "^2.5.1",
+    "vue-loader": "^10.0.2",
     "vue-resource": "^1.0.3",
+    "vue-template-compiler": "^2.1.4",
     "vuex": "^2.0.0"
   }
 }

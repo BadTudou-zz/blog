@@ -19,7 +19,7 @@ var conf = {
 		css: '2.css'
 	},
 	website:{
-		title:"杜小豆的编程大道",
+		title:"杜小豆的编程小道",
 		domain:"BadTudou",
 		ICP:"渝ICP备16010823号"
 	},

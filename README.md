@@ -8,7 +8,7 @@
 安装
 ![安装演示图片][img-install-demo]
 
-这是一个基于**Node.js**——**Express**框架的个人博客。支持解析**MarkDown**并生成静态HTML。
+这是一个基于**Node.js**——**Express**框架的**单页面应用**(Single Page Application)方法开发的个人博客。支持解析**MarkDown**并生成静态HTML。
 
 ##系统架构##
 ![系统架构][img-systemstructure]
@@ -19,8 +19,38 @@
 前端通过**Vue**+**Vuex**，实现了**组件化**。各组件相互配合，通过将各组件组合形成页面。
 
 所有**Vue**组件保存在**public/javascripts/src/components**文件夹。
+
+前端资源均使用**webpack**打包。
 ###后台###
 后台基于**Node.js**的**Express**框架，分为**视图层**、**路由层**、**服务层**，其中视图层用于显示HTML页面，但考虑到其解析**Pug**模版带来的性能问题，改用静态HTML对其进行替换。
+
+##文件结构##
+1.	conf:配置文件
+2.	**demoImages**:软件开发中不同进度与版本的demo图片
+3.	**docs**:说明文档
+4.	models:数据表定义
+5.	servers:服务层
+6.	**tests**:单元测试
+7.	utility:通用工具集
+8.	GPL.txt:开源协议
+9.	其他为express框架自动生成
+
+以***粗体***标示的文件夹，**生产环境无需包含，可删除**
+
+##初始化##
+初始化中，**后台**部分用于下载软件运行所**必需的模块**，**前端**部分则是用于开发过程中使用**webpack**重新对前端资源进行打包
+
+以下是包配置文件的位置。
+
+1.前端
+```
+	public/javascripts/package.json
+```
+2.后台
+```
+	package.json
+```
+进行初始化请在相应的路径执行**npm install**或**cnpm install**
 
 ##配置##
 配置文件保存在 **conf/conf.js**，其中包含**数据库**/**系统**等配置信息，所有信息均采用**JSON**格式存储。
