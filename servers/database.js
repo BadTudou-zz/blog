@@ -4,7 +4,6 @@ var utility = require('../utility/utility');
 var pool  = mysql.createPool(conf.mysql);
 
 var query = function query(sql, callback){
-	console.log(sql);
 	pool.getConnection(function(err, connection)
 	{
 		if(!err){
@@ -35,7 +34,6 @@ var backup = function backup(table, filename, callback){
  * @param  {Function}	callback [回调函数]
  */
 var list = function list(table, fields, range, callback) {
-	var sqlString;
 	if(!range)
 		sqlString = `SELECT ${fields} FROM ${table}`;
 	else
@@ -60,7 +58,6 @@ var search = function search(table, fields, condition, range, callback) {
 	else
 		sqlString = `SELECT ${fields} FROM ${table} WHERE ${condition} ;`;
 
-	console.log(sqlString);
 	query(sqlString, function(err, result) {
 		callback(err, result);
 	});
@@ -77,7 +74,6 @@ var del = function del(table, condition, callback) {
 	query(sqlString, function(err, result) {
 	 		callback(err || !result.affectedRows, result);
 	 	});
-	console.log(sqlString);
 };
 
 /**
@@ -90,7 +86,6 @@ var del = function del(table, condition, callback) {
 var update = function update(table, values, condition, callback) {
 	var valuesString = utility.obj2array(values).join(' , ');
 	var sqlString = `UPDATE ${table} SET ${valuesString} WHERE ${condition} ;`;
-	console.log(sqlString);
 	query(sqlString, (err, result)=> {
 		callback(err || !result.affectedRows, result);
 	});

@@ -104,8 +104,8 @@
             </div>
           </fieldset>
         </form>
-        <div class="col-lg-10">
-          <ul class="list-group" id="ul-backuplist">
+        <div class="col-lg-10" style="height:200px; overflow:auto;">
+          <ul class="list-group" id="ul-backuplist" >
             <li class="list-group-item" style="height: 40px;" v-for="backupDatabaseItem in backupDatabaseList">
               <span class="col-lg-10">{{backupDatabaseItem}}</span>
               <a :href="'/manage?action=backup-download&database='+backupDatabaseItem"><i class="fa fa-download" aria-hidden="true"></i></a>

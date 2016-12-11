@@ -34,7 +34,7 @@ var conf = {
 	},
 	database:{
 		storePath: '/usr/share/nginx/blog/backup',
-		autoBackup:true,
+		autoBackup:false,
 		interval: 60
 	},
 	articleCssList:[

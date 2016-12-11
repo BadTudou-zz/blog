@@ -12323,7 +12323,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _vuex = __webpack_require__(2);
@@ -12370,25 +12370,21 @@
 	//
 	//
 	//
+	//
+	//
 
 	exports.default = {
-	    data: function data() {
-	        return {
-	            newDiscussShow: false
-	        };
+	  components: {
+	    'Newdiscuss': _NewDiscuss2.default
+	  },
+	  computed: (0, _vuex.mapState)({
+	    discussList: function discussList(state) {
+	      return state.discussList;
 	    },
-
-	    components: {
-	        'Newdiscuss': _NewDiscuss2.default
-	    },
-	    computed: (0, _vuex.mapState)({
-	        discussList: function discussList(state) {
-	            return state.discussList;
-	        },
-	        isShow: function isShow() {
-	            return this.$store.state.parentNavItem.text == '文章' && this.$store.state.childNavItem.text == '查看';
-	        }
-	    })
+	    isShow: function isShow() {
+	      return this.$store.state.parentNavItem.text == '文章' && this.$store.state.childNavItem.text == '查看';
+	    }
+	  })
 	};
 
 /***/ },
@@ -12627,19 +12623,7 @@
 	    attrs: {
 	      "id": "div-discusslist"
 	    }
-	  }, [_m(0), " ", _h('span', {
-	    staticClass: "col-lg-offset-4"
-	  }, [_h('button', {
-	    staticClass: "btn btn-link",
-	    attrs: {
-	      "type": "button"
-	    },
-	    on: {
-	      "click": function($event) {
-	        newDiscussShow = true
-	      }
-	    }
-	  }, ["我要评论"])]), " ", _h('ul', {
+	  }, [_m(0), " ", _m(1), " ", _h('ul', {
 	    directives: [{
 	      name: "show",
 	      rawName: "v-show",
@@ -12652,25 +12636,41 @@
 	      staticClass: "list-group-item "
 	    }, [_h('div', {
 	      staticClass: "col-lg-2 discuss-author"
-	    }, [_m(1, true), _s(discussItem.author)]), " ", _h('div', {
+	    }, [_m(2, true), _s(discussItem.author)]), " ", _h('div', {
 	      staticClass: "col-lg-4 discuss-time"
-	    }, [_m(2, true), _s(new Date(discussItem.timeCreate).toLocaleString())]), " ", _h('div', {
+	    }, [_m(3, true), _s(new Date(discussItem.timeCreate).toLocaleString())]), " ", _h('div', {
 	      staticClass: "col-lg-12 discuss-content"
 	    }, [_s(discussItem.content)])])
-	  })]), " ", _h('Newdiscuss', {
+	  })]), " ", _h('div', {
+	    staticClass: "collapse col-lg-12",
+	    attrs: {
+	      "id": "div-articleDiscussList"
+	    }
+	  }, [_h('Newdiscuss', {
 	    directives: [{
 	      name: "show",
 	      rawName: "v-show",
-	      value: (newDiscussShow),
-	      expression: "newDiscussShow"
+	      value: (true),
+	      expression: "true"
 	    }]
-	  })])
+	  })])])
 	}},staticRenderFns: [function (){with(this) {
 	  return _h('span', {
 	    staticClass: "col-lg-6"
 	  }, [_h('h4', ["评论列表", _h('span', {
 	    staticClass: "label label-default"
 	  }, ["All"])])])
+	}},function (){with(this) {
+	  return _h('span', {
+	    staticClass: "col-lg-offset-4"
+	  }, [_h('button', {
+	    staticClass: "btn btn-link",
+	    attrs: {
+	      "type": "button",
+	      "data-toggle": "collapse",
+	      "href": "#div-articleDiscussList"
+	    }
+	  }, ["我要评论"])])
 	}},function (){with(this) {
 	  return _h('i', {
 	    staticClass: "fa fa-1x fa-user",
@@ -17018,7 +17018,7 @@
 	      },
 	      on: {
 	        "click": function($event) {
-	          (discussItem, 'pass')
+	          updateDiscuss(discussItem, 'pass')
 	        }
 	      }
 	    }, [_m(7, true), "通过"]), " ", _h('a', {
@@ -19052,7 +19052,10 @@
 	      "click": addBackup
 	    }
 	  }, ["立即备份"])])])]), " ", _h('div', {
-	    staticClass: "col-lg-10"
+	    staticClass: "col-lg-10",
+	    attrs: {
+	      "style": "height:200px; overflow:auto;"
+	    }
 	  }, [_h('ul', {
 	    staticClass: "list-group",
 	    attrs: {

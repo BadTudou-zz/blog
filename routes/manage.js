@@ -15,6 +15,35 @@ var discuss = require('../servers/discuss.js');
 var visitor = require('../servers/visitor.js');
 var utility = require('../utility/utility.js');
 
+var backupDatabase  = function backupDatabase(callback){
+	var databaseConf = conf.database;
+	var mysqlTables = conf.mysql.tables;
+	var currentDate = new Date();
+	var backupFileName = currentDate.getFullYear()+'-'
+		+(currentDate.getMonth()+1)+'-'+currentDate.getDate()
+		+' '+currentDate.getHours()+':'+currentDate.getMinutes()
+		+':'+currentDate.getSeconds();
+	backupFileName = databaseConf.storePath+'/'+backupFileName;
+	var backupStep = 0;
+	var keys = Object.keys(conf.mysql.tables);
+	var tableCount = keys.length;
+	for(table in conf.mysql.tables){
+		database.backup(conf.mysql.tables[table],backupFileName+' '+table+'.sql',(err)=>{
+			if(err){
+				console.log('导出'+JSON.stringify(err));
+				callback(JSON.stringify({err:err, result:err}));
+			}
+			else{
+				backupStep++;
+				if (backupStep == tableCount){
+					utility.compress(backupFileName+'*.sql', backupFileName + '.zip');
+				}
+			}
+		});
+	}
+	callback(JSON.stringify({err:false, result:'success'}));
+};
+
 
 router.get('/', function(req, res, next) {
 	if(req.session.loginstate == 'true')
@@ -307,34 +336,9 @@ router.put('/', function(req, res) {
 			break;
 
 		case 'backup-add':
-			var databaseConf = conf.database;
-			var mysqlTables = conf.mysql.tables;
-			var currentDate = new Date();
-			var backupFileName = currentDate.getFullYear()+'-'
-			+(currentDate.getMonth()+1)+'-'+currentDate.getDate()
-			+' '+currentDate.getHours()+':'+currentDate.getMinutes()
-			+':'+currentDate.getSeconds();
-			backupFileName = databaseConf.storePath+'/'+backupFileName;
-			var backupStep = 0;
-			console.log('测试');
-			var keys = Object.keys(conf.mysql.tables);
-			var tableCount = keys.length;
-			console.log('表个数'+keys.length);
-			for(table in conf.mysql.tables){
-				database.backup(conf.mysql.tables[table],backupFileName+' '+table+'.sql',(err)=>{
-					if(err){
-						res.end(JSON.stringify({err:err, result:err}));
-					}
-					else{
-						backupStep++;
-						if (backupStep == tableCount){
-							utility.compress(backupFileName+'*.sql', backupFileName + '.zip');
-						}
-					}
-					console.log('导出'+conf.mysql.tables[table]);
-				});
-			}
-			res.end(JSON.stringify({err:false, result:'success'}));
+			backupDatabase((result)=>{
+				res.end(result);
+			});
 			break;
 
 		case 'backup-del':
@@ -360,7 +364,18 @@ router.put('/', function(req, res) {
 			break;
 
 		case 'conf-database':
+			var intervalID = null;
 			conf.database = req.body.conf;
+			if(req.body.conf.autoBackup){
+				intervalID = setInterval(function(){
+					backupDatabase((result)=>{
+						;
+					});
+				}, req.body.conf.interval * 60*1000);
+			}
+			else{
+				clearInterval(intervalID);
+			}
 			res.end(JSON.stringify({err:false, result:'success'}));
 			break;
 

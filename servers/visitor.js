@@ -8,7 +8,6 @@ var add = function add(visitor, callback)
 	
 	//专题字段: id, token, timeVisited, ua
 	var values = utility.objescape(visitor);
-	console.log(values);
 	var sqlString = `INSERT INTO ${TABLE_VISITOR} 
 	(
 		token, ua

@@ -25,7 +25,7 @@
   					     <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{discussItem.state}}</button>
   					     <div class="dropdown-menu">
     					     <a class="dropdown-item" href="#" @click="updateDiscuss(discussItem, 'verify')"><i class="fa fa-circle" aria-hidden="true"></i>待审核</a>
-    					     <a class="dropdown-item" href="#" @click=" (discussItem, 'pass')"><i class="fa fa-check" aria-hidden="true"></i>通过</a>
+    					     <a class="dropdown-item" href="#" @click="updateDiscuss(discussItem, 'pass')"><i class="fa fa-check" aria-hidden="true"></i>通过</a>
     					     <a class="dropdown-item" href="#" @click="updateDiscuss(discussItem, 'unpass')"><i class="fa fa-close" aria-hidden="true"></i>屏蔽</a>
   					     </div>
 				      </div>

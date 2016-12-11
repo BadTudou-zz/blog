@@ -1,7 +1,7 @@
 <template>
 <div id="div-discusslist" class="col-lg-9" v-show="isShow">
 	<span class="col-lg-6"><h4>评论列表<span class="label label-default">All</span></h4></span>
-	<span class="col-lg-offset-4"><button type="button" class="btn btn-link" @click="newDiscussShow = true">我要评论</button></span>
+	<span class="col-lg-offset-4"><button type="button" class="btn btn-link" data-toggle="collapse" href="#div-articleDiscussList">我要评论</button></span>
 	<ul class="list-group" v-show="!newDiscussShow">
         <li class="list-group-item " v-for="discussItem in discussList">
         	<div class="col-lg-2 discuss-author"><i class="fa fa-1x fa-user" aria-hidden="true"></i>{{discussItem.author}}</div>
@@ -9,7 +9,9 @@
             <div class="col-lg-12 discuss-content">{{discussItem.content}}</div>
         </li>
     </ul>
-    <Newdiscuss v-show="newDiscussShow"></Newdiscuss>
+    <div class="collapse col-lg-12" id="div-articleDiscussList">
+      <Newdiscuss v-show="true"></Newdiscuss>
+    </div>
 </div>
 </template>
 <style type="">
@@ -38,11 +40,6 @@
 import { mapState } from 'vuex';
 import Newdiscuss 	from './NewDiscuss.vue';
 export default {
-	data () {
- 		return {
- 			newDiscussShow:false
- 		}
- 	},
   	components:{
   		'Newdiscuss':Newdiscuss
   	},
